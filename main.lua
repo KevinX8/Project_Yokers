@@ -9,31 +9,38 @@ physics.addBody(player, "dynamic")
 local playerSpeed = 250
 player.x = display.contentCenterX
 player.y = display.contentCenterY
+local pressUp = false
+local pressDown = false
+local pressLeft = false
+local pressRight = false
 
 local function key(event)
     local phase = event.phase
     local name = event.keyName
-    local px, py = player:getLinearVelocity()
-    if phase == "down" then
-        if name == "w" then
-            player:setLinearVelocity(px, -playerSpeed)
-        elseif name == "s" then
-            player:setLinearVelocity(px, playerSpeed)
-        elseif name == "a" then
-            player:setLinearVelocity(-playerSpeed, py)
-        elseif name == "d" then
-            player:setLinearVelocity(playerSpeed, py)
-        end
-    elseif phase == "up" then
-        if name == "w" then
-            player:setLinearVelocity(px, 0)
-        elseif name == "s" then
-            player:setLinearVelocity(px, 0)
-        elseif name == "a" then
-            player:setLinearVelocity(0, py)
-        elseif name == "d" then
-            player:setLinearVelocity(0, py)
-        end
+    local keyState = false
+    local newXVelocity, newYVelocity = 0, 0
+    if phase == "down" then keyState = true end
+    if name == "w" then
+        pressUp = keyState
+    elseif name == "s" then
+        pressDown = keyState
+    elseif name == "a" then
+        pressLeft = keyState
+    elseif name == "d" then
+        pressRight = keyState
     end
+    if pressUp == true then
+        newYVelocity = newYVelocity - playerSpeed
+    end
+    if pressDown == true then
+        newYVelocity = newYVelocity + playerSpeed
+    end
+    if pressLeft == true then
+        newXVelocity = newXVelocity - playerSpeed
+    end
+    if pressRight == true then
+        newXVelocity = newXVelocity + playerSpeed
+    end
+    player:setLinearVelocity(newXVelocity, newYVelocity)
 end
 Runtime:addEventListener("key", key)
