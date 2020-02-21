@@ -33,6 +33,27 @@ while wait() do
     end
 end
 
+curHealth() 
+  character.living.health
+
+local enemy = 
+local fill = script.Parent.Filler
+local text = script.Parent.TextLabel
+while wait() do
+    local character = enemy.Character
+    if character ~= nil then
+        local zombie = character:FindFirstChild("undead")
+        if zombie ~= nil then
+            character.undead.MaxHealth = 50
+            character.undead.Health = MaxHealth - damage()
+            fill:HealthSize(UDim2.new((zombie.Health/zombie.MaxHealth),0,1,0))
+            text.Text = "HP: "..math.floor(zombie.Health).." / "..zombie.MaxHealth.." ["..math.floor((zombie.Health/zombie.MaxHealth)*100).."%]"
+        end
+    else
+        text.Text = "NIL"
+        fill:HealthSize(UDim2.new(0,0,1,0))
+    end
+end
 
 --[[damage() Have to make function so damage can 
 //       actually be applied --]] 
