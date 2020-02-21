@@ -33,9 +33,10 @@ while wait() do
     end
 end
 
-//damage() Have to make function so damage can 
-//       actually be applied
 
+--[[damage() Have to make function so damage can 
+//       actually be applied --]] 
+    
 local function throwProjectile()
     local newProjectile = display.newImageRect("assets/egg.png", 64, 64)
     physics.addBody(newProjectile, "dynamic", {isSensor=true})
