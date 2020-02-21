@@ -15,6 +15,23 @@ local pressUp = false
 local pressDown = false
 local pressLeft = false
 local pressRight = false
+local fill = script.Parent.Filler
+local text = script.Parent.TextLabel
+while wait() do
+    local character = player.Character
+    if character ~= nil then
+        local chicken = character:FindFirstChild("living")
+        if chicken ~= nil then
+            character.living.MaxHealth = 100
+            character.living.Health = MaxHealth - damage()
+            fill:HealthSize(UDim2.new((chicken.Health/chicken.MaxHealth),0,1,0))
+            text.Text = "HP: "..math.floor(chicken.Health).." / "..chicken.MaxHealth.." ["..math.floor((chicken.Health/chicken.MaxHealth)*100).."%]"
+        end
+    else
+        text.Text = "NIL"
+        fill:HealthSize(UDim2.new(0,0,1,0))
+    end
+end
 
 local function throwProjectile()
     local newProjectile = display.newImageRect("assets/egg.png", 64, 64)
