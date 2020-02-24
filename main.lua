@@ -15,6 +15,8 @@ local pressUp = false
 local pressDown = false
 local pressLeft = false
 local pressRight = false
+
+--[[
 local fill = script.Parent.Filler
 local text = script.Parent.TextLabel
 while wait() do
@@ -32,8 +34,8 @@ while wait() do
         fill:HealthSize(UDim2.new(0,0,1,0))
     end
 end
-
-curHealth() 
+--]]
+--[[curHealth() 
   character.living.health
 
 local enemy = 
@@ -54,6 +56,7 @@ while wait() do
         fill:HealthSize(UDim2.new(0,0,1,0))
     end
 end
+--]]
 
 --[[damage() Have to make function so damage can 
 //       actually be applied --]] 
