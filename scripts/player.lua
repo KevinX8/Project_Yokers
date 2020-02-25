@@ -15,6 +15,7 @@ local pressLeft = false
 local pressRight = false
 local mouseX = 0
 local mouseY = 0
+local clickReady = true
 
 function class.start()
     playerImage = display.newImageRect("assets/player.png", 128, 128)
@@ -71,7 +72,12 @@ function class.handleMouse(event)
     mouseY = event.y
     class.updateRotation()
     if (event.isPrimaryButtonDown) then
-        class.throwProjectile()
+        if (clickReady) then
+            class.throwProjectile()
+            clickReady = false
+        end
+    else
+        clickReady = true
     end
 end
 
