@@ -1,6 +1,6 @@
 local class = {}; -- this and the return statement at the end make this file behave somewhat like a class
 
-local playerSpeed = 250
+local playerSpeed = 400
 local playerProjectileSpeed = 300
 local upButton = "w"
 local downButton = "s"
@@ -22,6 +22,10 @@ function class.start()
     Physics.addBody(playerImage, "dynamic")
     playerImage.x = display.contentCenterX
     playerImage.y = display.contentCenterY
+end
+
+function class.getPosition()
+    return playerImage.x, playerImage.y
 end
 
 function class.throwProjectile()

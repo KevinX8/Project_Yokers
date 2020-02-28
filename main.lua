@@ -1,5 +1,6 @@
 Physics = require("physics")
 local player = require("scripts.player")
+local enemy = require("scripts.enemy")
 
 Physics.start()
 Physics.setGravity(0, 0)
@@ -7,6 +8,7 @@ Physics.setGravity(0, 0)
 math.randomseed(os.time())
 
 player.start()
+enemy.start(player)
 
 --[[
 local fill = script.Parent.Filler
@@ -57,9 +59,9 @@ local function keyEvent(event)
     player.handleMovement(event)
 end
 
-local function MouseEvent(event)
+local function mouseEvent(event)
     player.handleMouse(event)
 end
 
 Runtime:addEventListener("key", keyEvent)
-Runtime:addEventListener("mouse", MouseEvent)
+Runtime:addEventListener("mouse", mouseEvent)
