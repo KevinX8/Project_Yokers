@@ -25,6 +25,18 @@ function class.start(playerReference)
     enemyImage.y = 200
     player = playerReference
     aiLoopTimer = timer.performWithDelay(33.333333, class.aiUpdate, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
+    enemyImage.collision = class.collisionEvent
+    enemyImage:addEventListener( "collision" )
+end
+
+function class.collisionEvent(self, event)
+    if event.phase == "began" then
+        if event.other.myName == "playerProjectile" then
+            timer.cancel(aiLoopTimer)
+            event.other:removeSelf()
+            enemyImage:removeSelf()
+        end
+    end
 end
 
 function class.aiUpdate() -- Called 30 times a second
