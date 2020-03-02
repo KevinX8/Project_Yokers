@@ -1,7 +1,7 @@
 local class = {}; -- this and the return statement at the end make this file behave somewhat like a class
 
 local playerSpeed = 400
-local playerProjectileSpeed = 300
+local playerProjectileSpeed = 800
 local upButton = "w"
 local downButton = "s"
 local leftButton = "a"
@@ -29,7 +29,7 @@ function class.getPosition()
 end
 
 function class.throwProjectile()
-    local newProjectile = display.newImageRect("assets/egg.png", 64, 64)
+    local newProjectile = display.newImageRect("assets/egg.png", 300 / 8, 380 / 8)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
     newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)
     newProjectile.myName = "playerProjectile" -- also used for collision detection
