@@ -13,34 +13,34 @@ local background = display.newImage("Images/Title_Screen.png", 1280, 720)
         background.y = display.contentCenterY
 
 local btn =widget.newButton {
-    width = 500,
-    height = 250,
-    left = 175,
-    top = 655,
+    width = 289,
+    height = 30,
+    left = 15,
+    top = 250,
     defaultFile = "Images/new_game.png",
 }
 
 local btn =widget.newButton {
-    width = 500,
-    height = 250,
-    left = 175,
-    top = 765,
+    width = 289,
+    height = 30,
+    left = 15,
+    top = 280,
     defaultFile = "Images/load_game.png",
 }
 
 local btn =widget.newButton {
-    width = 500,
-    height = 250,
-    left = 175,
-    top = 875,
+    width = 289,
+    height = 30,
+    left = 15,
+    top = 310,
     defaultFile = "Images/options.png",
 }
 
 local btn =widget.newButton {
-    width = 500,
-    height = 250,
-    left = 175,
-    top = 985,
+    width = 289,
+    height = 30,
+    left = 15,
+    top = 340,
     defaultFile = "Images/quit_game.png",
 }
 
