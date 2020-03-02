@@ -32,25 +32,25 @@ local function walkLeft(event)
   	if ((event.keyName.left == 's' or event.keyName.left == 'left') and event.phase == 'down' ) then
         walkLeft(Sprite)
     end
-    
+end    
 local function walkRight(event)  
 	local name = event.keyName.right
   	if ((event.keyName.right == 'd' or event.keyName.right == 'right') and event.phase == 'down' ) then
         walkRight(Sprite)
     end
-  	
+end  	
 local function walkBackwards(event)
 	local name = event.keyName.backward
   	if ((event.keyName.backward == 's' or event.keyName.backward == 'backwards') and event.phase == 'down' ) then
         walkBackwards(Sprite)
     end
-    
+end    
 local function walkForwards(event)
 	local name = event.keyName.forward 
     if ((event.keyName.forward == 'w' or event.keyName.forward == 'forwards') and event.phase == 'down' ) then
         walkForwards(Sprite)
     end
-
+end
 local function jump(Sprite)
     Sprite:setLinearVelocity(0, -150)
 end

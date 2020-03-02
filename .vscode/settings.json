@@ -1,0 +1,10 @@
+{
+    "Lua.diagnostics.globals": [
+        "display",
+        "keyBind",
+        "Sprite",
+        "timer",
+        "Runtime",
+        "application"
+    ]
+}
