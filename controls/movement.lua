@@ -27,27 +27,27 @@ end
 
 
 local function walkLeft(event)
-	local name = event.left
+	local name = event.keyName.left
     local xv, yv = Sprite:getLinearVelocity()
-  	if ((event.left == 's' or event.left == 'left') and event.phase == 'down' ) then
+  	if ((event.keyName.left == 's' or event.keyName.left == 'left') and event.phase == 'down' ) then
         walkLeft(Sprite)
     end
     
 local function walkRight(event)  
-	local name = event.right
-  	if ((event.right == 'd' or event.right == 'right') and event.phase == 'down' ) then
+	local name = event.keyName.right
+  	if ((event.keyName.right == 'd' or event.keyName.right == 'right') and event.phase == 'down' ) then
         walkRight(Sprite)
     end
   	
 local function walkBackwards(event)
-	local name = event.backward
-  	if ((event.backward == 's' or event.backward == 'backwards') and event.phase == 'down' ) then
+	local name = event.keyName.backward
+  	if ((event.keyName.backward == 's' or event.keyName.backward == 'backwards') and event.phase == 'down' ) then
         walkBackwards(Sprite)
     end
     
 local function walkForwards(event)
-	local name = event.forward 
-    if ((event.forward == 'w' or event.forward == 'forwards') and event.phase == 'down' ) then
+	local name = event.keyName.forward 
+    if ((event.keyName.forward == 'w' or event.keyName.forward == 'forwards') and event.phase == 'down' ) then
         walkForwards(Sprite)
     end
 
@@ -56,8 +56,8 @@ local function jump(Sprite)
 end
 
 local function jump(event)
-	local name = event.up
-	if ((event.up == (keyBind.space()) or event.up == 'up') and event.phase == 'down' ) then
+	local name = event.keyName.up
+	if ((event.keyName.up == (keyBind.space()) or event.keyName.up == 'up') and event.phase == 'down' ) then
        jump(Sprite)
     end
 end
