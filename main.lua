@@ -7,6 +7,10 @@ Physics.setGravity(0, 0)
 
 math.randomseed(os.time())
 
+bgImage = display.newImageRect("assets/background.png", 3072, 3072)
+bgImage.x = display.contentCenterX
+bgImage.y = display.contentCenterY
+
 player.start()
 enemy.start(player)
 
