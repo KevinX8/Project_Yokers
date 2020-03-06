@@ -19,7 +19,7 @@ local aiLoopTimer
 -- attackPlayer will become roaming if the player gets far away
 
 function class.start(playerReference)
-    enemyImage = display.newImageRect("assets/enemy.png", 128, 128)
+    enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 128, 128)
     Physics.addBody(enemyImage, "dynamic")
     enemyImage.x = 200
     enemyImage.y = 200

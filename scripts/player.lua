@@ -1,6 +1,6 @@
 local class = {}; -- this and the return statement at the end make this file behave somewhat like a class
 
-local playerSpeed = 400
+local playerSpeed = 10
 local playerProjectileSpeed = 800
 local upButton = "w"
 local downButton = "s"
@@ -18,10 +18,11 @@ local mouseY = 0
 local clickReady = true
 
 function class.start()
-    playerImage = display.newImageRect("assets/player.png", 128, 128)
+    playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 128, 128)
     Physics.addBody(playerImage, "dynamic")
     playerImage.x = display.contentCenterX
     playerImage.y = display.contentCenterY
+    Runtime:addEventListener("enterFrame", class.enterFrame)
 end
 
 function class.getPosition()
@@ -29,7 +30,7 @@ function class.getPosition()
 end
 
 function class.throwProjectile()
-    local newProjectile = display.newImageRect("assets/egg.png", 300 / 8, 380 / 8)
+    local newProjectile = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
     newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)
     newProjectile.myName = "playerProjectile" -- also used for collision detection
@@ -44,7 +45,6 @@ function class.handleMovement(event)
     local phase = event.phase
     local name = event.keyName
     local keyState = false
-    local newXVelocity, newYVelocity = 0, 0
     if phase == "down" then keyState = true end
     if name == upButton then
         pressUp = keyState
@@ -55,20 +55,6 @@ function class.handleMovement(event)
     elseif name == rightButton then
         pressRight = keyState
     end
-    if pressUp == true then
-        newYVelocity = newYVelocity - playerSpeed
-    end
-    if pressDown == true then
-        newYVelocity = newYVelocity + playerSpeed
-    end
-    if pressLeft == true then
-        newXVelocity = newXVelocity - playerSpeed
-    end
-    if pressRight == true then
-        newXVelocity = newXVelocity + playerSpeed
-    end
-    playerImage:setLinearVelocity(newXVelocity, newYVelocity)
-    class.updateRotation()
 end
 
 function class.handleMouse(event)
@@ -86,7 +72,34 @@ function class.handleMouse(event)
 end
 
 function class.updateRotation()
-    playerImage.rotation = math.deg(math.atan2(playerImage.y - mouseY, playerImage.x - mouseX)) - 90
+    local adjMouseX, adjMouseY = BackgroundGroup:contentToLocal(mouseX, mouseY)
+    playerImage.rotation = math.deg(math.atan2(playerImage.y - adjMouseY, playerImage.x - adjMouseX)) - 90
+end
+
+local runtime = 0
+local function getDeltaTime() -- Calculate the "Delta Time" (Time between frames)
+    local time = system.getTimer() -- Time since the program started
+    local deltaTime = (time - runtime) / (1000 / 60)
+    runtime = time
+    return deltaTime
+end
+
+function class.enterFrame()
+    dt = getDeltaTime()
+    if pressUp == true then
+        BackgroundGroup.y = BackgroundGroup.y + (playerSpeed * dt)
+    end
+    if pressDown == true then
+        BackgroundGroup.y = BackgroundGroup.y - (playerSpeed * dt)
+    end
+    if pressLeft == true then
+        BackgroundGroup.x = BackgroundGroup.x + (playerSpeed * dt)
+    end
+    if pressRight == true then
+        BackgroundGroup.x = BackgroundGroup.x - (playerSpeed * dt)
+    end
+    -- Force the player to be in the middle of the screen at all times
+    playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
 end
 
 return class
