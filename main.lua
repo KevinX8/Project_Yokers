@@ -70,13 +70,5 @@ local function mouseEvent(event)
     player.handleMouse(event)
 end
 
---https://forums.coronalabs.com/topic/70000-dragging-a-sprite-between-display-groups/?p=364727
-function MoveObjectTo( targetGroup, dispObject )
-    local x, y = dispObject:localToContent( 0, 0 ) -- get location in world coords
-    x, y = targetGroup:contentToLocal( x, y ) -- get world coords as local to target group
-    targetGroup:insert( dispObject ) -- move display object to the target display group
-    dispObject.x, dispObject.y = x, y -- reposition the display object to the position relative to it's original position
-end
-
 Runtime:addEventListener("key", keyEvent)
 Runtime:addEventListener("mouse", mouseEvent)
