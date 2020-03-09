@@ -1,13 +1,13 @@
-local class = {};
-
+local enemy = {
+    player = nil,
+    enemyImage = nil,
+    aiState = "roaming",
+    targetX = 0,
+    targetY = 0,
+    aiLoopTimer = nil
+}
+enemy.__index = enemy
 local movementSpeed = 250
-
-local player
-local enemyImage
-local aiState = "roaming"
-local targetX = 0
-local targetY = 0
-local aiLoopTimer
 
 --      AI States: 
 -- roaming - Randomly wandering around.
@@ -18,46 +18,52 @@ local aiLoopTimer
 -- roaming/attackCoop will become attackPlayer if the player comes really close or if the player attacks
 -- attackPlayer will become roaming if the player gets far away
 
-function class.start(playerReference)
-    enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 128, 128)
-    Physics.addBody(enemyImage, "dynamic")
-    enemyImage.x = 200
-    enemyImage.y = 200
-    player = playerReference
-    aiLoopTimer = timer.performWithDelay(33.333333, class.aiUpdate, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
-    enemyImage.collision = class.collisionEvent
-    enemyImage:addEventListener( "collision" )
+function enemy.new(playerReference, startX, startY)
+    local self = setmetatable({}, enemy) -- OOP in Lua is weird...
+
+    self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 128, 128)
+    self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
+    Physics.addBody(self.enemyImage, "dynamic")
+    self.enemyImage.x = startX
+    self.enemyImage.y = startY
+    self.player = playerReference
+    self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
+    self.enemyImage.collision = self.collisionEvent
+    self.enemyImage:addEventListener("collision")
+
+    return self
 end
 
-function class.collisionEvent(self, event)
+function enemy.collisionEvent(self, event)
+    -- In this case, "self" refers to "enemyImage"
     if event.phase == "began" then
         if event.other.myName == "playerProjectile" then
-            timer.cancel(aiLoopTimer)
+            timer.cancel(self.instance.aiLoopTimer)
             timer.cancel(event.other.despawnTimer)
             event.other:removeSelf()
-            enemyImage:removeSelf()
+            self:removeSelf()
         end
     end
 end
 
-function class.aiUpdate() -- Called 30 times a second
-    if aiState == "roaming" then
+function enemy:aiUpdate() -- Called 30 times a second
+    if self.aiState == "roaming" then
         if math.random(0, 200) == 0 then -- 1 in 200 chance, 30 times a second - on average will roam for 6 seconds
-            aiState = "attackCoop"
+            self.aiState = "attackCoop"
             return
         end
         -- Generate random target position (todo)
-    elseif aiState == "attackCoop" then
+    elseif self.aiState == "attackCoop" then
         -- add this when coops exist
-        aiState = "attackPlayer" -- temporary
-    elseif aiState == "attackPlayer" then
-        targetX, targetY = player.getPosition()
+        self.aiState = "attackPlayer" -- temporary
+    elseif self.aiState == "attackPlayer" then
+        self.targetX, self.targetY = self.player.getPosition()
     end
     -- Point towards the target position
-    enemyImage.rotation = math.deg(math.atan2(enemyImage.y - targetY, enemyImage.x - targetX)) - 90
+    self.enemyImage.rotation = math.deg(math.atan2(self.enemyImage.y - self.targetY, self.enemyImage.x - self.targetX)) - 90
     -- Move towards the target position
-    local angle = math.rad(enemyImage.rotation - 90)
-    enemyImage:setLinearVelocity(math.cos(angle) * movementSpeed, math.sin(angle) * movementSpeed)
+    local angle = math.rad(self.enemyImage.rotation - 90)
+    self.enemyImage:setLinearVelocity(math.cos(angle) * movementSpeed, math.sin(angle) * movementSpeed)
 end
 
-return class
+return enemy

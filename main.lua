@@ -15,7 +15,12 @@ bgImage.x = display.contentCenterX
 bgImage.y = display.contentCenterY
 
 player.start()
-enemy.start(player)
+
+local function spawnNewEnemy()
+    enemy.new(player, math.random(-1000, 1000), math.random(-1000, 1000))
+end
+timer.performWithDelay(2000, spawnNewEnemy, 0) -- Spawn new enemy every 2 seconds
+
 
 --[[
 local fill = script.Parent.Filler
