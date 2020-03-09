@@ -2,6 +2,7 @@ local class = {}; -- this and the return statement at the end make this file beh
 
 local playerSpeed = 10
 local playerProjectileSpeed = 800
+local projectileLifetime = 3 -- Time in seconds before a projectile goes disappears after being shot
 local upButton = "w"
 local downButton = "s"
 local leftButton = "a"
@@ -39,6 +40,8 @@ function class.throwProjectile()
     newProjectile.rotation = playerImage.rotation
     local angle = math.rad(newProjectile.rotation - 90) -- use the projectile's direction to see which way it should go
     newProjectile:setLinearVelocity(math.cos(angle) * playerProjectileSpeed, math.sin(angle) * playerProjectileSpeed)
+
+    newProjectile.despawnTimer = timer.performWithDelay(projectileLifetime * 1000, function() newProjectile:removeSelf() end, 1)
 end
 
 function class.handleMovement(event)

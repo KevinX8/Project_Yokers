@@ -33,6 +33,7 @@ function class.collisionEvent(self, event)
     if event.phase == "began" then
         if event.other.myName == "playerProjectile" then
             timer.cancel(aiLoopTimer)
+            timer.cancel(event.other.despawnTimer)
             event.other:removeSelf()
             enemyImage:removeSelf()
         end
