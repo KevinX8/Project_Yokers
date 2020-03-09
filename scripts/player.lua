@@ -1,4 +1,4 @@
-local class = {}; -- this and the return statement at the end make this file behave somewhat like a class
+local player = {} -- this and the return statement at the end make this file behave somewhat like a class
 
 local playerSpeed = 10
 local playerProjectileSpeed = 800
@@ -18,19 +18,19 @@ local mouseX = 0
 local mouseY = 0
 local clickReady = true
 
-function class.start()
+function player.start()
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 128, 128)
     Physics.addBody(playerImage, "dynamic")
     playerImage.x = display.contentCenterX
     playerImage.y = display.contentCenterY
-    Runtime:addEventListener("enterFrame", class.enterFrame)
+    Runtime:addEventListener("enterFrame", player.enterFrame)
 end
 
-function class.getPosition()
+function player.getPosition()
     return playerImage.x, playerImage.y
 end
 
-function class.throwProjectile()
+function player.throwProjectile()
     local newProjectile = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
     newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)
@@ -44,7 +44,7 @@ function class.throwProjectile()
     newProjectile.despawnTimer = timer.performWithDelay(projectileLifetime * 1000, function() newProjectile:removeSelf() end, 1)
 end
 
-function class.handleMovement(event)
+function player.handleMovement(event)
     local phase = event.phase
     local name = event.keyName
     local keyState = false
@@ -60,23 +60,17 @@ function class.handleMovement(event)
     end
 end
 
-function class.handleMouse(event)
+function player.handleMouse(event)
     mouseX = event.x
     mouseY = event.y
-    class.updateRotation()
     if (event.isPrimaryButtonDown) then
         if (clickReady) then
-            class.throwProjectile()
+            player.throwProjectile()
             clickReady = false
         end
     else
         clickReady = true
     end
-end
-
-function class.updateRotation()
-    local adjMouseX, adjMouseY = BackgroundGroup:contentToLocal(mouseX, mouseY)
-    playerImage.rotation = math.deg(math.atan2(playerImage.y - adjMouseY, playerImage.x - adjMouseX)) - 90
 end
 
 local runtime = 0
@@ -87,7 +81,7 @@ local function getDeltaTime() -- Calculate the "Delta Time" (Time between frames
     return deltaTime
 end
 
-function class.enterFrame()
+function player.enterFrame()
     dt = getDeltaTime()
     if pressUp == true then
         BackgroundGroup.y = BackgroundGroup.y + (playerSpeed * dt)
@@ -103,6 +97,9 @@ function class.enterFrame()
     end
     -- Force the player to be in the middle of the screen at all times
     playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
+    -- Update player rotation
+    local adjMouseX, adjMouseY = BackgroundGroup:contentToLocal(mouseX, mouseY)
+    playerImage.rotation = math.deg(math.atan2(playerImage.y - adjMouseY, playerImage.x - adjMouseX)) - 90
 end
 
-return class
+return player
