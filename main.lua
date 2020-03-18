@@ -14,10 +14,20 @@ bgImage = display.newImageRect(BackgroundGroup, "assets/background.png", 3072, 3
 bgImage.x = display.contentCenterX
 bgImage.y = display.contentCenterY
 
+local coop1 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+coop1.x = 0
+coop1.y = 0
+Physics.addBody(coop1, "static")
+local coop2 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+coop2.x = 1000
+coop2.y = 1300
+Physics.addBody(coop2, "static")
+local coops = {coop1, coop2}
+
 player.start()
 
 local function spawnNewEnemy()
-    enemy.new(player, math.random(-1000, 1000), math.random(-1000, 1000))
+    enemy.new(player, coops, math.random(-1000, 1000), math.random(-1000, 1000))
 end
 timer.performWithDelay(2000, spawnNewEnemy, 0) -- Spawn new enemy every 2 seconds
 

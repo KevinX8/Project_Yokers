@@ -4,7 +4,8 @@ local enemy = {
     aiState = "roaming",
     targetX = 0,
     targetY = 0,
-    aiLoopTimer = nil
+    aiLoopTimer = nil,
+    coopList = {}
 }
 enemy.__index = enemy
 local movementSpeed = 250
@@ -18,7 +19,7 @@ local movementSpeed = 250
 -- roaming/attackCoop will become attackPlayer if the player comes really close or if the player attacks
 -- attackPlayer will become roaming if the player gets far away
 
-function enemy.new(playerReference, startX, startY)
+function enemy.new(playerReference, coops, startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
 
     self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 128, 128)
@@ -27,6 +28,7 @@ function enemy.new(playerReference, startX, startY)
     self.enemyImage.x = startX
     self.enemyImage.y = startY
     self.player = playerReference
+    self.coopList = coops
     self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
     self.enemyImage.collision = self.collisionEvent
     self.enemyImage:addEventListener("collision")
@@ -54,8 +56,18 @@ function enemy:aiUpdate() -- Called 30 times a second
         end
         -- Generate random target position (todo)
     elseif self.aiState == "attackCoop" then
-        -- add this when coops exist
-        self.aiState = "attackPlayer" -- temporary
+        -- Find the closest coop to this enemy
+        local lowestDistance = 100000
+        local closestCoop = nil
+        for i, coop in ipairs(self.coopList) do
+            local distance = math.sqrt(((self.enemyImage.x - coop.x) ^ 2) + ((self.enemyImage.y - coop.y) ^ 2))
+            if distance < lowestDistance or closestCoop == nil then
+                lowestDistance = distance
+                closestCoop = coop
+            end
+        end
+        self.targetX = closestCoop.x
+        self.targetY = closestCoop.y
     elseif self.aiState == "attackPlayer" then
         self.targetX, self.targetY = self.player.getPosition()
     end

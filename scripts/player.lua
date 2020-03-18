@@ -82,7 +82,7 @@ local function getDeltaTime() -- Calculate the "Delta Time" (Time between frames
 end
 
 function player.enterFrame()
-    dt = getDeltaTime()
+    local dt = getDeltaTime()
     if pressUp == true then
         BackgroundGroup.y = BackgroundGroup.y + (playerSpeed * dt)
     end
