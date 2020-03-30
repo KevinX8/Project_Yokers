@@ -99,7 +99,7 @@ function player.enterFrame()
     if pressRight == true and (playerImage.x + 64) < LevelBoundRight then
         BackgroundGroup.x = BackgroundGroup.x - (playerSpeed * dt)
     end
-    -- Force the player to be in the middle of the screen at all times 
+    -- Force the player to be in the middle of the screen at all times
     playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
     -- Update player rotation
     local adjMouseX, adjMouseY = BackgroundGroup:contentToLocal(mouseX, mouseY)
