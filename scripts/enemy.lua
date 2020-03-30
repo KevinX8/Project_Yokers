@@ -9,6 +9,8 @@ local enemy = {
 }
 enemy.__index = enemy
 local movementSpeed = 250
+local playerAttackDistance = 300 -- If the player comes closer than this distance, the enemy attacks
+local playerForgetDistance = 500 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 
 --      AI States: 
 -- roaming - Randomly wandering around.
@@ -18,6 +20,10 @@ local movementSpeed = 250
 -- Roaming will become attackCoop after waiting a random amount of time
 -- roaming/attackCoop will become attackPlayer if the player comes really close or if the player attacks
 -- attackPlayer will become roaming if the player gets far away
+
+local function calculateDistance(object1x, object1y, object2x, object2y) -- Calculates the distance between 2 positions
+    return math.sqrt(((object1x - object2x) ^ 2) + ((object1y - object2y) ^ 2))
+end
 
 function enemy.new(playerReference, coops, startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
@@ -32,6 +38,9 @@ function enemy.new(playerReference, coops, startX, startY)
     self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
     self.enemyImage.collision = self.collisionEvent
     self.enemyImage:addEventListener("collision")
+
+    self.targetX = math.random(LevelBoundLeft, LevelBoundRight) -- Generate an initial random target (enemy starts in "roaming" mode)
+    self.targetY = math.random(LevelBoundTop, LevelBoundBottom)
 
     return self
 end
@@ -49,27 +58,41 @@ function enemy.collisionEvent(self, event)
 end
 
 function enemy:aiUpdate() -- Called 30 times a second
+    local playerX, playerY = self.player.getPosition()
     if self.aiState == "roaming" then
         if math.random(0, 200) == 0 then -- 1 in 200 chance, 30 times a second - on average will roam for 6 seconds
             self.aiState = "attackCoop"
-            return
         end
-        -- Generate random target position (todo)
+        if calculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY) < playerAttackDistance then
+            self.aiState = "attackPlayer"
+        end
+        if calculateDistance(self.enemyImage.x, self.enemyImage.y, self.targetX, self.targetY) < 100 then
+            -- When the enemy arrives at the target position, generate a new target position
+            self.targetX = math.random(LevelBoundLeft, LevelBoundRight)
+            self.targetY = math.random(LevelBoundTop, LevelBoundBottom)
+        end
     elseif self.aiState == "attackCoop" then
         -- Find the closest coop to this enemy
         local lowestDistance = 100000
         local closestCoop = nil
         for i, coop in ipairs(self.coopList) do
-            local distance = math.sqrt(((self.enemyImage.x - coop.x) ^ 2) + ((self.enemyImage.y - coop.y) ^ 2))
+            local distance = calculateDistance(self.enemyImage.x, self.enemyImage.y, coop.x, coop.y)
             if distance < lowestDistance or closestCoop == nil then
                 lowestDistance = distance
                 closestCoop = coop
             end
         end
+        if calculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY) < playerAttackDistance then
+            self.aiState = "attackPlayer"
+        end
         self.targetX = closestCoop.x
         self.targetY = closestCoop.y
     elseif self.aiState == "attackPlayer" then
-        self.targetX, self.targetY = self.player.getPosition()
+        if calculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY) > playerForgetDistance then
+            self.aiState = "attackCoop"
+        end
+        self.targetX = playerX
+        self.targetY = playerY
     end
     -- Point towards the target position
     self.enemyImage.rotation = math.deg(math.atan2(self.enemyImage.y - self.targetY, self.enemyImage.x - self.targetX)) - 90

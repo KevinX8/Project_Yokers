@@ -83,16 +83,16 @@ end
 
 function player.enterFrame()
     local dt = getDeltaTime()
-    if pressUp == true and (playerImage.y - 64) > display.contentCenterY - 1536 then
+    if pressUp == true and (playerImage.y - 64) > LevelBoundTop then
         BackgroundGroup.y = BackgroundGroup.y + (playerSpeed * dt)
     end
-    if pressDown == true and (playerImage.y + 64) < display.contentCenterY + 1536 then
+    if pressDown == true and (playerImage.y + 64) < LevelBoundBottom then
         BackgroundGroup.y = BackgroundGroup.y - (playerSpeed * dt)
     end
-    if pressLeft == true and (playerImage.x - 64) > display.contentCenterX - 1536 then
+    if pressLeft == true and (playerImage.x - 64) > LevelBoundLeft then
         BackgroundGroup.x = BackgroundGroup.x + (playerSpeed * dt)
     end
-    if pressRight == true and (playerImage.x + 64) < display.contentCenterX + 1536 then
+    if pressRight == true and (playerImage.x + 64) < LevelBoundRight then
         BackgroundGroup.x = BackgroundGroup.x - (playerSpeed * dt)
     end
     -- Force the player to be in the middle of the screen at all times 
