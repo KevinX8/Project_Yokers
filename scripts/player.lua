@@ -19,7 +19,7 @@ local mouseY = 0
 local clickReady = true
 
 function player.start()
-    playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 128, 128)
+    playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
     Physics.addBody(playerImage, "dynamic")
     playerImage.x = display.contentCenterX
     playerImage.y = display.contentCenterY
