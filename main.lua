@@ -9,6 +9,8 @@ LevelBoundTop = display.contentCenterY - 1536
 LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
+Level = 1
+TimeDifficulty = 120000
 
 Physics.start()
 Physics.setGravity(0, 0)
@@ -38,8 +40,19 @@ local function spawnNewEnemy()
     if pickrandomedge == 2 then enemy.new(player, coops, LevelBoundRight, math.random(LevelBoundTop, LevelBoundBottom)) end
     if pickrandomedge == 3 then enemy.new(player, coops, LevelBoundLeft, math.random(LevelBoundTop, LevelBoundBottom)) end
 end
+local function progresslevel()
+if Level == 1 then 
+    LevelBoundRight = display.contentCenterX + 1536 + 3072
+    Level = 2    
+elseif Level == 2 then
+    LevelBoundTop = display.contentCenterY - 1536 - 3072
+    Level = 3
+elseif Level == 3 then
+    LevelBoundBottom = display.contentCenterY + 1536 + 3072
+end
+end
 timer.performWithDelay(2000, spawnNewEnemy, 0) -- Spawn new enemy every 2 seconds
-
+timer.performWithDelay(TimeDifficulty, progresslevel, 3)
 
 --[[
 local fill = script.Parent.Filler
