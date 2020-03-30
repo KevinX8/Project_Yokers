@@ -10,7 +10,7 @@ Physics.setGravity(0, 0)
 
 math.randomseed(os.time())
 
-bgImage = display.newImageRect(BackgroundGroup, "assets/background.png", 3072, 3072)
+bgImage = display.newImageRect(BackgroundGroup, "assets/full background.png", 3072, 3072)
 bgImage.x = display.contentCenterX
 bgImage.y = display.contentCenterY
 
