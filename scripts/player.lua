@@ -2,6 +2,7 @@ local player = {} -- this and the return statement at the end make this file beh
 
 local playerSpeed = 10
 local playerProjectileSpeed = 800
+local invincibilityTime = 1 -- Time in seconds the player should be invincible after being hit
 local projectileLifetime = 3 -- Time in seconds before a projectile goes disappears after being shot
 local upButton = "w"
 local downButton = "s"
@@ -17,6 +18,9 @@ local pressRight = false
 local mouseX = 0
 local mouseY = 0
 local clickReady = true
+
+local health = 100
+local isInvincible = false
 
 function player.start()
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
@@ -83,23 +87,34 @@ end
 
 function player.enterFrame()
     local dt = getDeltaTime()
-    if pressUp == true and (playerImage.y - 64) > display.contentCenterY - 1536 then
+    if pressUp == true and (playerImage.y - 64) > LevelBoundTop then
         BackgroundGroup.y = BackgroundGroup.y + (playerSpeed * dt)
     end
-    if pressDown == true and (playerImage.y + 64) < display.contentCenterY + 1536 then
+    if pressDown == true and (playerImage.y + 64) < LevelBoundBottom then
         BackgroundGroup.y = BackgroundGroup.y - (playerSpeed * dt)
     end
-    if pressLeft == true and (playerImage.x - 64) > display.contentCenterX - 1536 then
+    if pressLeft == true and (playerImage.x - 64) > LevelBoundLeft then
         BackgroundGroup.x = BackgroundGroup.x + (playerSpeed * dt)
     end
-    if pressRight == true and (playerImage.x + 64) < display.contentCenterX + 1536 then
+    if pressRight == true and (playerImage.x + 64) < LevelBoundRight then
         BackgroundGroup.x = BackgroundGroup.x - (playerSpeed * dt)
     end
-    -- Force the player to be in the middle of the screen at all times 
+    -- Force the player to be in the middle of the screen at all times
     playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
     -- Update player rotation
     local adjMouseX, adjMouseY = BackgroundGroup:contentToLocal(mouseX, mouseY)
     playerImage.rotation = math.deg(math.atan2(playerImage.y - adjMouseY, playerImage.x - adjMouseX)) - 90
+end
+
+function player.damage(damageAmount)
+    if not isInvincible then
+        health = health - damageAmount
+        if health <= 0 then
+            print("u r ded") -- need to add death
+        end
+        isInvincible = true
+        timer.performWithDelay(invincibilityTime * 1000, function() isInvincible = false end, 1)
+    end
 end
 
 return player

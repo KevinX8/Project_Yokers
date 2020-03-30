@@ -5,12 +5,19 @@ local enemy = require("scripts.enemy")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
 
+LevelBoundTop = display.contentCenterY - 1536
+LevelBoundBottom = display.contentCenterY + 1536
+LevelBoundLeft = display.contentCenterX - 1536
+LevelBoundRight = display.contentCenterX + 1536
+Level = 1
+TimeDifficulty = 120000
+
 Physics.start()
 Physics.setGravity(0, 0)
 
 math.randomseed(os.time())
 
-bgImage = display.newImageRect(BackgroundGroup, "assets/full background.png", 3072, 3072)
+local bgImage = display.newImageRect(BackgroundGroup, "assets/full background.png", 3072, 3072)
 bgImage.x = display.contentCenterX
 bgImage.y = display.contentCenterY
 
@@ -28,13 +35,26 @@ player.start()
 
 local function spawnNewEnemy()
     local pickrandomedge = math.random(0,3)
-    if pickrandomedge == 0 then enemy.new(player, coops, math.random(display.contentCenterX - 1536, display.contentCenterX + 1536), display.contentCenterY + 1536) end
-    if pickrandomedge == 1 then enemy.new(player, coops, math.random(display.contentCenterX - 1536, display.contentCenterX + 1536), display.contentCenterY - 1536) end
-    if pickrandomedge == 2 then enemy.new(player, coops, display.contentCenterX + 1536, math.random(display.contentCenterY - 1536, display.contentCenterY + 1536)) end
-    if pickrandomedge == 3 then enemy.new(player, coops, display.contentCenterX - 1536, math.random(display.contentCenterY - 1536, display.contentCenterY + 1536)) end
+    if pickrandomedge == 0 then enemy.new(player, coops, math.random(LevelBoundLeft, LevelBoundRight), LevelBoundBottom) end
+    if pickrandomedge == 1 then enemy.new(player, coops, math.random(LevelBoundLeft, LevelBoundRight), LevelBoundTop) end
+    if pickrandomedge == 2 then enemy.new(player, coops, LevelBoundRight, math.random(LevelBoundTop, LevelBoundBottom)) end
+    if pickrandomedge == 3 then enemy.new(player, coops, LevelBoundLeft, math.random(LevelBoundTop, LevelBoundBottom)) end
 end
-timer.performWithDelay(2000, spawnNewEnemy, 0) -- Spawn new enemy every 2 seconds
 
+local function progressLevel()
+    if Level == 1 then 
+        LevelBoundRight = display.contentCenterX + 1536 + 3072
+        Level = 2    
+    elseif Level == 2 then
+        LevelBoundTop = display.contentCenterY - 1536 - 3072
+        Level = 3
+    elseif Level == 3 then
+        LevelBoundBottom = display.contentCenterY + 1536 + 3072
+    end
+end
+
+timer.performWithDelay(2000, spawnNewEnemy, 0) -- Spawn new enemy every 2 seconds
+timer.performWithDelay(TimeDifficulty, progressLevel, 3)
 
 --[[
 local fill = script.Parent.Filler
