@@ -83,19 +83,19 @@ end
 
 function player.enterFrame()
     local dt = getDeltaTime()
-    if pressUp == true then
+    if pressUp == true and (playerImage.y - 64) > display.contentCenterY - 1536 then
         BackgroundGroup.y = BackgroundGroup.y + (playerSpeed * dt)
     end
-    if pressDown == true then
+    if pressDown == true and (playerImage.y + 64) < display.contentCenterY + 1536 then
         BackgroundGroup.y = BackgroundGroup.y - (playerSpeed * dt)
     end
-    if pressLeft == true then
+    if pressLeft == true and (playerImage.x - 64) > display.contentCenterX - 1536 then
         BackgroundGroup.x = BackgroundGroup.x + (playerSpeed * dt)
     end
-    if pressRight == true then
+    if pressRight == true and (playerImage.x + 64) < display.contentCenterX + 1536 then
         BackgroundGroup.x = BackgroundGroup.x - (playerSpeed * dt)
     end
-    -- Force the player to be in the middle of the screen at all times
+    -- Force the player to be in the middle of the screen at all times 
     playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
     -- Update player rotation
     local adjMouseX, adjMouseY = BackgroundGroup:contentToLocal(mouseX, mouseY)

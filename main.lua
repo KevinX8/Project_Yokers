@@ -27,7 +27,11 @@ local coops = {coop1, coop2}
 player.start()
 
 local function spawnNewEnemy()
-    enemy.new(player, coops, math.random(-1000, 1000), math.random(-1000, 1000))
+    local pickrandomedge = math.random(0,3)
+    if pickrandomedge == 0 then enemy.new(player, coops, math.random(display.contentCenterX - 1536, display.contentCenterX + 1536), display.contentCenterY + 1536) end
+    if pickrandomedge == 1 then enemy.new(player, coops, math.random(display.contentCenterX - 1536, display.contentCenterX + 1536), display.contentCenterY - 1536) end
+    if pickrandomedge == 2 then enemy.new(player, coops, display.contentCenterX + 1536, math.random(display.contentCenterY - 1536, display.contentCenterY + 1536)) end
+    if pickrandomedge == 3 then enemy.new(player, coops, display.contentCenterX - 1536, math.random(display.contentCenterY - 1536, display.contentCenterY + 1536)) end
 end
 timer.performWithDelay(2000, spawnNewEnemy, 0) -- Spawn new enemy every 2 seconds
 

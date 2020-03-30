@@ -5,6 +5,8 @@
         "Sprite",
         "timer",
         "Runtime",
-        "application"
+        "application",
+        "system",
+        "bgImage"
     ]
 }
