@@ -10,8 +10,8 @@ local enemy = {
 enemy.__index = enemy
 local movementSpeed = 250
 local playerDamage = 20
-local playerAttackDistance = 300 -- If the player comes closer than this distance, the enemy attacks
-local playerForgetDistance = 500 -- If the player gets this far away, the enemy will forget about them and go back to the coops
+local playerAttackDistance = 400 -- If the player comes closer than this distance, the enemy attacks
+local playerForgetDistance = 800 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 
 --      AI States: 
 -- roaming - Randomly wandering around.

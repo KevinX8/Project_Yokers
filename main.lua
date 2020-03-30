@@ -42,9 +42,9 @@ local function spawnNewEnemy()
 end
 
 local function progressLevel()
-    if Level == 1 then 
+    if Level == 1 then
         LevelBoundRight = display.contentCenterX + 1536 + 3072
-        Level = 2    
+        Level = 2
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
