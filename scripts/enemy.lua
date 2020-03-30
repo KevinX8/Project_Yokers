@@ -9,8 +9,9 @@ local enemy = {
 }
 enemy.__index = enemy
 local movementSpeed = 250
-local playerAttackDistance = 300 -- If the player comes closer than this distance, the enemy attacks
-local playerForgetDistance = 500 -- If the player gets this far away, the enemy will forget about them and go back to the coops
+local playerDamage = 20
+local playerAttackDistance = 400 -- If the player comes closer than this distance, the enemy attacks
+local playerForgetDistance = 800 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 
 --      AI States: 
 -- roaming - Randomly wandering around.
@@ -59,11 +60,12 @@ end
 
 function enemy:aiUpdate() -- Called 30 times a second
     local playerX, playerY = self.player.getPosition()
+    local playerDistance = calculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY)
     if self.aiState == "roaming" then
         if math.random(0, 200) == 0 then -- 1 in 200 chance, 30 times a second - on average will roam for 6 seconds
             self.aiState = "attackCoop"
         end
-        if calculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY) < playerAttackDistance then
+        if playerDistance < playerAttackDistance then
             self.aiState = "attackPlayer"
         end
         if calculateDistance(self.enemyImage.x, self.enemyImage.y, self.targetX, self.targetY) < 100 then
@@ -82,18 +84,23 @@ function enemy:aiUpdate() -- Called 30 times a second
                 closestCoop = coop
             end
         end
-        if calculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY) < playerAttackDistance then
+        if playerDistance < playerAttackDistance then
             self.aiState = "attackPlayer"
         end
         self.targetX = closestCoop.x
         self.targetY = closestCoop.y
     elseif self.aiState == "attackPlayer" then
-        if calculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY) > playerForgetDistance then
+        if playerDistance > playerForgetDistance then
             self.aiState = "attackCoop"
         end
         self.targetX = playerX
         self.targetY = playerY
     end
+
+    if playerDistance < 150 then
+        self.player.damage(playerDamage)
+    end
+
     -- Point towards the target position
     self.enemyImage.rotation = math.deg(math.atan2(self.enemyImage.y - self.targetY, self.enemyImage.x - self.targetX)) - 90
     -- Move towards the target position
