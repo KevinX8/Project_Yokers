@@ -53,6 +53,7 @@ function enemy.collisionEvent(self, event)
             timer.cancel(self.instance.aiLoopTimer)
             timer.cancel(event.other.despawnTimer)
             event.other:removeSelf()
+            EnemyAmount = EnemyAmount - 1
             self:removeSelf()
         end
     end
