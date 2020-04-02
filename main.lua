@@ -25,10 +25,12 @@ bgImage.x = display.contentCenterX
 bgImage.y = display.contentCenterY
 
 local coop1 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(3,coop1)
 coop1.x = 0
 coop1.y = 0
 Physics.addBody(coop1, "static")
 local coop2 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(3,coop2)
 coop2.x = 1000
 coop2.y = 1300
 Physics.addBody(coop2, "static")
@@ -37,6 +39,7 @@ local coops = {coop1, coop2}
     local i = 0
     repeat
         local bush = display.newImageRect(BackgroundGroup, "assets/bush.png", 256, 256)
+        BackgroundGroup:insert(2,bush)
         bush.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 128)
         bush.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)
         i = i + 1
