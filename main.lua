@@ -11,6 +11,8 @@ LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Level = 1
 TimeDifficulty = 120000
+EnemyAmount = 5
+TimeBetweenWaves = 5000
 
 Physics.start()
 Physics.setGravity(0, 0)
@@ -34,11 +36,39 @@ local coops = {coop1, coop2}
 player.start()
 
 local function spawnNewEnemy()
-    local pickrandomedge = math.random(0,3)
-    if pickrandomedge == 0 then enemy.new(player, coops, math.random(LevelBoundLeft, LevelBoundRight), LevelBoundBottom) end
-    if pickrandomedge == 1 then enemy.new(player, coops, math.random(LevelBoundLeft, LevelBoundRight), LevelBoundTop) end
-    if pickrandomedge == 2 then enemy.new(player, coops, LevelBoundRight, math.random(LevelBoundTop, LevelBoundBottom)) end
-    if pickrandomedge == 3 then enemy.new(player, coops, LevelBoundLeft, math.random(LevelBoundTop, LevelBoundBottom)) end
+    local pickrandomedge = math.random(0,3)    
+        if pickrandomedge == 0 then 
+            local EnemyX = math.random(LevelBoundLeft, LevelBoundRight)
+            local i = 0
+            repeat
+                enemy.new(player, coops, EnemyX, LevelBoundBottom - 540) 
+                i = i + 1
+            until i >= EnemyAmount
+        end
+        if pickrandomedge == 1 then 
+            local EnemyX = math.random(LevelBoundLeft, LevelBoundRight)
+            local i = 0
+            repeat
+                enemy.new(player, coops, EnemyX, LevelBoundTop + 540) 
+                i = i + 1
+            until i >= EnemyAmount
+        end
+        if pickrandomedge == 2 then 
+            local EnemyY = math.random(LevelBoundTop, LevelBoundBottom)
+            local i = 0
+            repeat
+                enemy.new(player, coops, LevelBoundRight + 960, EnemyY)
+                i = i + 1
+            until i >= EnemyAmount    
+        end
+        if pickrandomedge == 3 then 
+            local EnemyY = math.random(LevelBoundTop, LevelBoundBottom)
+            local i = 0
+            repeat
+                enemy.new(player, coops, LevelBoundLeft - 960, EnemyY) 
+                i = i + 1
+            until i >= EnemyAmount    
+        end
 end
 
 local function progressLevel()
@@ -53,7 +83,7 @@ local function progressLevel()
     end
 end
 
-timer.performWithDelay(2000, spawnNewEnemy, 0) -- Spawn new enemy every 2 seconds
+timer.performWithDelay(TimeBetweenWaves, spawnNewEnemy, 0) -- Spawn new enemy every 2 seconds
 timer.performWithDelay(TimeDifficulty, progressLevel, 3)
 
 --[[
