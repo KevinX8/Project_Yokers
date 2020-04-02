@@ -20,6 +20,7 @@ Physics.setGravity(0, 0)
 math.randomseed(os.time())
 
 local bgImage = display.newImageRect(BackgroundGroup, "assets/full background.png", 3072, 3072)
+BackgroundGroup:insert(1,bgImage)
 bgImage.x = display.contentCenterX
 bgImage.y = display.contentCenterY
 
@@ -41,7 +42,7 @@ local function spawnNewEnemy()
             local EnemyX = math.random(LevelBoundLeft, LevelBoundRight)
             local i = 0
             repeat
-                enemy.new(player, coops, EnemyX, LevelBoundBottom - 540) 
+                enemy.new(player, coops, EnemyX, LevelBoundBottom + 540) 
                 i = i + 1
             until i >= EnemyAmount
         end
@@ -49,7 +50,7 @@ local function spawnNewEnemy()
             local EnemyX = math.random(LevelBoundLeft, LevelBoundRight)
             local i = 0
             repeat
-                enemy.new(player, coops, EnemyX, LevelBoundTop + 540) 
+                enemy.new(player, coops, EnemyX, LevelBoundTop - 540) 
                 i = i + 1
             until i >= EnemyAmount
         end
