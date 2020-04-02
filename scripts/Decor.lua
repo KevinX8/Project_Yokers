@@ -2,6 +2,7 @@ local Decor = {}
 
 function Decor.level1()
 local i = 0
+local bushlimit = math.random(5,10)
 repeat
     local bush = display.newImageRect(BackgroundGroup, "assets/bush.png", 256, 256)
     BackgroundGroup:insert(2,bush)
@@ -11,7 +12,7 @@ repeat
     i = i + 1
     bush.collision = Decor.collisionEvent
     bush:addEventListener("collision")
-until i >= 7
+until i >= bushlimit
 end
 function Decor.collisionEvent(self, event)
     -- In this case, "self" refers to "enemyImage"
