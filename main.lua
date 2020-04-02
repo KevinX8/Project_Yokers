@@ -1,6 +1,7 @@
 Physics = require("physics")
 local player = require("scripts.player")
 local enemy = require("scripts.enemy")
+local Decor = require("scripts.Decor")
 
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
@@ -35,16 +36,8 @@ coop2.x = 1000
 coop2.y = 1300
 Physics.addBody(coop2, "static")
 local coops = {coop1, coop2}
--- SpawnDecor
-    local i = 0
-    repeat
-        local bush = display.newImageRect(BackgroundGroup, "assets/bush.png", 256, 256)
-        BackgroundGroup:insert(2,bush)
-        bush.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 128)
-        bush.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)
-        i = i + 1
-    until i >= 7
 
+Decor.level1()
 player.start()
 
 local function spawnNewEnemy()
