@@ -23,18 +23,23 @@ Physics.setGravity(0, 0)
 
 math.randomseed(os.time())
 
-local bgImage = display.newImageRect(BackgroundGroup, "assets/background.png", 3072, 3072)
-BackgroundGroup:insert(1,bgImage)
-bgImage.x = display.contentCenterX
-bgImage.y = display.contentCenterY
+local L1BgImage = display.newImageRect(BackgroundGroup, "assets/background.png", 3072, 3072)
+BackgroundGroup:insert(1,L1BgImage)
+L1BgImage.x = display.contentCenterX
+L1BgImage.y = display.contentCenterY
+
+local L2BgImage = display.newImageRect(BackgroundGroup, "assets/SandBackground.png", 3072, 3072)
+BackgroundGroup:insert(2,L2BgImage)
+L2BgImage.x = display.contentCenterX + 3072
+L2BgImage.y = display.contentCenterY
 
 local coop1 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(3,coop1)
+BackgroundGroup:insert(4,coop1)
 coop1.x = 0
 coop1.y = 0
 Physics.addBody(coop1, "static")
 local coop2 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(3,coop2)
+BackgroundGroup:insert(4,coop2)
 coop2.x = 1000
 coop2.y = 1300
 Physics.addBody(coop2, "static")

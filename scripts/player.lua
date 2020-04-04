@@ -24,7 +24,7 @@ local isInvincible = false
 
 function player.start()
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
-    BackgroundGroup:insert(2,playerImage)
+    BackgroundGroup:insert(3,playerImage)
     Physics.addBody(playerImage, "dynamic")
     playerImage.x = display.contentCenterX
     playerImage.y = display.contentCenterY
@@ -37,7 +37,7 @@ end
 
 function player.throwProjectile()
     local newProjectile = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
-    BackgroundGroup:insert(2,newProjectile)
+    BackgroundGroup:insert(3,newProjectile)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
     newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)
     newProjectile.myName = "playerProjectile" -- also used for collision detection

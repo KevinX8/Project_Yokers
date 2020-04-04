@@ -5,7 +5,7 @@ local i = 0
 local bushlimit = math.random(5,10)
 repeat
     local bush = display.newImageRect(BackgroundGroup, "assets/bush.png", 256, 256)
-    BackgroundGroup:insert(2,bush)
+    BackgroundGroup:insert(4,bush)
     Physics.addBody(bush, "static", {radius=60})
     bush.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 128)
     bush.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)
