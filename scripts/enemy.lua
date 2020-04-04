@@ -9,7 +9,7 @@ local enemy = {
 }
 enemy.__index = enemy
 local movementSpeed = 250
-local playerDamage = 20
+local playerDamage = 1
 local playerAttackDistance = 400 -- If the player comes closer than this distance, the enemy attacks
 local playerForgetDistance = 800 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 

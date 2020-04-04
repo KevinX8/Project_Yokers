@@ -5,7 +5,6 @@ local i = 0
 local bushlimit = math.random(5,10)
 local cactusLimit = math.random(8,13)
 
-
 repeat--level1--
     local bush = display.newImageRect(BackgroundGroup, "assets/bush.png", 256, 256)
     BackgroundGroup:insert(3,bush)
@@ -41,6 +40,12 @@ function Decor.collisionEvent(self, event)
         if event.other.myName == "coop" then
             event.target:removeSelf()
             print("ouch coop hurts")
+        end
+        if event.other.myName == "player" and event.target.myName == "cactus" then
+            print("ouch cactus")
+            player.damage(1)
+            BackgroundGroup.x = BackgroundGroup.x + 0.2* (event.target.x- select(1,player.getPosition()))
+            BackgroundGroup.y = BackgroundGroup.y + 0.2*(event.target.y-select(2,player.getPosition()))
         end
     end
 end

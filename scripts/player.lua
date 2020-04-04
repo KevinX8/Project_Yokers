@@ -19,13 +19,14 @@ local mouseX = 0
 local mouseY = 0
 local clickReady = true
 
-local health = 100
+local health = 5
 local isInvincible = false
 
 function player.start()
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
     BackgroundGroup:insert(3,playerImage)
-    Physics.addBody(playerImage, "dynamic")
+    Physics.addBody(playerImage, "dynamic", {radius = 85})
+    playerImage.myName = "player"
     playerImage.x = display.contentCenterX
     playerImage.y = display.contentCenterY
     Runtime:addEventListener("enterFrame", player.enterFrame)

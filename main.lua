@@ -1,5 +1,5 @@
 Physics = require("physics")
-local player = require("scripts.player")
+player = require("scripts.player")
 local enemy = require("scripts.enemy")
 local Decor = require("scripts.Decor")
 
