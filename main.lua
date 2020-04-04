@@ -94,6 +94,16 @@ local function progressLevel()
     if Level == 1 then
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
+        local coop3 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+        BackgroundGroup:insert(4,coop3)
+        coop3.x = 3800
+        coop3.y = 300
+        Physics.addBody(coop3, "static")
+        local coop4 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+        BackgroundGroup:insert(4,coop4)
+        coop4.x = 4850
+        coop4.y = 1400
+        Physics.addBody(coop4, "static")
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
