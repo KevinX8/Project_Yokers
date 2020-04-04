@@ -9,8 +9,8 @@ local cactusLimit = math.random(8,13)
 repeat--level1--
     local bush = display.newImageRect(BackgroundGroup, "assets/bush.png", 256, 256)
     BackgroundGroup:insert(3,bush)
+    Physics.addBody(bush, "dynamic", {radius=60, density=99999999.0})
     bush.myName = "bush"
-    Physics.addBody(bush, "static", {radius=60})
     bush.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 128)-200
     bush.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)
     i = i + 1
@@ -21,8 +21,7 @@ i = 0
 repeat--level2--
     local cactus = display.newImageRect(BackgroundGroup, "assets/cactus.png", 256, 256)
     BackgroundGroup:insert(3, cactus)
-    cactus.myName = "cactus"
-    Physics.addBody(cactus, "static", {radius=120})
+    Physics.addBody(cactus, "dynamic", {radius=120, density=999999999.0})
     cactus.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 128)+2872
     cactus.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)
     cactus.myName = "cactus"
@@ -40,16 +39,8 @@ function Decor.collisionEvent(self, event)
             event.other:removeSelf()
         end
         if event.other.myName == "coop" then
-            if event.target.myName == "bush" then
-                self.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 128)-200
-                self.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)
-                print("it works bush")
-            end
-            if event.target.myName == "cactus" then
-                self.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 128)+2872
-                self.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)
-                print("it works cactus")
-            end
+            event.target:removeSelf()
+            print("ouch coop hurts")
         end
     end
 end
