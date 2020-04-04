@@ -11,7 +11,7 @@ LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Level = 1
-TimeDifficulty = 120000
+TimeDifficulty = 6000
 EnemiesPerWave = 5
 MinTimeBetweenWaves = 5000
 MaxTimeBetweenWaves = 10000
@@ -38,12 +38,26 @@ BackgroundGroup:insert(4,coop1)
 coop1.x = 0
 coop1.y = 0
 Physics.addBody(coop1, "static")
+coop1.myName = "coop"
 local coop2 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
 BackgroundGroup:insert(4,coop2)
 coop2.x = 1000
 coop2.y = 1300
 Physics.addBody(coop2, "static")
-local coops = {coop1, coop2}
+coop2.myName = "coop"
+local coop3 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(4,coop3)
+coop3.x = 3800
+coop3.y = 300
+Physics.addBody(coop3, "static")
+coop3.myName = "coop"
+local coop4 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(4,coop4)
+coop4.x = 4850
+coop4.y = 1400
+Physics.addBody(coop4, "static")
+coop4.myName = "coop"
+coops = {coop1, coop2}
 
 Decor.level1()
 player.start()
@@ -107,16 +121,7 @@ local function progressLevel()
     if Level == 1 then
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
-        local coop3 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-        BackgroundGroup:insert(5,coop3)
-        coop3.x = 3800
-        coop3.y = 300
-        Physics.addBody(coop3, "static")
-        local coop4 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-        BackgroundGroup:insert(5,coop4)
-        coop4.x = 4850
-        coop4.y = 1400
-        Physics.addBody(coop4, "static")
+        coops = {coop1, coop2, coop3, coop4}
         timer.performWithDelay(1000, displayArrow, 5)
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072

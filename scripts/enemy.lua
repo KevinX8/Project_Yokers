@@ -56,6 +56,11 @@ function enemy.collisionEvent(self, event)
             EnemyAmount = EnemyAmount - 1
             self:removeSelf()
         end
+        if event.other.myName == "cactus" then
+            timer.cancel(self.instance.aiLoopTimer)
+            EnemyAmount = EnemyAmount - 1
+            self:removeSelf()
+        end
     end
 end
 
