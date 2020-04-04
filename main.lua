@@ -48,6 +48,19 @@ local coops = {coop1, coop2}
 Decor.level1()
 player.start()
 
+local function displayArrow()
+    local arrow = display.newImageRect("assets/arrow.png", 500, 102)
+    ForegroundGroup:insert(1, arrow)
+    arrow.x = display.contentCenterX
+    arrow.y = display.contentCenterY
+    if Level == 3 then
+        arrow.rotation = arrow.rotation - 90
+    elseif Level == 4 then
+        arrow.rotation = arrow.rotation + 90
+    end
+    arrow.despawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
+end
+
 local function spawnNewEnemy()
     if EnemyAmount < EnemyLimit then
     local pickrandomedge = math.random(0,3)    
@@ -95,20 +108,24 @@ local function progressLevel()
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
         local coop3 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-        BackgroundGroup:insert(4,coop3)
+        BackgroundGroup:insert(5,coop3)
         coop3.x = 3800
         coop3.y = 300
         Physics.addBody(coop3, "static")
         local coop4 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-        BackgroundGroup:insert(4,coop4)
+        BackgroundGroup:insert(5,coop4)
         coop4.x = 4850
         coop4.y = 1400
         Physics.addBody(coop4, "static")
+        timer.performWithDelay(1000, displayArrow, 5)
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
+        timer.performWithDelay(1000, displayArrow, 5)
     elseif Level == 3 then
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
+        Level = 4
+        timer.performWithDelay(1000, displayArrow, 5)
     end
 end
 
