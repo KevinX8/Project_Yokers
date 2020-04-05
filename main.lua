@@ -4,6 +4,7 @@ local enemy = require("scripts.enemy")
 local Decor = require("scripts.Decor")
 local UserInteface = require("scripts.UI")
 
+native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
 
@@ -90,8 +91,10 @@ coop8.myName = "coop"
 Coops = {coop1, coop2}
 
 Decor.generateDecor()
+native.setProperty( "mouseCursorVisible", false )
 Player.start()
 UserInteface.InitialiseUI()
+
 
 local function displayArrow()
     local arrow = display.newImageRect("assets/arrow.png", 500, 102)

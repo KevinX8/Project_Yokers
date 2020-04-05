@@ -62,13 +62,7 @@ function Decor.level3()
         i = i + 1
         iceLake.collision = Decor.collisionEvent
         iceLake:addEventListener("collision")
-        if(iceCollision) then
-            repeat
-                iceCollision = false
-                iceLake.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 2744)
-                iceLake.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)-3072
-            until not(iceCollision)
-        end
+        
         print("icelake")
     until i >= iceLimit
 end
@@ -131,6 +125,18 @@ end
         pushplayer = false
         PlayerSpeed = 10
     end
- end
+    if (select(2,Player.getPosition()) < -1*(display.contentHeight/2+500)) then
+        SpawnSnowFlake()
+    end
+end
+
+function SpawnSnowFlake()
+    local size = math.random(5, 10)
+    local flake = display.newImageRect(BackgroundGroup, "assets/snowflake.png", size, size)
+    flake.x = math.random(6144)-500
+    flake.y = -3470-display.contentHeight/2
+    local wind = -100
+    transition.to(flake,{time=math.random(3000) + 3000, y = -1000, x = flake.x + wind, onComplete=function() flake:removeSelf() end})
+end
 
 return Decor
