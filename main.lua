@@ -91,6 +91,7 @@ Coops = {coop1, coop2}
 Decor.generateDecor()
 Player.start()
 
+
 local function displayArrow()
     local arrow = display.newImageRect("assets/arrow.png", 500, 102)
     ForegroundGroup:insert(1, arrow)
