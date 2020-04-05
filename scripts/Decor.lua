@@ -7,7 +7,7 @@ function Decor.level1()
 
     repeat--level1--
         local bush = display.newImageRect(BackgroundGroup, "assets/bush.png", 256, 256)
-        BackgroundGroup:insert(3,bush)
+        BackgroundGroup:insert(5,bush)
         Physics.addBody(bush, "dynamic", {radius=60, density=99999999.0})
         bush.myName = "bush"
         bush.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 128)-200
@@ -19,7 +19,7 @@ function Decor.level1()
     i = 0
     repeat--level2--
         local cactus = display.newImageRect(BackgroundGroup, "assets/cactus.png", 256, 256)
-        BackgroundGroup:insert(3, cactus)
+        BackgroundGroup:insert(5, cactus)
         Physics.addBody(cactus, "dynamic", {radius=120, density=999999999.0})
         cactus.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 128)+2872
         cactus.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)

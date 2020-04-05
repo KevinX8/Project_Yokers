@@ -33,30 +33,59 @@ BackgroundGroup:insert(2,L2BgImage)
 L2BgImage.x = display.contentCenterX + 3072
 L2BgImage.y = display.contentCenterY
 
+local L3BgImage = display.newImageRect(BackgroundGroup, "assets/full snow background.png", 6144, 3072)
+BackgroundGroup:insert(3,L3BgImage)
+L3BgImage.x = display.contentCenterX + 1536
+L3BgImage.y = display.contentCenterY - 3072
+
 local coop1 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(4,coop1)
+BackgroundGroup:insert(5,coop1)
 coop1.x = 0
 coop1.y = 0
 Physics.addBody(coop1, "static")
 coop1.myName = "coop"
 local coop2 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(4,coop2)
+BackgroundGroup:insert(5,coop2)
 coop2.x = 1000
 coop2.y = 1300
 Physics.addBody(coop2, "static")
 coop2.myName = "coop"
 local coop3 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(4,coop3)
+BackgroundGroup:insert(5,coop3)
 coop3.x = 3800
 coop3.y = 300
 Physics.addBody(coop3, "static")
 coop3.myName = "coop"
 local coop4 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(4,coop4)
+BackgroundGroup:insert(5,coop4)
 coop4.x = 4850
 coop4.y = 1400
 Physics.addBody(coop4, "static")
 coop4.myName = "coop"
+local coop5 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(5,coop5)
+coop5.x = 0
+coop5.y = -3072
+Physics.addBody(coop5, "static")
+coop5.myName = "coop"
+local coop6 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(5,coop6)
+coop6.x = 1000
+coop6.y = -1772
+Physics.addBody(coop6, "static")
+coop6.myName = "coop"
+local coop7 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(5,coop7)
+coop7.x = 3800
+coop7.y = -2772
+Physics.addBody(coop7, "static")
+coop7.myName = "coop"
+local coop8 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(5,coop8)
+coop8.x = 4850
+coop8.y = -1672
+Physics.addBody(coop8, "static")
+coop8.myName = "coop"
 Coops = {coop1, coop2}
 
 Decor.level1()
@@ -111,6 +140,7 @@ local function progressLevel()
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
+        coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
         timer.performWithDelay(1000, displayArrow, 5)
     elseif Level == 3 then
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
