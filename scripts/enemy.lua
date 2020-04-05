@@ -30,6 +30,7 @@ function enemy.new(startX, startY)
     self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
+    self.enemyImage.myName = "enemy"
     self.enemyImage.x = startX
     self.enemyImage.y = startY
     self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever

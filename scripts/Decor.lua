@@ -1,8 +1,12 @@
 local Decor = {}
 local iceCollision = false
 local pushplayer = false
+local iceslide = false
+local enemyslide = false
+local icewidth = 0
 local pushamount = 0.1
 local frame = 0
+local pushscale = pushamount / 30
 
 function Decor.generateDecor()
     Decor.level1()
@@ -73,11 +77,19 @@ function Decor.collisionEvent(self, event)
     -- In this case, "self" refers to the decor image
     if event.phase == "began" then
         if(event.target.myName == "iceLake") then
-            if(event.other.myName == "coop" or  event.other.myName == "iceLake") then
+            if event.other.myName == "player" or event.other.myName == "enemy" then
+                pushamount = 0.075
+                Initialx = event.other.x
+                Initialy = event.other.y
+                Pushx = -1 * (event.target.x - Initialx)
+                Pushy = -1 * (event.target.y - Initialy)
+                iceslide = true
+                icewidth = event.target.width
+            end
+            if(event.other.myName == "coop" or event.other.myName == "iceLake") then
                 iceCollision = true
             end
-        end
-        if event.other.myName == "playerProjectile" then
+        elseif event.other.myName == "playerProjectile" then
             timer.cancel(event.other.despawnTimer)
             event.other:removeSelf()
         elseif event.other.myName == "coop" then -- Don't allow decor to spawn on top of coops
@@ -87,6 +99,7 @@ function Decor.collisionEvent(self, event)
             print("ouch cactus")
             Player.damage(1)
             pushamount = 0.1
+            pushscale = pushamount / 30
             PlayerSpeed = 2
             Pushx = (event.target.x - select(1,Player.getPosition()))
             Pushy = (event.target.y - select(2,Player.getPosition()))
@@ -96,13 +109,26 @@ function Decor.collisionEvent(self, event)
 end
 
  function Decor.enterFrame()
+    if iceslide then
+        if enemyslide then
+            
+        else
+        PlayerSpeed = 2
+        BackgroundGroup.x = BackgroundGroup.x + (pushamount * Pushx)
+        BackgroundGroup.y = BackgroundGroup.y + (pushamount * Pushy)
+        if math.sqrt(math.pow(Initialx - select(1,Player.getPosition()),2) + math.pow(Initialy - select(2,Player.getPosition()),2)) - 150 > icewidth or select(1,Player.getPosition()) <= LevelBoundLeft or select(1,Player.getPosition()) >= LevelBoundRight or select(2,Player.getPosition()) <= LevelBoundTop or select(2,Player.getPosition()) >= LevelBoundBottom then
+            iceslide = false
+            PlayerSpeed = 10
+        end
+        end
+    end
     if pushplayer and frame < 30 then
         if select(1,Player.getPosition()) <= LevelBoundLeft or select(1,Player.getPosition()) >= LevelBoundRight or select(2,Player.getPosition()) <= LevelBoundTop or select(2,Player.getPosition()) >= LevelBoundBottom then
             frame = 29
         end
         BackgroundGroup.x = BackgroundGroup.x + (pushamount * Pushx)
         BackgroundGroup.y = BackgroundGroup.y + (pushamount * Pushy)
-        pushamount = pushamount - 0.0034
+        pushamount = pushamount - pushscale
         frame = frame + 1
     elseif frame >= 30 and pushplayer then
         frame = 0
