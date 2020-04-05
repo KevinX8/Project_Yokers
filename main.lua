@@ -62,6 +62,30 @@ coop4.x = 4850
 coop4.y = 1400
 Physics.addBody(coop4, "static")
 coop4.myName = "coop"
+local coop5 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(5,coop5)
+coop5.x = 0
+coop5.y = -3072
+Physics.addBody(coop5, "static")
+coop5.myName = "coop"
+local coop6 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(5,coop6)
+coop6.x = 1000
+coop6.y = -1772
+Physics.addBody(coop6, "static")
+coop6.myName = "coop"
+local coop7 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(5,coop7)
+coop7.x = 3800
+coop7.y = -2772
+Physics.addBody(coop7, "static")
+coop7.myName = "coop"
+local coop8 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+BackgroundGroup:insert(5,coop8)
+coop8.x = 4850
+coop8.y = -1672
+Physics.addBody(coop8, "static")
+coop8.myName = "coop"
 coops = {coop1, coop2}
 
 Decor.level1()
@@ -131,6 +155,7 @@ local function progressLevel()
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
+        coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
         timer.performWithDelay(1000, displayArrow, 5)
     elseif Level == 3 then
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
