@@ -64,6 +64,9 @@ end
 
  function Decor.enterFrame()
     if pushplayer and frame < 30 then
+        if select(1,Player.getPosition()) <= LevelBoundLeft or select(1,Player.getPosition()) >= LevelBoundRight or select(2,Player.getPosition()) <= LevelBoundTop or select(2,Player.getPosition()) >= LevelBoundBottom then
+            frame = 29
+        end
         BackgroundGroup.x = BackgroundGroup.x + (pushamount * Pushx)
         BackgroundGroup.y = BackgroundGroup.y + (pushamount * Pushy)
         pushamount = pushamount - 0.0034
