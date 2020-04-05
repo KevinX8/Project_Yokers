@@ -23,6 +23,7 @@ local health = 5
 local isInvincible = false
 
 function player.start()
+    Cursor = display.newImageRect(ForegroundGroup, "assets/cursor.png", 50, 50)
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
     BackgroundGroup:insert(5+iceLimit,playerImage)
     Physics.addBody(playerImage, "dynamic", {radius = 85})
@@ -70,6 +71,8 @@ end
 function player.handleMouse(event)
     mouseX = event.x
     mouseY = event.y
+    Cursor.x = mouseX
+    Cursor.y = mouseY
     if (event.isPrimaryButtonDown) then
         if (clickReady) then
             player.throwProjectile()

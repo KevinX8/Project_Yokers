@@ -59,7 +59,6 @@ function Decor.level3()
         iceLake.x = math.random(LevelBoundLeft + size,LevelBoundRight + 3072 - size)
         iceLake.y = math.random(LevelBoundTop + size,LevelBoundBottom - size)-3072
         iceLake.myName = "iceLake"
-        iceLakes[]
         i = i + 1
         iceLake.collision = Decor.collisionEvent
         iceLake:addEventListener("collision")
