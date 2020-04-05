@@ -136,11 +136,12 @@ local function progressLevel()
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
         Coops = {coop1, coop2, coop3, coop4}
+        Decor.level2()
         timer.performWithDelay(1000, displayArrow, 5)
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
-        coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
+        Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
         timer.performWithDelay(1000, displayArrow, 5)
     elseif Level == 3 then
         LevelBoundBottom = display.contentCenterY + 1536 + 3072

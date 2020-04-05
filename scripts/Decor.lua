@@ -3,8 +3,6 @@ local Decor = {}
 function Decor.level1()
     local i = 0
     local bushlimit = math.random(5,10)
-    local cactusLimit = math.random(8,13)
-
     repeat--level1--
         local bush = display.newImageRect(BackgroundGroup, "assets/bush.png", 256, 256)
         BackgroundGroup:insert(5,bush)
@@ -16,7 +14,11 @@ function Decor.level1()
         bush.collision = Decor.collisionEvent
         bush:addEventListener("collision")
     until i >= bushlimit
-    i = 0
+end
+
+function Decor.level2()
+    local i = 0
+    local cactusLimit = math.random(8,13)
     repeat--level2--
         local cactus = display.newImageRect(BackgroundGroup, "assets/cactus.png", 256, 256)
         BackgroundGroup:insert(5, cactus)
