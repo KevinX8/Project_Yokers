@@ -59,6 +59,7 @@ function Decor.level3()
         iceLake.x = math.random(LevelBoundLeft + size,LevelBoundRight + 3072 - size)
         iceLake.y = math.random(LevelBoundTop + size,LevelBoundBottom - size)-3072
         iceLake.myName = "iceLake"
+        iceLakes[]
         i = i + 1
         iceLake.collision = Decor.collisionEvent
         iceLake:addEventListener("collision")
@@ -77,7 +78,7 @@ function Decor.collisionEvent(self, event)
     -- In this case, "self" refers to the decor image
     if event.phase == "began" then
         if(event.target.myName == "iceLake") then
-            if event.other.myName == "player" or event.other.myName == "enemy" then
+            if event.other.myName == "player" then
                 pushamount = 0.075
                 Initialx = event.other.x
                 Initialy = event.other.y
@@ -110,16 +111,12 @@ end
 
  function Decor.enterFrame()
     if iceslide then
-        if enemyslide then
-            
-        else
         PlayerSpeed = 2
         BackgroundGroup.x = BackgroundGroup.x + (pushamount * Pushx)
         BackgroundGroup.y = BackgroundGroup.y + (pushamount * Pushy)
         if math.sqrt(math.pow(Initialx - select(1,Player.getPosition()),2) + math.pow(Initialy - select(2,Player.getPosition()),2)) - 150 > icewidth or select(1,Player.getPosition()) <= LevelBoundLeft or select(1,Player.getPosition()) >= LevelBoundRight or select(2,Player.getPosition()) <= LevelBoundTop or select(2,Player.getPosition()) >= LevelBoundBottom then
             iceslide = false
             PlayerSpeed = 10
-        end
         end
     end
     if pushplayer and frame < 30 then
