@@ -93,8 +93,8 @@ Coops = {coop1, coop2}
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
 Player.start()
+Timeloaded = system.getTimer()
 UserInteface.InitialiseUI()
-
 
 local function displayArrow()
     local arrow = display.newImageRect("assets/arrow.png", 500, 102)

@@ -1,8 +1,9 @@
 local player = {} -- this and the return statement at the end make this file behave somewhat like a class
 
+local UserInteface = require("scripts.UI")
 PlayerSpeed = 10
 local playerProjectileSpeed = 800
-local invincibilityTime = 1 -- Time in seconds the player should be invincible after being hit
+local invincibilityTime = 3 -- Time in seconds the player should be invincible after being hit
 local projectileLifetime = 3 -- Time in seconds before a projectile goes disappears after being shot
 local upButton = "w"
 local downButton = "s"
@@ -19,7 +20,7 @@ local mouseX = 0
 local mouseY = 0
 local clickReady = true
 
-local health = 5
+Health = 5
 local isInvincible = false
 
 function player.start()
@@ -114,10 +115,12 @@ end
 
 function player.damage(damageAmount)
     if not isInvincible then
-        health = health - damageAmount
-        if health <= 0 then
-            print("u r ded") -- need to add death
+        Health = Health - damageAmount
+        if Health <= 0 then
+            print("you are dead") -- need to add death
+            return
         end
+        UserInteface.updatehearts(false)
         isInvincible = true
         timer.performWithDelay(invincibilityTime * 1000, function() isInvincible = false end, 1)
     end
