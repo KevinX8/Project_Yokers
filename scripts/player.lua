@@ -1,6 +1,6 @@
 local player = {} -- this and the return statement at the end make this file behave somewhat like a class
 
-local playerSpeed = 10
+PlayerSpeed = 10
 local playerProjectileSpeed = 800
 local invincibilityTime = 1 -- Time in seconds the player should be invincible after being hit
 local projectileLifetime = 3 -- Time in seconds before a projectile goes disappears after being shot
@@ -91,16 +91,16 @@ end
 function player.enterFrame()
     local dt = getDeltaTime() -- Incorporating the Delta Time into the player speed makes the player go the same speed regardless of the framerate
     if pressUp == true and (playerImage.y - 64) > LevelBoundTop then
-        BackgroundGroup.y = BackgroundGroup.y + (playerSpeed * dt)
+        BackgroundGroup.y = BackgroundGroup.y + (PlayerSpeed * dt)
     end
     if pressDown == true and (playerImage.y + 64) < LevelBoundBottom then
-        BackgroundGroup.y = BackgroundGroup.y - (playerSpeed * dt)
+        BackgroundGroup.y = BackgroundGroup.y - (PlayerSpeed * dt)
     end
     if pressLeft == true and (playerImage.x - 64) > LevelBoundLeft then
-        BackgroundGroup.x = BackgroundGroup.x + (playerSpeed * dt)
+        BackgroundGroup.x = BackgroundGroup.x + (PlayerSpeed * dt)
     end
     if pressRight == true and (playerImage.x + 64) < LevelBoundRight then
-        BackgroundGroup.x = BackgroundGroup.x - (playerSpeed * dt)
+        BackgroundGroup.x = BackgroundGroup.x - (PlayerSpeed * dt)
     end
     -- Force the player to be in the middle of the screen at all times
     playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
