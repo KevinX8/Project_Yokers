@@ -2,6 +2,7 @@ Physics = require("physics")
 Player = require("scripts.player")
 local enemy = require("scripts.enemy")
 local Decor = require("scripts.Decor")
+local UserInteface = require("scripts.UI")
 
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
@@ -90,6 +91,7 @@ Coops = {coop1, coop2}
 
 Decor.generateDecor()
 Player.start()
+UserInteface.InitialiseUI()
 
 local function displayArrow()
     local arrow = display.newImageRect("assets/arrow.png", 500, 102)
