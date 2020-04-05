@@ -1,11 +1,9 @@
 local enemy = {
-    player = nil,
     enemyImage = nil,
     aiState = "roaming",
     targetX = 0,
     targetY = 0,
-    aiLoopTimer = nil,
-    coopList = {}
+    aiLoopTimer = nil
 }
 enemy.__index = enemy
 local movementSpeed = 250
@@ -26,7 +24,7 @@ local function calculateDistance(object1x, object1y, object2x, object2y) -- Calc
     return math.sqrt(((object1x - object2x) ^ 2) + ((object1y - object2y) ^ 2))
 end
 
-function enemy.new(playerReference, coops, startX, startY)
+function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
 
     self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
@@ -34,8 +32,6 @@ function enemy.new(playerReference, coops, startX, startY)
     Physics.addBody(self.enemyImage, "dynamic")
     self.enemyImage.x = startX
     self.enemyImage.y = startY
-    self.player = playerReference
-    self.coopList = coops
     self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
     self.enemyImage.collision = self.collisionEvent
     self.enemyImage:addEventListener("collision")
@@ -55,8 +51,7 @@ function enemy.collisionEvent(self, event)
             event.other:removeSelf()
             EnemyAmount = EnemyAmount - 1
             self:removeSelf()
-        end
-        if event.other.myName == "cactus" then
+        elseif event.other.myName == "cactus" then
             timer.cancel(self.instance.aiLoopTimer)
             EnemyAmount = EnemyAmount - 1
             self:removeSelf()
@@ -65,7 +60,7 @@ function enemy.collisionEvent(self, event)
 end
 
 function enemy:aiUpdate() -- Called 30 times a second
-    local playerX, playerY = self.player.getPosition()
+    local playerX, playerY = Player.getPosition()
     local playerDistance = calculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY)
     if self.aiState == "roaming" then
         if math.random(0, 200) == 0 then -- 1 in 200 chance, 30 times a second - on average will roam for 6 seconds
@@ -83,7 +78,7 @@ function enemy:aiUpdate() -- Called 30 times a second
         -- Find the closest coop to this enemy
         local lowestDistance = 100000
         local closestCoop = nil
-        for i, coop in ipairs(self.coopList) do
+        for i, coop in ipairs(Coops) do
             local distance = calculateDistance(self.enemyImage.x, self.enemyImage.y, coop.x, coop.y)
             if distance < lowestDistance or closestCoop == nil then
                 lowestDistance = distance
@@ -104,7 +99,7 @@ function enemy:aiUpdate() -- Called 30 times a second
     end
 
     if playerDistance < 150 then
-        self.player.damage(playerDamage)
+        Player.damage(playerDamage)
     end
 
     -- Point towards the target position

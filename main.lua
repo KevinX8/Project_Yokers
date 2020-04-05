@@ -1,5 +1,5 @@
 Physics = require("physics")
-player = require("scripts.player")
+Player = require("scripts.player")
 local enemy = require("scripts.enemy")
 local Decor = require("scripts.Decor")
 
@@ -57,10 +57,10 @@ coop4.x = 4850
 coop4.y = 1400
 Physics.addBody(coop4, "static")
 coop4.myName = "coop"
-coops = {coop1, coop2}
+Coops = {coop1, coop2}
 
 Decor.level1()
-player.start()
+Player.start()
 
 local function displayArrow()
     local arrow = display.newImageRect("assets/arrow.png", 500, 102)
@@ -75,53 +75,38 @@ local function displayArrow()
     arrow.despawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
 end
 
-local function spawnNewEnemy()
+local function spawnEnemyWave()
     if EnemyAmount < EnemyLimit then
-    local pickrandomedge = math.random(0,3)    
-        if pickrandomedge == 0 then 
-            local EnemyX = math.random(LevelBoundLeft, LevelBoundRight)
-            local i = 0
-            repeat
-                enemy.new(player, coops, EnemyX, LevelBoundBottom + 540) 
-                EnemyAmount = EnemyAmount + 1
-                i = i + 1
-            until i >= EnemiesPerWave
+        local pickrandomedge = math.random(0,3)
+        local enemyX
+        local enemyY
+        if pickrandomedge == 0 then
+            enemyX = math.random(LevelBoundLeft, LevelBoundRight)
+            enemyY = LevelBoundBottom + 540
+        elseif pickrandomedge == 1 then
+            enemyX = math.random(LevelBoundLeft, LevelBoundRight)
+            enemyY = LevelBoundTop - 540
+        elseif pickrandomedge == 2 then
+            enemyX = LevelBoundRight + 960
+            enemyY = math.random(LevelBoundTop, LevelBoundBottom)
+        elseif pickrandomedge == 3 then
+            enemyX = LevelBoundLeft - 960
+            enemyY = math.random(LevelBoundTop, LevelBoundBottom)
         end
-        if pickrandomedge == 1 then 
-            local EnemyX = math.random(LevelBoundLeft, LevelBoundRight)
-            local i = 0
-            repeat
-                enemy.new(player, coops, EnemyX, LevelBoundTop - 540) 
-                EnemyAmount = EnemyAmount + 1
-                i = i + 1
-            until i >= EnemiesPerWave
-        end
-        if pickrandomedge == 2 then 
-            local EnemyY = math.random(LevelBoundTop, LevelBoundBottom)
-            local i = 0
-            repeat
-                enemy.new(player, coops, LevelBoundRight + 960, EnemyY)
-                EnemyAmount = EnemyAmount + 1
-                i = i + 1
-            until i >= EnemiesPerWave   
-        end
-        if pickrandomedge == 3 then 
-            local EnemyY = math.random(LevelBoundTop, LevelBoundBottom)
-            local i = 0
-            repeat
-                enemy.new(player, coops, LevelBoundLeft - 960, EnemyY) 
-                EnemyAmount = EnemyAmount + 1
-                i = i + 1
-            until i >= EnemiesPerWave 
-        end
-    end    
+        local i = 0
+        repeat
+            enemy.new(enemyX, enemyY)
+            EnemyAmount = EnemyAmount + 1
+            i = i + 1
+        until i >= EnemiesPerWave
+    end
 end
 
 local function progressLevel()
     if Level == 1 then
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
-        coops = {coop1, coop2, coop3, coop4}
+        Coops = {coop1, coop2, coop3, coop4}
         timer.performWithDelay(1000, displayArrow, 5)
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072
@@ -134,60 +119,15 @@ local function progressLevel()
     end
 end
 
-timer.performWithDelay(math.random(MinTimeBetweenWaves,MaxTimeBetweenWaves), spawnNewEnemy, 0) -- Spawn new enemy every 2 seconds
+timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
 timer.performWithDelay(TimeDifficulty, progressLevel, 3)
 
---[[
-local fill = script.Parent.Filler
-local text = script.Parent.TextLabel
-while wait() do
-    local character = player.Character
-    if character ~= nil then
-        local chicken = character:FindFirstChild("living")
-        if chicken ~= nil then
-            character.living.MaxHealth = 100
-            character.living.Health = MaxHealth - damage()
-            fill:HealthSize(UDim2.new((chicken.Health/chicken.MaxHealth),0,1,0))
-            text.Text = "HP: "..math.floor(chicken.Health).." / "..chicken.MaxHealth.." ["..math.floor((chicken.Health/chicken.MaxHealth)*100).."%]"
-        end
-    else
-        text.Text = "NIL"
-        fill:HealthSize(UDim2.new(0,0,1,0))
-    end
-end
---]]
---[[curHealth() 
-  character.living.health
-
-local enemy = 
-local fill = script.Parent.Filler
-local text = script.Parent.TextLabel
-while wait() do
-    local character = enemy.Character
-    if character ~= nil then
-        local zombie = character:FindFirstChild("undead")
-        if zombie ~= nil then
-            character.undead.MaxHealth = 50
-            character.undead.Health = MaxHealth - damage()
-            fill:HealthSize(UDim2.new((zombie.Health/zombie.MaxHealth),0,1,0))
-            text.Text = "HP: "..math.floor(zombie.Health).." / "..zombie.MaxHealth.." ["..math.floor((zombie.Health/zombie.MaxHealth)*100).."%]"
-        end
-    else
-        text.Text = "NIL"
-        fill:HealthSize(UDim2.new(0,0,1,0))
-    end
-end
---]]
-
---[[damage() Have to make function so damage can 
-//       actually be applied --]] 
-
 local function keyEvent(event)
-    player.handleMovement(event)
+    Player.handleMovement(event)
 end
 
 local function mouseEvent(event)
-    player.handleMouse(event)
+    Player.handleMouse(event)
 end
 
 Runtime:addEventListener("key", keyEvent)

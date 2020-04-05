@@ -89,7 +89,7 @@ local function getDeltaTime() -- Calculate the "Delta Time" (Time between frames
 end
 
 function player.enterFrame()
-    local dt = getDeltaTime()
+    local dt = getDeltaTime() -- Incorporating the Delta Time into the player speed makes the player go the same speed regardless of the framerate
     if pressUp == true and (playerImage.y - 64) > LevelBoundTop then
         BackgroundGroup.y = BackgroundGroup.y + (playerSpeed * dt)
     end
