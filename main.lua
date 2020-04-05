@@ -88,7 +88,7 @@ Physics.addBody(coop8, "static")
 coop8.myName = "coop"
 Coops = {coop1, coop2}
 
-Decor.level1()
+Decor.generateDecor()
 Player.start()
 
 local function displayArrow()
@@ -136,7 +136,6 @@ local function progressLevel()
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
         Coops = {coop1, coop2, coop3, coop4}
-        Decor.level2()
         timer.performWithDelay(1000, displayArrow, 5)
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072

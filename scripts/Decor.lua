@@ -1,5 +1,10 @@
 local Decor = {}
 
+function Decor.generateDecor()
+    Decor.level1()
+    Decor.level2()
+end
+
 function Decor.level1()
     local i = 0
     local bushlimit = math.random(5,10)
