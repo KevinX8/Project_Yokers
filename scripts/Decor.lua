@@ -51,26 +51,30 @@ function Decor.level3()
     local i = 0
     iceLimit = math.random(5,10)
     repeat
-        iceCollision = false
         local size = math.random(512, 1024)
         local iceLake = display.newImageRect(BackgroundGroup, "assets/ice lake.png", size, size*0.99)
         BackgroundGroup:insert(4, iceLake)
-        Physics.addBody(iceLake, "dynamic", {radius=size/2, density=999999999.0})
-        iceLake.x = math.random(LevelBoundLeft + size,LevelBoundRight + 3072 - size)
-        iceLake.y = math.random(LevelBoundTop + size,LevelBoundBottom - size)-3072
+        Physics.addBody(iceLake, "static", {radius=size/2, density=999999999.0, isSensor=true})
+        local positionValid = false
+        local x = 0
+        local y = 0
+        repeat
+            x = math.random(LevelBoundLeft + size, (LevelBoundRight + 3072) - size)
+            y = math.random((LevelBoundTop - 3072) + size, LevelBoundTop - size)
+            positionValid = true
+            for o, object in ipairs(LevelObjects) do
+                if CalculateDistance(x, y, object[1], object[2]) < ((object[3] / 2) + (size / 2)) then
+                    positionValid = false
+                end
+            end
+        until positionValid == true
+        iceLake.x = x
+        iceLake.y = y
+        table.insert(LevelObjects, {x, y, size})
         iceLake.myName = "iceLake"
-        iceLakes[]
         i = i + 1
         iceLake.collision = Decor.collisionEvent
         iceLake:addEventListener("collision")
-        if(iceCollision) then
-            repeat
-                iceCollision = false
-                iceLake.x = math.random(LevelBoundLeft + 128,LevelBoundRight + 2744)
-                iceLake.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)-3072
-            until not(iceCollision)
-        end
-        print("icelake")
     until i >= iceLimit
 end
 
@@ -86,9 +90,6 @@ function Decor.collisionEvent(self, event)
                 Pushy = -1 * (event.target.y - Initialy)
                 iceslide = true
                 icewidth = event.target.width
-            end
-            if(event.other.myName == "coop" or event.other.myName == "iceLake") then
-                iceCollision = true
             end
         elseif event.other.myName == "playerProjectile" then
             timer.cancel(event.other.despawnTimer)
