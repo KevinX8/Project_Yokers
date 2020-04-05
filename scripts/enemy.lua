@@ -20,10 +20,6 @@ local playerForgetDistance = 800 -- If the player gets this far away, the enemy 
 -- roaming/attackCoop will become attackPlayer if the player comes really close or if the player attacks
 -- attackPlayer will become roaming if the player gets far away
 
-local function calculateDistance(object1x, object1y, object2x, object2y) -- Calculates the distance between 2 positions
-    return math.sqrt(((object1x - object2x) ^ 2) + ((object1y - object2y) ^ 2))
-end
-
 function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
 
@@ -63,7 +59,7 @@ end
 
 function enemy:aiUpdate() -- Called 30 times a second
     local playerX, playerY = Player.getPosition()
-    local playerDistance = calculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY)
+    local playerDistance = CalculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY)
     if self.aiState == "roaming" then
         if math.random(0, 200) == 0 then -- 1 in 200 chance, 30 times a second - on average will roam for 6 seconds
             self.aiState = "attackCoop"
@@ -71,7 +67,7 @@ function enemy:aiUpdate() -- Called 30 times a second
         if playerDistance < playerAttackDistance then
             self.aiState = "attackPlayer"
         end
-        if calculateDistance(self.enemyImage.x, self.enemyImage.y, self.targetX, self.targetY) < 100 then
+        if CalculateDistance(self.enemyImage.x, self.enemyImage.y, self.targetX, self.targetY) < 100 then
             -- When the enemy arrives at the target position, generate a new target position
             self.targetX = math.random(LevelBoundLeft, LevelBoundRight)
             self.targetY = math.random(LevelBoundTop, LevelBoundBottom)
@@ -81,7 +77,7 @@ function enemy:aiUpdate() -- Called 30 times a second
         local lowestDistance = 100000
         local closestCoop = nil
         for i, coop in ipairs(Coops) do
-            local distance = calculateDistance(self.enemyImage.x, self.enemyImage.y, coop.x, coop.y)
+            local distance = CalculateDistance(self.enemyImage.x, self.enemyImage.y, coop.x, coop.y)
             if distance < lowestDistance or closestCoop == nil then
                 lowestDistance = distance
                 closestCoop = coop

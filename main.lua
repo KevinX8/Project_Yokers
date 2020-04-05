@@ -7,6 +7,7 @@ local UserInteface = require("scripts.UI")
 native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
+LevelObjects = {} -- Holds level objects (coops, ice lakes, etc.) in the form {x, y, size}
 
 LevelBoundTop = display.contentCenterY - 1536
 LevelBoundBottom = display.contentCenterY + 1536
@@ -40,54 +41,29 @@ BackgroundGroup:insert(3,L3BgImage)
 L3BgImage.x = display.contentCenterX + 1536
 L3BgImage.y = display.contentCenterY - 3072
 
-local coop1 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(5,coop1)
-coop1.x = 0
-coop1.y = 0
-Physics.addBody(coop1, "static")
-coop1.myName = "coop"
-local coop2 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(5,coop2)
-coop2.x = 1000
-coop2.y = 1300
-Physics.addBody(coop2, "static")
-coop2.myName = "coop"
-local coop3 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(5,coop3)
-coop3.x = 3800
-coop3.y = 300
-Physics.addBody(coop3, "static")
-coop3.myName = "coop"
-local coop4 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(5,coop4)
-coop4.x = 4850
-coop4.y = 1400
-Physics.addBody(coop4, "static")
-coop4.myName = "coop"
-local coop5 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(5,coop5)
-coop5.x = 0
-coop5.y = -3072
-Physics.addBody(coop5, "static")
-coop5.myName = "coop"
-local coop6 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(5,coop6)
-coop6.x = 1000
-coop6.y = -1772
-Physics.addBody(coop6, "static")
-coop6.myName = "coop"
-local coop7 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(5,coop7)
-coop7.x = 3800
-coop7.y = -2772
-Physics.addBody(coop7, "static")
-coop7.myName = "coop"
-local coop8 = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-BackgroundGroup:insert(5,coop8)
-coop8.x = 4850
-coop8.y = -1672
-Physics.addBody(coop8, "static")
-coop8.myName = "coop"
+function CalculateDistance(object1x, object1y, object2x, object2y) -- Calculates the distance between 2 positions
+    return math.sqrt(((object1x - object2x) ^ 2) + ((object1y - object2y) ^ 2))
+end
+
+local function addCoop(x, y)
+    local coop = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+    BackgroundGroup:insert(5, coop)
+    coop.x = x
+    coop.y = y
+    Physics.addBody(coop, "static")
+    coop.myName = "coop"
+    table.insert(LevelObjects, {x, y, 512})
+    return coop
+end
+
+local coop1 = addCoop(0, 0)
+local coop2 = addCoop(1000, 1300)
+local coop3 = addCoop(3800, 300)
+local coop4 = addCoop(4850, 1400)
+local coop5 = addCoop(0, -3072)
+local coop6 = addCoop(1000, -1772)
+local coop7 = addCoop(3800, -2772)
+local coop8 = addCoop(4850, -1672)
 Coops = {coop1, coop2}
 
 Decor.generateDecor()
