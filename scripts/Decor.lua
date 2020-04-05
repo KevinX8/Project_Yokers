@@ -49,15 +49,16 @@ end
 
 function Decor.level3()
     local i = 0
-    iceLimit = math.random(5,10)
+    iceLimit = math.random(4,7)
     repeat
-        local size = math.random(512, 1024)
+        local size = math.random(512, 768)
         local iceLake = display.newImageRect(BackgroundGroup, "assets/ice lake.png", size, size*0.99)
         BackgroundGroup:insert(4, iceLake)
         Physics.addBody(iceLake, "static", {radius=size/2, density=999999999.0, isSensor=true})
         local positionValid = false
         local x = 0
         local y = 0
+        local positionAttempts = 0
         repeat
             x = math.random(LevelBoundLeft + size, (LevelBoundRight + 3072) - size)
             y = math.random((LevelBoundTop - 3072) + size, LevelBoundTop - size)
@@ -66,6 +67,11 @@ function Decor.level3()
                 if CalculateDistance(x, y, object[1], object[2]) < ((object[3] / 2) + (size / 2)) then
                     positionValid = false
                 end
+            end
+            positionAttempts = positionAttempts + 1
+            if (positionAttempts > 100) then
+                print("lake overflow")
+                break -- failsafe incase there's no space for lakes to prevent corona crashing
             end
         until positionValid == true
         iceLake.x = x
@@ -133,6 +139,18 @@ end
         pushplayer = false
         PlayerSpeed = 10
     end
- end
+    if (select(2,Player.getPosition()) < -1*(display.contentHeight/2+500)) then
+        SpawnSnowFlake()
+    end
+end
+
+function SpawnSnowFlake()
+    local size = math.random(5, 10)
+    local flake = display.newImageRect(BackgroundGroup, "assets/snowflake.png", size, size)
+    flake.x = math.random(6144)-500
+    flake.y = -3470-display.contentHeight/2
+    local wind = -100
+    transition.to(flake,{time=math.random(3000) + 3000, y = -1000, x = flake.x + wind, onComplete=function() flake:removeSelf() end})
+end
 
 return Decor
