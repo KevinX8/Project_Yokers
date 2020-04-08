@@ -53,7 +53,7 @@ function Decor.level3()
     repeat
         local size = math.random(512, 768)
         local iceLake = display.newImageRect(BackgroundGroup, "assets/ice lake.png", size, size*0.99)
-        BackgroundGroup:insert(4, iceLake)
+        BackgroundGroup:insert(5, iceLake)
         Physics.addBody(iceLake, "static", {radius=size/2, density=999999999.0, isSensor=true})
         local positionValid = false
         local x = 0

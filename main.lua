@@ -41,6 +41,11 @@ BackgroundGroup:insert(3,L3BgImage)
 L3BgImage.x = display.contentCenterX + 1536
 L3BgImage.y = display.contentCenterY - 3072
 
+local L4BgImage = display.newImageRect(BackgroundGroup, "assets/LavaBackground.png", 6144, 3072)
+BackgroundGroup:insert(4,L4BgImage)
+L4BgImage.x = display.contentCenterX + 1536
+L4BgImage.y = display.contentCenterY + 3072
+
 function CalculateDistance(object1x, object1y, object2x, object2y) -- Calculates the distance between 2 positions
     return math.sqrt(((object1x - object2x) ^ 2) + ((object1y - object2y) ^ 2))
 end
@@ -64,6 +69,10 @@ local coop5 = addCoop(0, -3072)
 local coop6 = addCoop(1000, -1772)
 local coop7 = addCoop(3800, -2772)
 local coop8 = addCoop(4850, -1672)
+local coop9 = addCoop(0, 3072)
+local coop10 = addCoop(1000, 4372)
+local coop11 = addCoop(3800, 3372)
+local coop12 = addCoop(4850, 4472)
 Coops = {coop1, coop2}
 
 Decor.generateDecor()
@@ -127,6 +136,7 @@ local function progressLevel()
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
         Level = 4
         timer.performWithDelay(1000, displayArrow, 5)
+        Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8, coop9, coop10, coop11, coop12}
     end
 end
 
