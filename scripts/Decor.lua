@@ -141,6 +141,10 @@ end
     end
     if (select(2,Player.getPosition()) < -1*(display.contentHeight/2+500)) then
         SpawnSnowFlake()
+    elseif(select(2,Player.getPosition()) > (display.contentHeight/2+1500)) then
+        if(math.random() < .5) then
+            SpawnSpark()
+        end
     end
 end
 
@@ -151,6 +155,21 @@ function SpawnSnowFlake()
     flake.y = -3470-display.contentHeight/2
     local wind = -100
     transition.to(flake,{time=math.random(3000) + 3000, y = -1000, x = flake.x + wind, onComplete=function() flake:removeSelf() end})
+end
+
+function SpawnSpark()
+    local size = math.random(5, 10)
+    local spark = display.newImageRect(BackgroundGroup, "assets/spark.png", size, size)
+    spark.x = math.random(6144)-500
+    spark.y = 4600+display.contentHeight/2
+    transition.to(spark,{time=math.random(6000) + 6000, y = 2100, onComplete=function() spark:removeSelf() SpawnAsh(spark.x, spark.y, size) end})
+end
+
+function SpawnAsh(x, y, size)
+    local ash = display.newImageRect(BackgroundGroup, "assets/ash.png", size, size)
+    ash.x = x
+    ash.y = y
+    transition.to(ash,{time=math.random(6000) + 6000, y = 3470+display.contentHeight/2, onComplete=function() ash:removeSelf() end})
 end
 
 return Decor
