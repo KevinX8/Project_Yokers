@@ -160,7 +160,7 @@ end
 function SpawnSpark()
     local size = math.random(5, 10)
     local spark = display.newImageRect(BackgroundGroup, "assets/spark.png", size, size)
-    spark.x = math.random(6144)-500
+    spark.x = math.random(6144)-600
     spark.y = 4600+display.contentHeight/2
     transition.to(spark,{time=math.random(6000) + 6000, y = 2100, onComplete=function() spark:removeSelf() SpawnAsh(spark.x, spark.y, size) end})
 end
