@@ -12,6 +12,7 @@ function Decor.generateDecor()
     Decor.level1()
     Decor.level2()
     Decor.level3()
+    Decor.level4()
     Runtime:addEventListener("enterFrame", Decor.enterFrame)
 end
 
@@ -52,7 +53,7 @@ function Decor.level3()
     iceLimit = math.random(4,7)
     repeat
         local size = math.random(512, 768)
-        local iceLake = display.newImageRect(BackgroundGroup, "assets/ice lake.png", size, size*0.99)
+        local iceLake = display.newImageRect(BackgroundGroup, "assets/ice lake.png", size, size)
         BackgroundGroup:insert(5, iceLake)
         Physics.addBody(iceLake, "static", {radius=size/2, density=999999999.0, isSensor=true})
         local positionValid = false
@@ -82,6 +83,43 @@ function Decor.level3()
         iceLake.collision = Decor.collisionEvent
         iceLake:addEventListener("collision")
     until i >= iceLimit
+end
+
+function Decor.level4()
+    local i = 0
+    lavaLimit = math.random(4,7)
+    repeat
+        local size = math.random(512, 768)
+        local lavaLake = display.newImageRect(BackgroundGroup, "assets/lava.png", size, size)
+        BackgroundGroup:insert(5, lavaLake)
+        Physics.addBody(lavaLake, "static", {radius=size/2, density=999999999.0, isSensor=true})
+        local positionValid = false
+        local x = 0
+        local y = 0
+        local positionAttempts = 0
+        repeat
+            x = math.random(LevelBoundLeft + size, (LevelBoundRight + 3072) - size)
+            y = math.random((LevelBoundBottom) + size, LevelBoundBottom - size + 3072)
+            positionValid = true
+            for o, object in ipairs(LevelObjects) do
+                if CalculateDistance(x, y, object[1], object[2]) < ((object[3] / 2) + (size / 2)) then
+                    positionValid = false
+                end
+            end
+            positionAttempts = positionAttempts + 1
+            if (positionAttempts > 100) then
+                print("lake overflow")
+                break -- failsafe incase there's no space for lakes to prevent corona crashing
+            end
+        until positionValid == true
+        lavaLake.x = x
+        lavaLake.y = y
+        table.insert(LevelObjects, {x, y, size})
+        lavaLake.myName = "lavaLake"
+        i = i + 1
+        lavaLake.collision = Decor.collisionEvent
+        lavaLake:addEventListener("collision")
+    until i >= lavaLimit
 end
 
 function Decor.collisionEvent(self, event)
