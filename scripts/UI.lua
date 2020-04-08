@@ -17,8 +17,10 @@ function userinterface.InitialiseUI()
         i = i + 1
     until i > 5
     Timeloaded = system.getTimer()
-    TimemImage = display.newText("0m", display.contentCenterX + 800, display.contentCenterY - 480, "assets/time.ttf", 64 )
-    TimesImage = display.newText("0s", display.contentCenterX + 900, display.contentCenterY - 480, "assets/time.ttf", 64 )
+    TimemImage = display.newText("0m", display.contentCenterX + 800, display.contentCenterY - 480, "assets/time.otf", 32 )
+    TimesImage = display.newText("0s", display.contentCenterX + 900, display.contentCenterY - 480, "assets/time.otf", 32 )
+    TimemImage:setFillColor(0,0,0)
+    TimesImage:setFillColor(0,0,0)
 end
 
 function userinterface.updatehearts(added)
@@ -38,8 +40,8 @@ end
 
 function userinterface.updatetime()
     print(Timeloaded)
-    local timem = toString(math.floor(((system.getTimer()) / 60000)* 10) * 0.1) .. "m"
-    local times = toString(math.floor(((system.getTimer()) % 60000)* 10) * 0.1) .. "s"
+    local timem = math.floor(((system.getTimer() - Timeloaded) / 60000)) .. "m"
+    local times = math.floor((((system.getTimer() - Timeloaded) % 60000) /1000) * 10) * 0.1 .. "s"
     TimemImage.text = timem
     TimesImage.text = times
 end
