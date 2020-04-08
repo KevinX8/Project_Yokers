@@ -3,6 +3,7 @@ local userinterface = {}
 local livesText
 local scoreText
 local heart = {}
+Timeloaded = 0
 
 --livesText = display.newText(uiGroup, "Lives: ".. lives, 200, 80, native.systemFont,36)
 --scoreText = display.newText(uiGroup, "Score: ".. score, 400, 80, native.systemFont,36)
@@ -15,7 +16,9 @@ function userinterface.InitialiseUI()
         heart[i].x = display.contentCenterX - 900 + (i * 120)
         i = i + 1
     until i > 5
-    local timeImage = display.newText(system.getTimer() - Timeloaded, display.contentCenterX + 900, display.contentCenterY - 480, "assets/time.ttf", 64 )
+    Timeloaded = system.getTimer()
+    TimemImage = display.newText("0m", display.contentCenterX + 800, display.contentCenterY - 480, "assets/time.ttf", 64 )
+    TimesImage = display.newText("0s", display.contentCenterX + 900, display.contentCenterY - 480, "assets/time.ttf", 64 )
 end
 
 function userinterface.updatehearts(added)
@@ -34,7 +37,11 @@ function userinterface.updatehearts(added)
 end 
 
 function userinterface.updatetime()
-    local time = system.getTimer() - Timeloaded
-    
+    print(Timeloaded)
+    local timem = toString(math.floor(((system.getTimer()) / 60000)* 10) * 0.1) .. "m"
+    local times = toString(math.floor(((system.getTimer()) % 60000)* 10) * 0.1) .. "s"
+    TimemImage.text = timem
+    TimesImage.text = times
 end
+
 return userinterface

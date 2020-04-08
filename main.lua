@@ -78,7 +78,6 @@ Coops = {coop1, coop2}
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
 Player.start()
-Timeloaded = system.getTimer()
 UserInteface.InitialiseUI()
 
 local function displayArrow()
@@ -142,6 +141,7 @@ end
 
 timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
 timer.performWithDelay(TimeDifficulty, progressLevel, 3)
+timer.performWithDelay(100, UserInteface.updatetime, 0)
 
 local function keyEvent(event)
     Player.handleMovement(event)
