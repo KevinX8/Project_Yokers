@@ -4,7 +4,8 @@ local UserInteface = require("scripts.UI")
 PlayerSpeed = 10
 local playerProjectileSpeed = 800
 local invincibilityTime = 3 -- Time in seconds the player should be invincible after being hit
-local counter = invincibilityTime -- used in invincibility animation
+local blinkSpeed = 3 --Speed at which player blinks when taken damage
+local counter = invincibilityTime * blinkSpeed -- used in invincibility animation
 local projectileLifetime = 3 -- Time in seconds before a projectile goes disappears after being shot
 local upButton = "w"
 local downButton = "s"
@@ -126,14 +127,14 @@ function player.damage(damageAmount)
         isInvincible = true
         PlayerFadeOut(counter)
         isInvincible = true
-        counter = invincibilityTime      
+        counter = invincibilityTime * blinkSpeed
     end
 end
 
 function PlayerFadeOut()
     counter = counter-1
     if(not(counter == 0)) then
-        transition.fadeOut(playerImage, {time = 750, onComplete = function() transition.fadeIn(playerImage, {time = 250, onComplete = PlayerFadeOut}) end})
+        transition.fadeOut(playerImage, {time = (1000/blinkSpeed), onComplete = function() transition.fadeIn(playerImage, {time = 1000/blinkSpeed, onComplete = PlayerFadeOut}) end})
     else
         isInvincible = false
     end
