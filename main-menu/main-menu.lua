@@ -3,12 +3,6 @@ local scene = composer.newScene()
 
 local widget = require("widget")
 
-local function goToLevelSelect(event)
-            if ("ended" == event.phase) then
-                composer.gotoScene("levelSelect", {effect = "crossFade", time = 500})
-            end
-        end
-
 local background = display.newImage("Images/Title_Screen.png", 1280, 720)
         background.x = display.contentCenterX
         background.y = display.contentCenterY
