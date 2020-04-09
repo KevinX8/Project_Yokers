@@ -207,7 +207,7 @@ function SpawnAsh(x, y, size)
     local ash = display.newImageRect(BackgroundGroup, "assets/ash.png", size, size)
     ash.x = x
     ash.y = y
-    transition.to(ash,{time=1200*(15-size) + 6000, y = 3470+display.contentHeight/2, onComplete=function() ash:removeSelf() end})
+    transition.to(ash,{time=1200*(15-size) + 6000, y = 4600+display.contentHeight/2, onComplete=function() ash:removeSelf() end})
 end
 
 return Decor
