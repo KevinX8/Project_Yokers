@@ -8,7 +8,7 @@ function scene:create(event)
 
     local widget = require("widget")
 
-    local background = display.newImageRect("images/background.png", 1280, 720)
+    local background = display.newImageRect("Images/Title_Screen.png", 1280, 720)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
 
@@ -48,7 +48,7 @@ function scene:create(event)
     local returnMain =
         widget.newButton(
         {
-			id = "back"
+	    id = "back"
             onEvent = goToMenu
         }
     )
