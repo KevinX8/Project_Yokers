@@ -24,7 +24,7 @@ function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
 
     self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
-    BackgroundGroup:insert(7+iceLimit,self.enemyImage)
+    BackgroundGroup:insert(5+iceLimit+lavaLimit,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
     self.enemyImage.myName = "enemy"
