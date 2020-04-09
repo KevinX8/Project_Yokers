@@ -1,3 +1,5 @@
+ local composer = require ("composer")
+ local scene = composer.newScene()
 
  local function goToLevel1(event)
             if ("ended" == event.phase) then
