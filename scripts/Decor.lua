@@ -192,7 +192,7 @@ function SpawnSnowFlake()
     flake.x = math.random(6144)-500
     flake.y = -3470-display.contentHeight/2
     local wind = -100
-    transition.to(flake,{time=math.random(3000) + 3000, y = -1000, x = flake.x + wind, onComplete=function() flake:removeSelf() end})
+    transition.to(flake,{time=(15-size)*300 + 3000, y = -1000, x = flake.x + wind, onComplete=function() flake:removeSelf() end})
 end
 
 function SpawnSpark()
@@ -200,14 +200,14 @@ function SpawnSpark()
     local spark = display.newImageRect(BackgroundGroup, "assets/spark.png", size, size)
     spark.x = math.random(6144)-600
     spark.y = 4600+display.contentHeight/2
-    transition.to(spark,{time=1200*(10-size) + 6000, y = 2100, onComplete=function() spark:removeSelf() SpawnAsh(spark.x, spark.y, size) end})
+    transition.to(spark,{time=1200*(15-size) + 6000, y = 2100, onComplete=function() spark:removeSelf() SpawnAsh(spark.x, spark.y, size) end})
 end
 
 function SpawnAsh(x, y, size)
     local ash = display.newImageRect(BackgroundGroup, "assets/ash.png", size, size)
     ash.x = x
     ash.y = y
-    transition.to(ash,{time=1200*(10-size) + 6000, y = 3470+display.contentHeight/2, onComplete=function() ash:removeSelf() end})
+    transition.to(ash,{time=1200*(15-size) + 6000, y = 3470+display.contentHeight/2, onComplete=function() ash:removeSelf() end})
 end
 
 return Decor
