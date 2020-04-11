@@ -153,6 +153,9 @@ function Decor.collisionEvent(self, event)
             pushplayer = true
         elseif event.other.myName == "playerProjectile" then
             if not(event.target.myName == "lavaLake") then 
+                if(event.other.isFireEgg) then
+                    event.other.fireEggImage:removeSelf()
+                end
                 timer.cancel(event.other.despawnTimer)
                 event.other:removeSelf()
             elseif event.other.isFireEgg == false then
@@ -223,7 +226,7 @@ function SpawnAsh(x, y, size)
 end
 
 function SpawnFireEggImage(egg)
-    local fireEggImage = display.newImageRect(BackgroundGroup, "assets/fireegg.png", 300 / 8, 380 / 8)
+    local fireEggImage = display.newImageRect(BackgroundGroup, "assets/fireegg.png", 380 / 8, 380 / 4)
     fireEggImage.rotation = egg.rotation + 180
     egg.fireEggImage = fireEggImage
     egg.alpha = 0.0

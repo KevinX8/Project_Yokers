@@ -50,6 +50,16 @@ function CalculateDistance(object1x, object1y, object2x, object2y) -- Calculates
     return math.sqrt(((object1x - object2x) ^ 2) + ((object1y - object2y) ^ 2))
 end
 
+function addCoopHealth(coop)
+    coop.health = 1000
+    coop.healthBorder = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 158 ,58, 10)
+    coop.healthGray = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 150 ,50, 10)
+    coop.healthImage = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 150 ,50, 10)
+    coop.healthImage:setFillColor( 232/255, 14/255, 14/255)
+    coop.healthGray:setFillColor(82/255,8/255,82/255)
+    coop.healthBorder:setFillColor(0)
+end    
+
 local function addCoop(x, y)
     local coop = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
     BackgroundGroup:insert(5, coop)
@@ -57,6 +67,7 @@ local function addCoop(x, y)
     coop.y = y
     Physics.addBody(coop, "static")
     coop.myName = "coop"
+    addCoopHealth(coop)
     table.insert(LevelObjects, {x, y, 512})
     return coop
 end
