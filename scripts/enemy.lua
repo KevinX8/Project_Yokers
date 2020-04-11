@@ -43,13 +43,13 @@ end
 function enemy.collisionEvent(self, event)
     -- In this case, "self" refers to "enemyImage"
     if event.phase == "began" then
-        if event.other.myName == "playerProjectile" then
+        if event.other.myName == "playerProjectile" or event.other.myName == "fireEgg" then
             timer.cancel(self.instance.aiLoopTimer)
             timer.cancel(event.other.despawnTimer)
             event.other:removeSelf()
             EnemyAmount = EnemyAmount - 1
             self:removeSelf()
-        elseif event.other.myName == "cactus" then
+        elseif event.other.myName == "cactus" or event.other.myName == "lavaLake" then
             timer.cancel(self.instance.aiLoopTimer)
             EnemyAmount = EnemyAmount - 1
             self:removeSelf()

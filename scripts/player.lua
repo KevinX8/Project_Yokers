@@ -2,7 +2,7 @@ local player = {} -- this and the return statement at the end make this file beh
 
 local UserInteface = require("scripts.UI")
 PlayerSpeed = 10
-local playerProjectileSpeed = 800
+local playerProjectileSpeed = 800--change fireEggSpeed in Decor.lua, global variable won't work so two variable needed
 local invincibilityTime = 3 -- Time in seconds the player should be invincible after being hit
 local blinkSpeed = 2 --Speed at which player blinks when taken damage
 local counter = invincibilityTime * blinkSpeed -- used in invincibility animation
@@ -24,6 +24,8 @@ local clickReady = true
 
 Health = 5
 local isInvincible = false
+EggCapacity = 50
+EgginInv = 50
 
 function player.start()
     Cursor = display.newImageRect(ForegroundGroup, "assets/cursor.png", 50, 50)
@@ -49,11 +51,12 @@ function player.throwProjectile()
     newProjectile.myName = "playerProjectile" -- also used for collision detection
     newProjectile.x = playerImage.x
     newProjectile.y = playerImage.y
+    newProjectile.isFireEgg = false
     newProjectile.rotation = playerImage.rotation
     local angle = math.rad(newProjectile.rotation - 90) -- use the projectile's direction to see which way it should go
     newProjectile:setLinearVelocity(math.cos(angle) * playerProjectileSpeed, math.sin(angle) * playerProjectileSpeed)
-
-    newProjectile.despawnTimer = timer.performWithDelay(projectileLifetime * 1000, function() newProjectile:removeSelf() end, 1)
+    --EgginInv = EgginInv - 1
+    newProjectile.despawnTimer = timer.performWithDelay(projectileLifetime * 1000, function() newProjectile:removeSelf() if(newProjectile.isFireEgg == true) then newProjectile.fireEggImage:removeSelf() end end, 1)
 end
 
 function player.handleMovement(event)
@@ -78,7 +81,7 @@ function player.handleMouse(event)
     Cursor.x = mouseX
     Cursor.y = mouseY
     if (event.isPrimaryButtonDown) then
-        if (clickReady) then
+        if (clickReady) and EgginInv > 0 then
             player.throwProjectile()
             clickReady = false
         end

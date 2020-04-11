@@ -2,9 +2,14 @@ local userinterface = {}
 --score = system.get(timer)--
 local livesText
 local scoreText
-local CoopLifetext
-local PlayerLifetext
-local CoopLife = {}
+
+local timeLoaded
+local timemImage
+local timesImage
+local sImage
+local eggImage
+
+
 local heart = {}
 Timeloaded = 0
 
@@ -16,26 +21,16 @@ function userinterface.InitialiseUI()
         heart[i].x = display.contentCenterX - 1010 + (i * 120)
         i = i + 1
     until i > 5
-    Timeloaded = system.getTimer()
-    TimemImage = display.newText("0m", display.contentCenterX + 750, display.contentCenterY - 440, "assets/time.otf", 32 )
-    TimesImage = display.newText("0", display.contentCenterX + 850, display.contentCenterY - 440, "assets/time.otf", 32 )
-    SImage = display.newText("s", display.contentCenterX + 920, display.contentCenterY - 440, "assets/time.otf", 32 )
-    TimemImage:setFillColor(0,0,0)
-    TimesImage:setFillColor(0,0,0)
-    SImage:setFillColor(0,0,0)
-
-    j = 1
-    repeat
-        CoopLife[j] = display.newImageRect(ForegroundGroup, "assets/heart.png", 100, 150)
-        CoopLife[j].y = display.contentCenterY + 480
-        CoopLife[j].x = display.contentCenterX - 1010 + (j * 120)
-        j = j + 1
-    until j > 5
-
-    PlayerLifetext = display.newText("PlayerLife", display.contentCenterX -850, display.contentCenterY -500, native.systemFontBold, 36)
-    CoopLifetext = display.newText("CoopLife", display.contentCenterX -850, display.contentCenterY +420, native.systemFontBold, 36)
-    PlayerLifetext :setFillColor( 0, 0, 0 )
-    CoopLifetext :setFillColor( 0, 0, 0 )
+    timeLoaded = system.getTimer()
+    timemImage = display.newText("0m", display.contentCenterX + 750, display.contentCenterY - 440, "assets/time.otf", 32 )
+    timesImage = display.newText("0", display.contentCenterX + 850, display.contentCenterY - 440, "assets/time.otf", 32 )
+    sImage = display.newText("s", display.contentCenterX + 920, display.contentCenterY - 440, "assets/time.otf", 32 )
+    eggImage = display.newImageRect(ForegroundGroup, "assets/egg.png", 37.5, 47.5)
+    eggImage.x = display.contentCenterX - 920
+    eggImage.y = display.contentCenterY + 500
+    timemImage:setFillColor(0,0,0)
+    timesImage:setFillColor(0,0,0)
+    sImage:setFillColor(0,0,0)
 end
 
 function userinterface.updatehearts(added)
@@ -56,8 +51,8 @@ end
 function userinterface.updatetime()
     local timem = math.floor(((system.getTimer() - Timeloaded) / 60000)) .. "m"
     local times = math.floor((((system.getTimer() - Timeloaded) % 60000) /1000) *10) * 0.1
-    TimemImage.text = timem
-    TimesImage.text = times
+    timemImage.text = timem
+    timesImage.text = times
 end
 
 function userinterface.deathscreen()

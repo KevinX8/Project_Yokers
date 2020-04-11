@@ -7,6 +7,8 @@ local icewidth = 0
 local pushamount = 0.1
 local frame = 0
 local pushscale = pushamount / 30
+local fireEggSpeed = 800
+local fireEggLifeTime = 3
 
 function Decor.generateDecor()
     Decor.level1()
@@ -92,7 +94,7 @@ function Decor.level4()
         local size = math.random(512, 768)
         local lavaLake = display.newImageRect(BackgroundGroup, "assets/lava.png", size, size)
         BackgroundGroup:insert(5, lavaLake)
-        Physics.addBody(lavaLake, "static", {radius=size/2, density=999999999.0, isSensor=true})
+        Physics.addBody(lavaLake, "static", {radius=(size-30)/2, density=999999999.0, isSensor=true})
         local positionValid = false
         local x = 0
         local y = 0
@@ -114,6 +116,7 @@ function Decor.level4()
         until positionValid == true
         lavaLake.x = x
         lavaLake.y = y
+        lavaLake.rotation = (math.floor(math.random(4))*90)
         table.insert(LevelObjects, {x, y, size})
         lavaLake.myName = "lavaLake"
         i = i + 1
@@ -135,21 +138,30 @@ function Decor.collisionEvent(self, event)
                 iceslide = true
                 icewidth = event.target.width
             end
-        elseif event.other.myName == "playerProjectile" then
-            timer.cancel(event.other.despawnTimer)
-            event.other:removeSelf()
-        elseif event.other.myName == "coop" then -- Don't allow decor to spawn on top of coops
-            event.target:removeSelf()
-            print("ouch coop hurts")
-        elseif event.other.myName == "player" and event.target.myName == "cactus" then
+        elseif event.other.myName == "player" and (event.target.myName == "cactus" or event.target.myName == "lavaLake") then
             print("ouch cactus")
             Player.damage(1)
+            if(event.target.myName == "cactus") then
             pushamount = 0.1
+            else
+                pushamount = 0.05
+            end
             pushscale = pushamount / 30
             PlayerSpeed = 2
             Pushx = (event.target.x - select(1,Player.getPosition()))
             Pushy = (event.target.y - select(2,Player.getPosition()))
             pushplayer = true
+        elseif event.other.myName == "playerProjectile" then
+            if not(event.target.myName == "lavaLake") then 
+                timer.cancel(event.other.despawnTimer)
+                event.other:removeSelf()
+            elseif event.other.isFireEgg == false then
+                event.other.isFireEgg = true
+                SpawnFireEggImage(event.other)
+            end
+        elseif event.other.myName == "coop" then -- Don't allow decor to spawn on top of coops
+            event.target:removeSelf()
+            print("ouch coop hurts")
         end
     end
 end
@@ -208,6 +220,17 @@ function SpawnAsh(x, y, size)
     ash.x = x
     ash.y = y
     transition.to(ash,{time=1200*(15-size) + 6000, y = 4600+display.contentHeight/2, onComplete=function() ash:removeSelf() end})
+end
+
+function SpawnFireEggImage(egg)
+    local fireEggImage = display.newImageRect(BackgroundGroup, "assets/fireegg.png", 300 / 8, 380 / 8)
+    fireEggImage.rotation = egg.rotation + 180
+    egg.fireEggImage = fireEggImage
+    egg.alpha = 0.0
+    local vX, vY = egg:getLinearVelocity()
+    fireEggImage.x = egg.x
+    fireEggImage.y = egg.y
+    transition.to(fireEggImage,{time = fireEggLifeTime*(937),x = fireEggImage.x + vX*fireEggLifeTime, y = fireEggImage.y + vY*fireEggLifeTime})
 end
 
 return Decor

@@ -26,15 +26,15 @@ Physics.setGravity(0, 0)
 
 math.randomseed(os.time())
 
+local L2BgImage = display.newImageRect(BackgroundGroup, "assets/SandBackground.png", 3072, 3072)
+BackgroundGroup:insert(1,L2BgImage)
+L2BgImage.x = display.contentCenterX + 3072
+L2BgImage.y = display.contentCenterY
+
 local L1BgImage = display.newImageRect(BackgroundGroup, "assets/background.png", 3072, 3072)
 BackgroundGroup:insert(1,L1BgImage)
 L1BgImage.x = display.contentCenterX
 L1BgImage.y = display.contentCenterY
-
-local L2BgImage = display.newImageRect(BackgroundGroup, "assets/SandBackground.png", 3072, 3072)
-BackgroundGroup:insert(2,L2BgImage)
-L2BgImage.x = display.contentCenterX + 3072
-L2BgImage.y = display.contentCenterY
 
 local L3BgImage = display.newImageRect(BackgroundGroup, "assets/full snow background.png", 6144, 3072)
 BackgroundGroup:insert(3,L3BgImage)
