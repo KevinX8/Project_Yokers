@@ -46,6 +46,28 @@ BackgroundGroup:insert(4,L4BgImage)
 L4BgImage.x = display.contentCenterX + 1536
 L4BgImage.y = display.contentCenterY + 3072
 
+for i=1, 3 do
+    local seaSideImageLeft = display.newImageRect(BackgroundGroup, "assets/seaCropped.png", 1536, 3072)
+    BackgroundGroup:insert(5,seaSideImageLeft)
+    seaSideImageLeft.x = -1344
+    seaSideImageLeft.y = display.contentCenterY-3072+((i-1)*3072)
+    local seaSideImageRight = display.newImageRect(BackgroundGroup, "assets/seaCropped.png", 1536, 3072)
+    BackgroundGroup:insert(5,seaSideImageRight)
+    seaSideImageRight.x = 6336
+    seaSideImageRight.y = display.contentCenterY-3072+((i-1)*3072)
+end
+
+for i =1, 2 do
+    local seaImageTop = display.newImageRect(BackgroundGroup, "assets/seaHorizontalCropped.png", 4608, 768)
+    BackgroundGroup:insert(5,seaImageTop)
+    seaImageTop.x = (i-1)*4608
+    seaImageTop.y = display.contentCenterY - 4992
+    local seaImageBottom = display.newImageRect(BackgroundGroup, "assets/seaHorizontalCropped.png", 4608, 768)
+    BackgroundGroup:insert(5,seaImageBottom)
+    seaImageBottom.x = (i-1)*4608
+    seaImageBottom.y = display.contentCenterY + 4992
+end
+
 function CalculateDistance(object1x, object1y, object2x, object2y) -- Calculates the distance between 2 positions
     return math.sqrt(((object1x - object2x) ^ 2) + ((object1y - object2y) ^ 2))
 end
@@ -62,7 +84,7 @@ end
 
 local function addCoop(x, y)
     local coop = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
-    BackgroundGroup:insert(5, coop)
+    BackgroundGroup:insert(15, coop)
     coop.x = x
     coop.y = y
     Physics.addBody(coop, "static")

@@ -39,7 +39,7 @@ function enemy.new(startX, startY)
         self.type = 0
         self.enemyImage.health = 1
     end
-    BackgroundGroup:insert(5+iceLimit+lavaLimit,self.enemyImage)
+    BackgroundGroup:insert(15+iceLimit+lavaLimit,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
     self.enemyImage.myName = "enemy"
