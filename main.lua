@@ -136,17 +136,22 @@ local function progressLevel()
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
         Coops = {coop1, coop2, coop3, coop4}
+        EnemyLimit = 75
         timer.performWithDelay(1000, displayArrow, 5)
         UserInteface.updateLevelDisp()
+        timer.performWithDelay(TimeDifficulty, progressLevel, 1)
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
+        EnemyLimit =  125
         timer.performWithDelay(1000, displayArrow, 5)
         UserInteface.updateLevelDisp()
+        timer.performWithDelay(TimeDifficulty, progressLevel, 1)
     elseif Level == 3 then
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
         Level = 4
+        EnemyLimit = 175
         timer.performWithDelay(1000, displayArrow, 5)
         UserInteface.updateLevelDisp()
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8, coop9, coop10, coop11, coop12}
@@ -154,7 +159,7 @@ local function progressLevel()
 end
 
 timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
-timer.performWithDelay(TimeDifficulty, progressLevel, 3)
+timer.performWithDelay(TimeDifficulty, progressLevel, 1)
 timer.performWithDelay(100, UserInteface.updatetime, 0)
 
 local function keyEvent(event)

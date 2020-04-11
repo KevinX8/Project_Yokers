@@ -8,7 +8,8 @@ local enemy = {
 enemy.__index = enemy
 local movementSpeed = 250
 local playerDamage = 1
-local isRed = false
+local type = 0 -- 0 is normal, red is 1, blue is 2
+local health = 1
 local playerAttackDistance = 400 -- If the player comes closer than this distance, the enemy attacks
 local playerForgetDistance = 800 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 
@@ -24,11 +25,19 @@ local playerForgetDistance = 800 -- If the player gets this far away, the enemy 
 function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
     local pickred = math.random(9) + Level - 1
+    local pickblue = math.random(19) + Level - 2
     if pickred > 9 then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
-        self.isRed = true
+        self.type = 1
+        self.enemyImage.health = 1
+    elseif pickblue > 19 then
+        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blueenemy.png", 93, 120)
+        self.type = 2
+        self.enemyImage.health = 3
     else
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
+        self.type = 0
+        self.enemyImage.health = 1
     end
     BackgroundGroup:insert(5+iceLimit+lavaLimit,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
@@ -50,14 +59,17 @@ function enemy.collisionEvent(self, event)
     -- In this case, "self" refers to "enemyImage"
     if event.phase == "began" then
         if event.other.myName == "playerProjectile" then
-            timer.cancel(self.instance.aiLoopTimer)
-            timer.cancel(event.other.despawnTimer)
+            self.health = self.health - 1
+            if event.target.health <= 0 then
+                timer.cancel(self.instance.aiLoopTimer)
+                EnemyAmount = EnemyAmount - 1
+                self:removeSelf()
+            end
+        timer.cancel(event.other.despawnTimer)
             if(event.other.isFireEgg) then
                 event.other.fireEggImage:removeSelf()
             end
-            event.other:removeSelf()
-            EnemyAmount = EnemyAmount - 1
-            self:removeSelf()
+        event.other:removeSelf()
         elseif event.other.myName == "cactus" or event.other.myName == "lavaLake" then
             timer.cancel(self.instance.aiLoopTimer)
             EnemyAmount = EnemyAmount - 1
@@ -106,7 +118,7 @@ function enemy:aiUpdate() -- Called 30 times a second
     end
 
     if playerDistance < 150 then
-        if self.isRed then
+        if self.type == 1 then
             playerDamage = 2
         end
         Player.damage(playerDamage)
