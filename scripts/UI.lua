@@ -8,7 +8,8 @@ local timemImage
 local timesImage
 local sImage
 local eggImage
-
+local fullHeart = false
+local blinkTime = 300
 
 local heart = {}
 Timeloaded = 0
@@ -36,20 +37,42 @@ end
 
 function userinterface.updatehearts(added)
    if added then
+    if(Health == 1)then
+        timer.cancel(Blink)
+        heart[1] = display.newImageRect(ForegroundGroup, "assets/heart.png", 96, 84)
+    end
     heart[Health] = display.newImageRect(ForegroundGroup, "assets/heart.png", 96, 84)
     heart[Health].alpha = 0.7
-    heart[Health].y = display.contentCenterY - 480
+    heart[Health].y = display.contentCenterY - 440
     heart[Health + 1].x = heart[Health].x + 120
    else
     local heartx = heart[Health + 1].x
     local hearty = heart[Health + 1].y
-    heart[Health + 1]:removeSelf()
+    local animationImage = heart[Health + 1]
+    transition.to(animationImage,{time=2000, y = animationImage.y-200, alpha = 0.4, onComplete=function() animationImage:removeSelf() end})
     heart[Health + 1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
     heart[Health+1].alpha = 0.7
     heart[Health + 1].x = heartx
     heart[Health + 1].y = hearty
+    if(Health == 1) then
+        fullHeart = true
+        Blink = timer.performWithDelay(blinkTime, function() fullHeart = not(fullHeart) BlinkHealth() end, 0)
+    end
    end
 end 
+
+function BlinkHealth()
+    heart[1]:removeSelf()
+    if(fullHeart) then
+        heart[1] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
+    else
+        heart[1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
+    end
+    heart[1].alpha = 0.7
+    heart[1].y = display.contentCenterY - 440
+    heart[1].x = display.contentCenterX - 890
+end
+
 
 function userinterface.updatetime()
     local timem = math.floor(((system.getTimer() - Timeloaded) / 60000)) .. "m"
