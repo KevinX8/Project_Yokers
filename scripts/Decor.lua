@@ -22,7 +22,7 @@ function Decor.level1()
     local bushlimit = math.random(5,10)
     repeat--level1--
         local bush = display.newImageRect(BackgroundGroup, "assets/bush.png", 256, 256)
-        BackgroundGroup:insert(16,bush)
+        BackgroundGroup:insert(15,bush)
         Physics.addBody(bush, "dynamic", {radius=60, density=99999999.0})
         bush.myName = "bush"
         bush.x = math.random(LevelBoundLeft + 128,LevelBoundRight - 128)
@@ -38,7 +38,7 @@ function Decor.level2()
     local cactusLimit = math.random(8,13)
     repeat--level2--
         local cactus = display.newImageRect(BackgroundGroup, "assets/cactus.png", 256, 256)
-        BackgroundGroup:insert(16, cactus)
+        BackgroundGroup:insert(15, cactus)
         Physics.addBody(cactus, "dynamic", {radius=120, density=999999999.0})
         cactus.x = math.random(LevelBoundLeft + 128,LevelBoundRight - 128)+2872
         cactus.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)
@@ -55,7 +55,7 @@ function Decor.level3()
     repeat
         local size = math.random(512, 768)
         local iceLake = display.newImageRect(BackgroundGroup, "assets/ice lake.png", size, size)
-        BackgroundGroup:insert(16, iceLake)
+        BackgroundGroup:insert(15, iceLake)
         Physics.addBody(iceLake, "static", {radius=size/2, density=999999999.0, isSensor=true})
         local positionValid = false
         local x = 0
@@ -92,7 +92,7 @@ function Decor.level4()
     repeat
         local size = math.random(512, 768)
         local lavaLake = display.newImageRect(BackgroundGroup, "assets/lava.png", size, size)
-        BackgroundGroup:insert(16, lavaLake)
+        BackgroundGroup:insert(15, lavaLake)
         Physics.addBody(lavaLake, "static", {radius=(size-30)/2, density=999999999.0, isSensor=true})
         local positionValid = false
         local x = 0
@@ -225,7 +225,7 @@ end
 
 function SpawnFireEggImage(egg)
     local fireEggImage = display.newImageRect(BackgroundGroup, "assets/fireegg.png", 380 / 8, 380 / 4)
-    BackgroundGroup:insert(16+iceLimit+lavaLimit,fireEggImage)
+    BackgroundGroup:insert(15+iceLimit+lavaLimit,fireEggImage)
     fireEggImage.rotation = egg.rotation + 180
     egg.fireEggImage = fireEggImage
     egg.alpha = 0.0
