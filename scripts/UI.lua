@@ -16,9 +16,10 @@ Timeloaded = 0
 function userinterface.InitialiseUI()
     i = 1
     repeat
-        heart[i] = display.newImageRect(ForegroundGroup, "assets/heart.png", 100, 150)
+        heart[i] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
         heart[i].y = display.contentCenterY - 440
         heart[i].x = display.contentCenterX - 1010 + (i * 120)
+        heart[i].alpha = 0.7
         i = i + 1
     until i > 5
     timeLoaded = system.getTimer()
@@ -35,14 +36,16 @@ end
 
 function userinterface.updatehearts(added)
    if added then
-    heart[Health] = display.newImageRect(ForegroundGroup, "assets/heart.png", 100, 150)
+    heart[Health] = display.newImageRect(ForegroundGroup, "assets/heart.png", 96, 84)
+    heart[Health].alpha = 0.7
     heart[Health].y = display.contentCenterY - 480
     heart[Health + 1].x = heart[Health].x + 120
    else
     local heartx = heart[Health + 1].x
     local hearty = heart[Health + 1].y
     heart[Health + 1]:removeSelf()
-    heart[Health + 1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 100, 150)
+    heart[Health + 1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
+    heart[Health+1].alpha = 0.7
     heart[Health + 1].x = heartx
     heart[Health + 1].y = hearty
    end
