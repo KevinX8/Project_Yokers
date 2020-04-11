@@ -9,6 +9,7 @@ local timeLoaded
 local timemImage
 local timesImage
 local sImage
+local currentLevel
 local eggImage
 local eggCounter
 local fullHeart = false
@@ -59,8 +60,17 @@ function userinterface.InitialiseUI()
         fontSize = 32,
         align = "centre"
     }
+    local optionsl = {
+        text = "Level 1",
+        x = display.contentCenterX + 830,
+        y = display.contentCenterY - 500,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "centre"
+    }
     timemImage = Ponyfont.newText(optionsm)
     timesImage = Ponyfont.newText(optionss)
+    currentLevel = Ponyfont.newText(optionsl)
     sImage = Ponyfont.newText(optionssi)
     eggImage = display.newImageRect(ForegroundGroup, "assets/egg.png", 37.5, 47.5)
     eggImage.x = display.contentCenterX - 920
@@ -69,11 +79,11 @@ function userinterface.InitialiseUI()
 end
 
 function userinterface.updatehearts(added)
-   if added then
-    if(Health == 1)then
-        timer.cancel(Blink)
-        heart[1] = display.newImageRect(ForegroundGroup, "assets/heart.png", 96, 84)
-    end
+    if added then
+        if(Health == 1)then
+            timer.cancel(Blink)
+            heart[1] = display.newImageRect(ForegroundGroup, "assets/heart.png", 96, 84)
+        end
     heart[Health] = display.newImageRect(ForegroundGroup, "assets/heart.png", 96, 84)
     heart[Health].alpha = 0.7
     heart[Health].y = display.contentCenterY - 440
@@ -106,7 +116,6 @@ function BlinkHealth()
     heart[1].x = display.contentCenterX - 890
 end
 
-
 function userinterface.updatetime()
     local timem = math.floor(((system.getTimer() - Timeloaded) / 60000)) .. "m"
     local times = math.floor((((system.getTimer() - Timeloaded) % 60000) /1000) *10) * 0.1
@@ -116,6 +125,10 @@ end
 
 function userinterface.updateEggs()
     eggCounter.text = EgginInv .. " / " .. EggCapacity
+end
+
+function userinterface.updateLevelDisp()
+    currentLevel.text = "Level " .. Level 
 end
 
 function userinterface.deathscreen()

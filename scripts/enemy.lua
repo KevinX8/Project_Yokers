@@ -8,6 +8,7 @@ local enemy = {
 enemy.__index = enemy
 local movementSpeed = 250
 local playerDamage = 1
+local isRed = false
 local playerAttackDistance = 400 -- If the player comes closer than this distance, the enemy attacks
 local playerForgetDistance = 800 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 
@@ -22,8 +23,13 @@ local playerForgetDistance = 800 -- If the player gets this far away, the enemy 
 
 function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
-
-    self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
+    local pickred = math.random(9) + Level - 1
+    if pickred > 9 then
+        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
+        self.isRed = true
+    else
+        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
+    end
     BackgroundGroup:insert(5+iceLimit+lavaLimit,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
@@ -100,7 +106,11 @@ function enemy:aiUpdate() -- Called 30 times a second
     end
 
     if playerDistance < 150 then
+        if self.isRed then
+            playerDamage = 2
+        end
         Player.damage(playerDamage)
+        playerDamage = 1
     end
 
     -- Point towards the target position
