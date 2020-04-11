@@ -2,7 +2,6 @@ local Decor = {}
 local iceCollision = false
 local pushplayer = false
 local iceslide = false
-local enemyslide = false
 local icewidth = 0
 local pushamount = 0.1
 local frame = 0
@@ -139,10 +138,9 @@ function Decor.collisionEvent(self, event)
                 icewidth = event.target.width
             end
         elseif event.other.myName == "player" and (event.target.myName == "cactus" or event.target.myName == "lavaLake") then
-            print("ouch cactus")
             Player.damage(1)
             if(event.target.myName == "cactus") then
-            pushamount = 0.1
+                pushamount = 0.1
             else
                 pushamount = 0.05
             end

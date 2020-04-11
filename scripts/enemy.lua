@@ -28,15 +28,15 @@ function enemy.new(startX, startY)
     local pickblue = math.random(19) + Level - 2
     if pickred > 9 then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
-        self.type = 1
+        self.enemyImage.Enemytype = 1
         self.enemyImage.health = 1
     elseif pickblue > 19 then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blueenemy.png", 93, 120)
-        self.type = 2
+        self.enemyImage.Enemytype = 2
         self.enemyImage.health = 3
     else
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
-        self.type = 0
+        self.enemyImage.Enemytype = 0
         self.enemyImage.health = 1
     end
     BackgroundGroup:insert(15+iceLimit+lavaLimit,self.enemyImage)
@@ -71,9 +71,18 @@ function enemy.collisionEvent(self, event)
             end
         event.other:removeSelf()
         elseif event.other.myName == "cactus" or event.other.myName == "lavaLake" then
-            timer.cancel(self.instance.aiLoopTimer)
-            EnemyAmount = EnemyAmount - 1
-            self:removeSelf()
+            self.health = self.health - 1
+            if event.target.Enemytype == 2 and event.other.myName == "lavaLake" then
+                self.health = 0
+            end
+            if event.target.Enemytype == 1 and event.other.myName == "cactus" then
+                return
+            end
+            if event.target.health <= 0 then
+                timer.cancel(self.instance.aiLoopTimer)
+                EnemyAmount = EnemyAmount - 1
+                self:removeSelf()
+            end
         end
     end
 end
@@ -118,7 +127,7 @@ function enemy:aiUpdate() -- Called 30 times a second
     end
 
     if playerDistance < 150 then
-        if self.type == 1 then
+        if self.enemyImage.Enemytype == 1 then
             playerDamage = 2
         end
         Player.damage(playerDamage)
