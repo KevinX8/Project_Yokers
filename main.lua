@@ -108,6 +108,10 @@ local coop11 = addCoop(3800, 3372)
 local coop12 = addCoop(4850, 4472)
 Coops = {coop1, coop2}
 
+Sandwall = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 99, 3072)
+Sandwall.x = display.contentCenterX + 1585
+Sandwall.y = display.contentCenterY
+
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
 Player.start()
@@ -155,6 +159,7 @@ end
 
 local function progressLevel()
     if Level == 1 then
+        transition.to(Sandwall, {time = 2000, x = display.contentCenterX + 1585 + 3072, onComplete = function() Sandwall:removeSelf() end})
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
         Coops = {coop1, coop2, coop3, coop4}
