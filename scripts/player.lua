@@ -134,12 +134,15 @@ end
 
 function player.damage(damageAmount)
     if not isInvincible then
-        Health = Health - damageAmount
+        local hurt = Health - damageAmount
+        while not (Health == 0) and not (hurt == Health) do
+        Health = Health - 1
+        UserInteface.updatehearts(false)
+        end
         if Health <= 0 then
             print("you are dead") -- need to add death
             return
         end
-        UserInteface.updatehearts(false)
         isInvincible = true
         PlayerFadeOut(counter)
         isInvincible = true
