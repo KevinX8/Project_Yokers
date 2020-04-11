@@ -20,6 +20,7 @@ local pressLeft = false
 local pressRight = false
 local mouseX = 0
 local mouseY = 0
+local mouseRotation = 0
 local clickReady = true
 
 Health = 5
@@ -28,7 +29,8 @@ EggCapacity = 50
 EgginInv = 50
 
 function player.start()
-    Cursor = display.newImageRect(ForegroundGroup, "assets/cursor.png", 50, 50)
+    Cursor = display.newImageRect(ForegroundGroup, "assets/cursor.png", 100, 100)
+    Cursor.alpha = 0.65
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
     BackgroundGroup:insert(5+lavaLimit+iceLimit,playerImage)
     print(BackgroundGroup.numChildren-12-iceLimit-lavaLimit)
@@ -79,8 +81,17 @@ end
 function player.handleMouse(event)
     mouseX = event.x
     mouseY = event.y
+    mouseRotation = math.atan((mouseY-display.contentCenterY)/ (mouseX-display.contentCenterX))
     Cursor.x = mouseX
     Cursor.y = mouseY
+
+    if (mouseX <display.contentCenterX) then
+        Cursor.rotation = math.deg(mouseRotation)+180
+        Cursor.yScale = -1
+    else
+        Cursor.rotation = math.deg(mouseRotation)
+        Cursor.yScale = 1
+    end
     if (event.isPrimaryButtonDown) then
         if (clickReady) and EgginInv > 0 then
             player.throwProjectile()
