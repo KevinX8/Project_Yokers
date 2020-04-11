@@ -89,18 +89,18 @@ function userinterface.updatehearts(added)
     heart[Health].y = display.contentCenterY - 440
     heart[Health + 1].x = heart[Health].x + 120
    else
-    local heartx = heart[Health + 1].x
-    local hearty = heart[Health + 1].y
-    local animationImage = heart[Health + 1]
-    transition.to(animationImage,{time=2000, y = animationImage.y-200, alpha = 0.4, onComplete=function() animationImage:removeSelf() end})
-    heart[Health + 1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
-    heart[Health+1].alpha = 0.7
-    heart[Health + 1].x = heartx
-    heart[Health + 1].y = hearty
-    if(Health == 1) then
-        fullHeart = true
-        Blink = timer.performWithDelay(blinkTime, function() fullHeart = not(fullHeart) BlinkHealth() end, 0)
-    end
+        local heartx = heart[Health + 1].x
+        local hearty = heart[Health + 1].y
+        local animationImage = heart[Health + 1]
+        transition.to(animationImage,{time=2000, y = animationImage.y-200, alpha = 0.4, onComplete=function() animationImage:removeSelf() end})
+        heart[Health + 1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
+        heart[Health+1].alpha = 0.7
+        heart[Health + 1].x = heartx
+        heart[Health + 1].y = hearty
+        if(Health == 1) then
+            fullHeart = true
+            Blink = timer.performWithDelay(blinkTime, function() fullHeart = not(fullHeart) BlinkHealth() end, 0)
+        end
    end
 end 
 
