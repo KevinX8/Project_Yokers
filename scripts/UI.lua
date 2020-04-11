@@ -1,6 +1,6 @@
 local userinterface = {}
 --score = system.get(timer)--
-Ponyfont = require "com.ponywolf.ponyfont"
+Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
 
 local livesText
 local scoreText
@@ -32,7 +32,7 @@ function userinterface.InitialiseUI()
         text = "0m",
         x = display.contentCenterX + 762,
         y = display.contentCenterY - 445,
-        font = "assets/coolfont.fnt",
+        font = "assets/coolfont.fnt", -- vector font from: https://www.dafont.com/fipps.font converted to bitmap manually
         fontSize = 32,
         align = "centre"
     }
