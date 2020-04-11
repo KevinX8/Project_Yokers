@@ -153,6 +153,9 @@ function Decor.collisionEvent(self, event)
             pushplayer = true
         elseif event.other.myName == "playerProjectile" then
             if not(event.target.myName == "lavaLake") then 
+                if(event.other.isFireEgg) then
+                    event.other.fireEggImage:removeSelf()
+                end
                 timer.cancel(event.other.despawnTimer)
                 event.other:removeSelf()
             elseif event.other.isFireEgg == false then
