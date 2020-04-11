@@ -55,7 +55,8 @@ function player.throwProjectile()
     newProjectile.rotation = playerImage.rotation
     local angle = math.rad(newProjectile.rotation - 90) -- use the projectile's direction to see which way it should go
     newProjectile:setLinearVelocity(math.cos(angle) * playerProjectileSpeed, math.sin(angle) * playerProjectileSpeed)
-    --EgginInv = EgginInv - 1
+    EgginInv = EgginInv - 1
+    UserInteface.updateEggs()
     newProjectile.despawnTimer = timer.performWithDelay(projectileLifetime * 1000, function() newProjectile:removeSelf() if(newProjectile.isFireEgg == true) then newProjectile.fireEggImage:removeSelf() end end, 1)
 end
 
