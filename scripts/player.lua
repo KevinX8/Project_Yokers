@@ -81,24 +81,25 @@ end
 function player.handleMouse(event)
     mouseX = event.x
     mouseY = event.y
-    mouseRotation = math.atan((mouseY-display.contentCenterY)/ (mouseX-display.contentCenterX))
-    Cursor.x = mouseX
-    Cursor.y = mouseY
-
-    if (mouseX <display.contentCenterX) then
-        Cursor.rotation = math.deg(mouseRotation)+180
-        Cursor.yScale = -1
-    else
-        Cursor.rotation = math.deg(mouseRotation)
-        Cursor.yScale = 1
-    end
-    if (event.isPrimaryButtonDown) then
-        if (clickReady) and EgginInv > 0 then
-            player.throwProjectile()
-            clickReady = false
+    if not(mouseX == display.contentCenterX and mouseY == display.contentCenterY) then
+        mouseRotation = math.atan((mouseY-display.contentCenterY)/ (mouseX-display.contentCenterX))
+        Cursor.x = mouseX
+        Cursor.y = mouseY
+        if (mouseX < display.contentCenterX) then
+            Cursor.rotation = math.deg(mouseRotation)+180
+            Cursor.yScale = -1
+        else
+            Cursor.rotation = math.deg(mouseRotation)
+            Cursor.yScale = 1
         end
-    else
-        clickReady = true
+        if (event.isPrimaryButtonDown) then
+            if (clickReady) and EgginInv > 0 then
+                player.throwProjectile()
+                clickReady = false
+            end
+        else
+            clickReady = true
+        end
     end
 end
 
