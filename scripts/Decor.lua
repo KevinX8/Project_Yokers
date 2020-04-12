@@ -1,11 +1,4 @@
 local Decor = {}
-local iceCollision = false
-local pushplayer = false
-local iceslide = false
-local icewidth = 0
-local pushamount = 0.1
-local frame = 0
-local pushscale = pushamount / 30
 local fireEggSpeed = 800
 local fireEggLifeTime = 3
 
@@ -129,26 +122,25 @@ function Decor.collisionEvent(self, event)
     if event.phase == "began" then
         if(event.target.myName == "iceLake") then
             if event.other.myName == "player" then
-                pushamount = 0.075
-                Initialx = event.other.x
-                Initialy = event.other.y
-                Pushx = -1 * (event.target.x - Initialx)
-                Pushy = -1 * (event.target.y - Initialy)
-                iceslide = true
-                icewidth = event.target.width
+                local pushX = -1 * (event.target.x - event.other.x)
+                local pushY = -1 * (event.target.y - event.other.y)
+                Player.slideOnIce(0.075, pushX, pushY, event.target.width)
             end
-        elseif event.other.myName == "player" and (event.target.myName == "cactus" or event.target.myName == "lavaLake") then
-            Player.damage(1)
+        elseif (event.other.myName == "player" or event.other.myName == "enemy") and (event.target.myName == "cactus" or event.target.myName == "lavaLake") then
+            local pushAmount
             if(event.target.myName == "cactus") then
-                pushamount = 0.1
+                pushAmount = 0.1
             else
-                pushamount = 0.05
+                pushAmount = 0.05
             end
-            pushscale = pushamount / 30
-            PlayerSpeed = 2
-            Pushx = (event.target.x - select(1,Player.getPosition()))
-            Pushy = (event.target.y - select(2,Player.getPosition()))
-            pushplayer = true
+            local pushX = (event.target.x - event.other.x)
+            local pushY = (event.target.y - event.other.y)
+            if event.other.myName == "player" then
+                Player.damage(1)
+                Player.push(pushAmount, pushX, pushY)
+            elseif event.other.myName == "enemy" then
+                event.other.instance:push(pushAmount, pushX, pushY)
+            end
         elseif event.other.myName == "playerProjectile" then
             if not(event.target.myName == "lavaLake") then 
                 if(event.other.isFireEgg) then
@@ -162,34 +154,11 @@ function Decor.collisionEvent(self, event)
             end
         elseif event.other.myName == "coop" then -- Don't allow decor to spawn on top of coops
             event.target:removeSelf()
-            print("ouch coop hurts")
         end
     end
 end
 
  function Decor.enterFrame()
-    if iceslide then
-        PlayerSpeed = 2
-        BackgroundGroup.x = BackgroundGroup.x + (pushamount * Pushx)
-        BackgroundGroup.y = BackgroundGroup.y + (pushamount * Pushy)
-        if math.sqrt(math.pow(Initialx - select(1,Player.getPosition()),2) + math.pow(Initialy - select(2,Player.getPosition()),2)) - 150 > icewidth or select(1,Player.getPosition()) <= LevelBoundLeft or select(1,Player.getPosition()) >= LevelBoundRight or select(2,Player.getPosition()) <= LevelBoundTop or select(2,Player.getPosition()) >= LevelBoundBottom then
-            iceslide = false
-            PlayerSpeed = 10
-        end
-    end
-    if pushplayer and frame < 30 then
-        if select(1,Player.getPosition()) <= LevelBoundLeft or select(1,Player.getPosition()) >= LevelBoundRight or select(2,Player.getPosition()) <= LevelBoundTop or select(2,Player.getPosition()) >= LevelBoundBottom then
-            frame = 29
-        end
-        BackgroundGroup.x = BackgroundGroup.x + (pushamount * Pushx)
-        BackgroundGroup.y = BackgroundGroup.y + (pushamount * Pushy)
-        pushamount = pushamount - pushscale
-        frame = frame + 1
-    elseif frame >= 30 and pushplayer then
-        frame = 0
-        pushplayer = false
-        PlayerSpeed = 10
-    end
     if (select(2,Player.getPosition()) < -1*(display.contentHeight/2+500)) then
         SpawnSnowFlake()
     elseif(select(2,Player.getPosition()) > (display.contentHeight/2+1500)) then
