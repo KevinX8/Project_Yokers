@@ -11,11 +11,13 @@ local enemy = {
     pushX = 0,
     pushY = 0,
     pushFrame = 0,
+    currentMovementSpeed = 0
 }
 enemy.__index = enemy
 local movementSpeed = 250
-local playerAttackDistance = 400 -- If the player comes closer than this distance, the enemy attacks
-local playerForgetDistance = 800 -- If the player gets this far away, the enemy will forget about them and go back to the coops
+local iceChickenAcceleratedSpeed = 600
+local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
+local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 
 --      AI States: 
 -- roaming - Randomly wandering around.
@@ -49,6 +51,7 @@ function enemy.new(startX, startY)
     self.enemyImage.myName = "enemy"
     self.enemyImage.x = startX
     self.enemyImage.y = startY
+    self.currentMovementSpeed = movementSpeed
     self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
     self.enemyImage.collision = self.collisionEvent
     self.enemyImage:addEventListener("collision")
@@ -82,11 +85,17 @@ function enemy.collisionEvent(self, event)
             if self.instance.type == 1 and event.other.myName == "cactus" then
                 self.instance.health = self.instance.health + 1 -- red chickens are immune to cacti
             end
+        elseif event.other.myName == "iceLake" and self.instance.type == 2 then
+            self.instance.currentMovementSpeed = iceChickenAcceleratedSpeed -- ice chickens move faster on ice lakes
         end
         if self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
             EnemyAmount = EnemyAmount - 1
             self:removeSelf()
+        end
+    elseif event.phase == "ended" then
+        if event.other.myName == "iceLake" and self.instance.type == 2 then
+            self.instance.currentMovementSpeed = movementSpeed
         end
     end
 end
@@ -108,7 +117,7 @@ function enemy:enterFrame()
     -- Move towards the target position
     if not self.pushActive then
         local angle = math.rad(self.enemyImage.rotation - 90)
-        self.enemyImage:setLinearVelocity(math.cos(angle) * movementSpeed, math.sin(angle) * movementSpeed)
+        self.enemyImage:setLinearVelocity(math.cos(angle) * self.currentMovementSpeed, math.sin(angle) * self.currentMovementSpeed)
     end
 
     if self.pushActive and self.pushFrame < 30 then
