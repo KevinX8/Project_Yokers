@@ -14,7 +14,7 @@ LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Level = 1
-TimeDifficulty = 120000 --Don't change and commit, if changed, change back before commit
+TimeDifficulty = 6000 --Don't change and commit, if changed, change back before commit
 EnemiesPerWave = 5
 MinTimeBetweenWaves = 5000
 MaxTimeBetweenWaves = 10000
@@ -162,7 +162,7 @@ local function progressLevel()
         transition.to(Sandwall, {time = 2000, x = display.contentCenterX + 1585 + 3072, onComplete = function() Sandwall:removeSelf() end})
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
-        TimeDifficulty = TimeDifficulty+30000
+        --TimeDifficulty = TimeDifficulty+30000
         Coops = {coop1, coop2, coop3, coop4}
         EnemyLimit = 75
         timer.performWithDelay(1000, displayArrow, 5)
@@ -171,7 +171,7 @@ local function progressLevel()
     elseif Level == 2 then
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
-        TimeDifficulty = TimeDifficulty+30000
+        --TimeDifficulty = TimeDifficulty+30000
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
         EnemyLimit =  125
         timer.performWithDelay(1000, displayArrow, 5)
@@ -180,7 +180,7 @@ local function progressLevel()
     elseif Level == 3 then
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
         Level = 4
-        TimeDifficulty = TimeDifficulty+30000
+        --TimeDifficulty = TimeDifficulty+30000
         EnemyLimit = 175
         timer.performWithDelay(1000, displayArrow, 5)
         UserInteface.updateLevelDisp()
