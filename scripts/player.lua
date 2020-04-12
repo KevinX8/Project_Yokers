@@ -23,6 +23,18 @@ local mouseY = 0
 local mouseRotation = 0
 local clickReady = true
 
+local pushActive = false
+local pushAmount = 0
+local pushX = 0
+local pushY = 0
+local pushFrame = 0
+
+local slideActive = false
+local slideSpeed = 0
+local lakeWidth = 0
+local slideInitialX = 0
+local slideInitialY = 0
+
 Health = 5
 local isInvincible = false
 EggCapacity = 50
@@ -125,11 +137,33 @@ function player.enterFrame()
     if pressRight == true and (playerImage.x + 64) < LevelBoundRight then
         BackgroundGroup.x = BackgroundGroup.x - (PlayerSpeed * dt)
     end
-    -- Force the player to be in the middle of the screen at all times
-    playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
     -- Update player rotation
     local adjMouseX, adjMouseY = BackgroundGroup:contentToLocal(mouseX, mouseY)
     playerImage.rotation = math.deg(math.atan2(playerImage.y - adjMouseY, playerImage.x - adjMouseX)) - 90
+    -- Apply push / ice slide if one is active
+    if slideActive then
+        BackgroundGroup.x = BackgroundGroup.x + (slideSpeed * pushX)
+        BackgroundGroup.y = BackgroundGroup.y + (slideSpeed * pushY)
+        if math.sqrt(math.pow(slideInitialX - playerImage.x,2) + math.pow(slideInitialY - playerImage.y,2)) - 150 > lakeWidth or playerImage.x <= LevelBoundLeft or playerImage.x >= LevelBoundRight or playerImage.y <= LevelBoundTop or playerImage.y >= LevelBoundBottom then
+            slideActive = false
+            PlayerSpeed = 10
+        end
+    end
+    if pushActive and pushFrame < 30 then
+        if playerImage.x <= LevelBoundLeft or playerImage.x >= LevelBoundRight or playerImage.y <= LevelBoundTop or playerImage.y >= LevelBoundBottom then
+            pushFrame = 29
+        end
+        BackgroundGroup.x = BackgroundGroup.x + (pushAmount * pushX)
+        BackgroundGroup.y = BackgroundGroup.y + (pushAmount * pushY)
+        pushAmount = pushAmount - (pushAmount / 30)
+        pushFrame = pushFrame + 1
+    elseif pushFrame >= 30 and pushActive then
+        pushFrame = 0
+        pushActive = false
+        PlayerSpeed = 10
+    end
+    -- Force the player to be in the middle of the screen at all times
+    playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
 end
 
 function player.damage(damageAmount)
@@ -144,19 +178,37 @@ function player.damage(damageAmount)
             return
         end
         isInvincible = true
-        PlayerFadeOut(counter)
-        isInvincible = true
+        player.fadeOut()
         counter = invincibilityTime * blinkSpeed
     end
 end
 
-function PlayerFadeOut()
+function player.fadeOut()
     counter = counter-1
     if(not(counter == 0)) then
-        transition.fadeOut(playerImage, {time = (1000/(blinkSpeed*2)), onComplete = function() transition.fadeIn(playerImage, {time = 1000/(blinkSpeed*2), onComplete = PlayerFadeOut}) end})
+        transition.fadeOut(playerImage, {time = (1000/(blinkSpeed*2)), onComplete = function() transition.fadeIn(playerImage, {time = 1000/(blinkSpeed*2), onComplete = player.fadeOut}) end})
     else
         isInvincible = false
     end
+end
+
+function player.push(_pushAmount, _pushX, _pushY)
+    pushAmount = _pushAmount
+    pushX = _pushX
+    pushY = _pushY
+    pushActive = true
+    PlayerSpeed = 2
+end
+
+function player.slideOnIce(_slideSpeed, _pushX, _pushY, _lakeWidth)
+    slideSpeed = _slideSpeed
+    pushX = _pushX
+    pushY = _pushY
+    lakeWidth = _lakeWidth
+    slideActive = true
+    slideInitialX = playerImage.x
+    slideInitialY = playerImage.y
+    PlayerSpeed = 2
 end
 
 return player

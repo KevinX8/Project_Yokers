@@ -3,15 +3,21 @@ local enemy = {
     aiState = "roaming",
     targetX = 0,
     targetY = 0,
-    aiLoopTimer = nil
+    aiLoopTimer = nil,
+    type = 0, -- 0 is normal, red is 1, blue is 2
+    health = 1,
+    pushActive = false,
+    pushAmount = 0,
+    pushX = 0,
+    pushY = 0,
+    pushFrame = 0,
+    currentMovementSpeed = 0
 }
 enemy.__index = enemy
 local movementSpeed = 250
-local playerDamage = 1
-local type = 0 -- 0 is normal, red is 1, blue is 2
-local health = 1
-local playerAttackDistance = 400 -- If the player comes closer than this distance, the enemy attacks
-local playerForgetDistance = 800 -- If the player gets this far away, the enemy will forget about them and go back to the coops
+local iceChickenAcceleratedSpeed = 600
+local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
+local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 
 --      AI States: 
 -- roaming - Randomly wandering around.
@@ -28,16 +34,16 @@ function enemy.new(startX, startY)
     local pickblue = math.random(19) + Level - 2
     if pickred > 9 then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
-        self.enemyImage.Enemytype = 1
-        self.enemyImage.health = 1
+        self.type = 1
+        self.health = 1
     elseif pickblue > 19 then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blueenemy.png", 93, 120)
-        self.enemyImage.Enemytype = 2
-        self.enemyImage.health = 3
+        self.type = 2
+        self.health = 3
     else
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
-        self.enemyImage.Enemytype = 0
-        self.enemyImage.health = 1
+        self.type = 0
+        self.health = 1
     end
     BackgroundGroup:insert(15+iceLimit+lavaLimit,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
@@ -45,9 +51,12 @@ function enemy.new(startX, startY)
     self.enemyImage.myName = "enemy"
     self.enemyImage.x = startX
     self.enemyImage.y = startY
+    self.currentMovementSpeed = movementSpeed
     self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
     self.enemyImage.collision = self.collisionEvent
     self.enemyImage:addEventListener("collision")
+
+    Runtime:addEventListener("enterFrame", function() enemy.enterFrame(self) end)
 
     self.targetX = math.random(LevelBoundLeft, LevelBoundRight) -- Generate an initial random target (enemy starts in "roaming" mode)
     self.targetY = math.random(LevelBoundTop, LevelBoundBottom)
@@ -59,31 +68,68 @@ function enemy.collisionEvent(self, event)
     -- In this case, "self" refers to "enemyImage"
     if event.phase == "began" then
         if event.other.myName == "playerProjectile" then
-            self.health = self.health - 1
-            if event.target.health <= 0 then
-                timer.cancel(self.instance.aiLoopTimer)
-                EnemyAmount = EnemyAmount - 1
-                self:removeSelf()
-            end
-        timer.cancel(event.other.despawnTimer)
+            self.instance.health = self.instance.health - 1
+            timer.cancel(event.other.despawnTimer)
             if(event.other.isFireEgg) then
                 event.other.fireEggImage:removeSelf()
             end
-        event.other:removeSelf()
+            event.other:removeSelf()
+            local pushX = (event.other.x - event.target.x)
+            local pushY = (event.other.y - event.target.y)
+            self.instance:push(0.1, pushX, pushY)
         elseif event.other.myName == "cactus" or event.other.myName == "lavaLake" then
-            self.health = self.health - 1
-            if event.target.Enemytype == 2 and event.other.myName == "lavaLake" then
-                self.health = 0
+            self.instance.health = self.instance.health - 1
+            if self.instance.type == 2 and event.other.myName == "lavaLake" then
+                self.instance.health = 0 -- blue chickens die instantly in lava
             end
-            if event.target.Enemytype == 1 and event.other.myName == "cactus" then
-                return
+            if self.instance.type == 1 and event.other.myName == "cactus" then
+                self.instance.health = self.instance.health + 1 -- red chickens are immune to cacti
             end
-            if event.target.health <= 0 then
-                timer.cancel(self.instance.aiLoopTimer)
-                EnemyAmount = EnemyAmount - 1
-                self:removeSelf()
-            end
+        elseif event.other.myName == "iceLake" and self.instance.type == 2 then
+            self.instance.currentMovementSpeed = iceChickenAcceleratedSpeed -- ice chickens move faster on ice lakes
         end
+        if self.instance.health <= 0 then
+            timer.cancel(self.instance.aiLoopTimer)
+            EnemyAmount = EnemyAmount - 1
+            self:removeSelf()
+        end
+    elseif event.phase == "ended" then
+        if event.other.myName == "iceLake" and self.instance.type == 2 then
+            self.instance.currentMovementSpeed = movementSpeed
+        end
+    end
+end
+
+function enemy:push(_pushAmount, _pushX, _pushY)
+    self.pushAmount = _pushAmount
+    self.pushX = _pushX
+    self.pushY = _pushY
+    self.pushActive = true
+end
+
+function enemy:enterFrame()
+    if self.enemyImage.y == nil then -- chicken has already died
+        return
+    end
+
+    -- Point towards the target position
+    self.enemyImage.rotation = math.deg(math.atan2(self.enemyImage.y - self.targetY, self.enemyImage.x - self.targetX)) - 90
+    -- Move towards the target position
+    if not self.pushActive then
+        local angle = math.rad(self.enemyImage.rotation - 90)
+        self.enemyImage:setLinearVelocity(math.cos(angle) * self.currentMovementSpeed, math.sin(angle) * self.currentMovementSpeed)
+    end
+
+    if self.pushActive and self.pushFrame < 30 then
+        if self.enemyImage.x <= LevelBoundLeft or self.enemyImage.x >= LevelBoundRight or self.enemyImage.y <= LevelBoundTop or self.enemyImage.y >= LevelBoundBottom then
+            self.pushFrame = 29
+        end
+        self.enemyImage:setLinearVelocity(self.pushAmount * self.pushX * -40, self.pushAmount * self.pushY * -40)
+        self.pushAmount = self.pushAmount - (self.pushAmount / 30)
+        self.pushFrame = self.pushFrame + 1
+    elseif self.pushFrame >= 30 and self.pushActive then
+        self.pushFrame = 0
+        self.pushActive = false
     end
 end
 
@@ -127,18 +173,12 @@ function enemy:aiUpdate() -- Called 30 times a second
     end
 
     if playerDistance < 150 then
-        if self.enemyImage.Enemytype == 1 then
+        local playerDamage = 1
+        if self.type == 1 then
             playerDamage = 2
         end
         Player.damage(playerDamage)
-        playerDamage = 1
     end
-
-    -- Point towards the target position
-    self.enemyImage.rotation = math.deg(math.atan2(self.enemyImage.y - self.targetY, self.enemyImage.x - self.targetX)) - 90
-    -- Move towards the target position
-    local angle = math.rad(self.enemyImage.rotation - 90)
-    self.enemyImage:setLinearVelocity(math.cos(angle) * movementSpeed, math.sin(angle) * movementSpeed)
 end
 
 return enemy
