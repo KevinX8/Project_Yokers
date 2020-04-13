@@ -115,8 +115,26 @@ SandwallBottom = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 10
 SandwallBottom.x = display.contentCenterX + 1585
 SandwallBottom.y = display.contentCenterY + 1536
 SandwallBottom.rotation = SandwallBottom.rotation+180
-BackgroundGroup:insert(27, SandwallTop)
-BackgroundGroup:insert(27, SandwallBottom)
+IceWallRight = display.newImageRect(BackgroundGroup, "assets/icewall.png", 6144, 102)
+IceWallRight.x = display.contentCenterX +4608
+IceWallRight.y = display.contentCenterY - 1587
+IceWallLeft = display.newImageRect(BackgroundGroup, "assets/icewall.png", 6144, 102)
+IceWallLeft.x = display.contentCenterX - 1534
+IceWallLeft.y = display.contentCenterY - 1587
+IceWallLeft.rotation = IceWallLeft.rotation+180
+LavaWallRight = display.newImageRect(BackgroundGroup, "assets/lavawall.png", 6144, 102)
+LavaWallRight.x = display.contentCenterX +4608
+LavaWallRight.y = display.contentCenterY + 1587
+LavaWallLeft = display.newImageRect(BackgroundGroup, "assets/lavawall.png", 6144, 102)
+LavaWallLeft.x = display.contentCenterX - 1534
+LavaWallLeft.y = display.contentCenterY + 1587
+LavaWallLeft.rotation = LavaWallLeft.rotation+180
+BackgroundGroup:insert(15, SandwallTop)
+BackgroundGroup:insert(15, SandwallBottom)
+BackgroundGroup:insert(15, IceWallRight)
+BackgroundGroup:insert(15, IceWallLeft)
+BackgroundGroup:insert(15, LavaWallRight)
+BackgroundGroup:insert(15, LavaWallLeft)
 
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
@@ -176,6 +194,8 @@ local function progressLevel()
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
     elseif Level == 2 then
+        transition.to(IceWallRight, {time = 3000, rotation = IceWallRight.rotation+90, alpha = 0.2, onComplete = function() IceWallRight:removeSelf() end})
+        transition.to(IceWallLeft, {time = 3000, rotation = IceWallLeft.rotation-90, alpha = 0.2, onComplete = function() IceWallLeft:removeSelf() end})
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
         --TimeDifficulty = TimeDifficulty+30000
@@ -185,6 +205,8 @@ local function progressLevel()
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
     elseif Level == 3 then
+        transition.to(LavaWallRight, {time = 3000, rotation = LavaWallRight.rotation-90, alpha = 0.2, onComplete = function() LavaWallRight:removeSelf() end})
+        transition.to(LavaWallLeft, {time = 3000, rotation = LavaWallLeft.rotation+90, alpha = 0.2, onComplete = function() LavaWallLeft:removeSelf() end})
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
         Level = 4
         --TimeDifficulty = TimeDifficulty+30000

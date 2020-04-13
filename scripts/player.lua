@@ -44,7 +44,7 @@ function player.start()
     Cursor = display.newImageRect(ForegroundGroup, "assets/cursor.png", 100, 100)
     Cursor.alpha = 0.65
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
-    BackgroundGroup:insert(15+lavaLimit+iceLimit,playerImage)
+    BackgroundGroup:insert(21+lavaLimit+iceLimit,playerImage)
     print(BackgroundGroup.numChildren-12-iceLimit-lavaLimit)
     Physics.addBody(playerImage, "dynamic", {radius = 85})
     playerImage.myName = "player"
@@ -59,7 +59,7 @@ end
 
 function player.throwProjectile()
     local newProjectile = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
-    BackgroundGroup:insert(15+iceLimit+lavaLimit,newProjectile)
+    BackgroundGroup:insert(21+iceLimit+lavaLimit,newProjectile)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
     newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)
     newProjectile.myName = "playerProjectile" -- also used for collision detection
