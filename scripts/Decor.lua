@@ -193,7 +193,7 @@ function SpawnAsh(x, y, size)
 end
 
 function SpawnFireEggImage(egg)
-    local fireEggImage = display.neawImageRect(BackgroundGroup, "assets/fireegg.png", 380 / 8, 380 / 4)
+    local fireEggImage = display.newImageRect(BackgroundGroup, "assets/fireegg.png", 380 / 8, 380 / 4)
     BackgroundGroup:insert(21+iceLimit+lavaLimit,fireEggImage)
     fireEggImage.rotation = egg.rotation + 180
     egg.fireEggImage = fireEggImage
