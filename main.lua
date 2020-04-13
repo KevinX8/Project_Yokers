@@ -108,9 +108,15 @@ local coop11 = addCoop(3800, 3372)
 local coop12 = addCoop(4850, 4472)
 Coops = {coop1, coop2}
 
-Sandwall = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 99, 3072)
-Sandwall.x = display.contentCenterX + 1585
-Sandwall.y = display.contentCenterY
+SandwallTop = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 102, 3072)
+SandwallTop.x = display.contentCenterX + 1585
+SandwallTop.y = display.contentCenterY - 1536
+SandwallBottom = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 102, 3072)
+SandwallBottom.x = display.contentCenterX + 1585
+SandwallBottom.y = display.contentCenterY + 1536
+SandwallBottom.rotation = SandwallBottom.rotation+180
+BackgroundGroup:insert(27, SandwallTop)
+BackgroundGroup:insert(27, SandwallBottom)
 
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
@@ -159,7 +165,8 @@ end
 
 local function progressLevel()
     if Level == 1 then
-        transition.to(Sandwall, {time = 2000, x = display.contentCenterX + 1585 + 3072, onComplete = function() Sandwall:removeSelf() end})
+        transition.to(SandwallTop, {time = 2000, rotation = SandwallTop.rotation-90, alpha = 0.2, onComplete = function() SandwallTop:removeSelf() end})
+        transition.to(SandwallBottom, {time = 2000, rotation = SandwallBottom.rotation+90, alpha = 0.2, onComplete = function() SandwallBottom:removeSelf() end})
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
         --TimeDifficulty = TimeDifficulty+30000
