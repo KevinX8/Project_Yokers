@@ -33,7 +33,7 @@ function Decor.level2()
         local cactus = display.newImageRect(BackgroundGroup, "assets/cactus.png", 256, 256)
         BackgroundGroup:insert(15, cactus)
         Physics.addBody(cactus, "dynamic", {radius=120, density=999999999.0})
-        cactus.x = math.random(LevelBoundLeft + 128,LevelBoundRight - 128)+2872
+        cactus.x = math.random(LevelBoundLeft + 350,LevelBoundRight - 128)+2872
         cactus.y = math.random(LevelBoundTop + 128,LevelBoundBottom - 128)
         cactus.myName = "cactus"
         i = i + 1
