@@ -1,6 +1,8 @@
 local Decor = {}
 local fireEggSpeed = 800
 local fireEggLifeTime = 3
+local fireEggAudio = audio.loadSound("audio/Ignition.wav")
+local channelSelect = 0
 
 function Decor.generateDecor()
     Decor.level1()
@@ -194,6 +196,7 @@ end
 
 function SpawnFireEggImage(egg)
     local fireEggImage = display.newImageRect(BackgroundGroup, "assets/fireegg.png", 380 / 8, 380 / 4)
+    audio.play(fireEggAudio,{channel = 10+channelSelect, loops = 0, duration = 900})
     BackgroundGroup:insert(21+iceLimit+lavaLimit,fireEggImage)
     fireEggImage.rotation = egg.rotation + 180
     egg.fireEggImage = fireEggImage
@@ -201,6 +204,11 @@ function SpawnFireEggImage(egg)
     local vX, vY = egg:getLinearVelocity()
     fireEggImage.x = egg.x
     fireEggImage.y = egg.y
+    if channelSelect == 2 then
+        channelSelect = 0
+    else
+        channelSelect = channelSelect + 1
+    end
     transition.to(fireEggImage,{time = fireEggLifeTime*(937),x = fireEggImage.x + vX*fireEggLifeTime, y = fireEggImage.y + vY*fireEggLifeTime})
 end
 

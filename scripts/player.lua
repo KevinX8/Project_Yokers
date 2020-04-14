@@ -1,5 +1,9 @@
 local player = {} -- this and the return statement at the end make this file behave somewhat like a class
 
+local iceSlideSound = audio.loadSound("audio/IceSlide.mp3")
+local eggThrowSound = audio.loadSound("audio/EggThrowSound.wav")
+local audioChannelSelect = 1
+
 local UserInteface = require("scripts.UI")
 PlayerSpeed = 10
 local playerProjectileSpeed = 800--change fireEggSpeed in Decor.lua, global variable won't work so two variable needed
@@ -61,6 +65,12 @@ function player.getPosition()
 end
 
 function player.throwProjectile()
+    audio.play(eggThrowSound,{channel = 2+audioChannelSelect, loops = 0, duration = 400, fadeIn = 10})
+    if audioChannelSelect == 3 then
+        audioChannelSelect = 1
+    else
+        audioChannelSelect = audioChannelSelect + 1
+    end
     local newProjectile = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
     BackgroundGroup:insert(21+iceLimit+lavaLimit,newProjectile)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
@@ -218,6 +228,7 @@ function player.push(_pushAmount, _pushX, _pushY)
 end
 
 function player.slideOnIce(_slideSpeed, _pushX, _pushY, _lakeWidth)
+    audio.play(iceSlideSound,{channel = 8, loops = 0, duration = 1100})
     slideSpeed = _slideSpeed
     pushX = _pushX
     pushY = _pushY

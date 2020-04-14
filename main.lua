@@ -3,7 +3,6 @@ Player = require("scripts.player")
 local enemy = require("scripts.enemy")
 local Decor = require("scripts.Decor")
 local UserInteface = require("scripts.UI")
-
 native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
@@ -20,6 +19,8 @@ MinTimeBetweenWaves = 5000
 MaxTimeBetweenWaves = 10000
 EnemyAmount = 0
 EnemyLimit = 50
+
+local newLevelSound = audio.loadSound("audio/newLevel.mp3")
 
 Physics.start()
 Physics.setGravity(0, 0)
@@ -146,6 +147,7 @@ local function displayArrow()
     ForegroundGroup:insert(1, arrow)
     arrow.x = display.contentCenterX
     arrow.y = display.contentCenterY
+    audio.play(newLevelSound,{channel = 6, loops = 0, duration = 800})
     if Level == 3 then
         arrow.rotation = arrow.rotation - 90
     elseif Level == 4 then
@@ -190,7 +192,7 @@ local function progressLevel()
         --TimeDifficulty = TimeDifficulty+30000
         Coops = {coop1, coop2, coop3, coop4}
         EnemyLimit = 75
-        timer.performWithDelay(1000, displayArrow, 5)
+        timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
     elseif Level == 2 then
@@ -201,7 +203,7 @@ local function progressLevel()
         --TimeDifficulty = TimeDifficulty+30000
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
         EnemyLimit =  125
-        timer.performWithDelay(1000, displayArrow, 5)
+        timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
     elseif Level == 3 then
@@ -211,7 +213,7 @@ local function progressLevel()
         Level = 4
         --TimeDifficulty = TimeDifficulty+30000
         EnemyLimit = 175
-        timer.performWithDelay(1000, displayArrow, 5)
+        timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8, coop9, coop10, coop11, coop12}
     end

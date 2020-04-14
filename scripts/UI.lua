@@ -2,6 +2,9 @@ local userinterface = {}
 --score = system.get(timer)--
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
 
+local damageSound = audio.loadSound("audio/Damage Sound.wav")
+local oneHeart = audio.loadSound("audio/OneHeart.mp3")
+
 local livesText
 local scoreText
 
@@ -82,16 +85,25 @@ function userinterface.updatehearts(added)
     if added then
         if(Health == 1)then
             timer.cancel(Blink)
-            heart[1] = display.newImageRect(ForegroundGroup, "assets/heart.png", 96, 84)
+            heart[1] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
         end
     heart[Health] = display.newImageRect(ForegroundGroup, "assets/heart.png", 96, 84)
     heart[Health].alpha = 0.7
     heart[Health].y = display.contentCenterY - 440
     heart[Health + 1].x = heart[Health].x + 120
    else
+        audio.play(damageSound,{channel = 2, loops = 0, duration = 2000})
         local heartx = heart[Health + 1].x
         local hearty = heart[Health + 1].y
         local animationImage = heart[Health + 1]
+        if Health == 0 then
+            display.remove(animationImage)
+            animationImage = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
+            animationImage.alpha = 0.7
+            animationImage.y = display.contentCenterY - 440
+            animationImage.x = display.contentCenterX - 890
+            timer.cancel(Blink)
+        end
         transition.to(animationImage,{time=2000, y = animationImage.y-200, alpha = 0.4, onComplete=function() animationImage:removeSelf() end})
         heart[Health + 1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
         heart[Health+1].alpha = 0.7
@@ -108,6 +120,7 @@ function BlinkHealth()
     heart[1]:removeSelf()
     if(fullHeart) then
         heart[1] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
+        audio.play(oneHeart,{loops = 0, channel = 7, duration = 550})
     else
         heart[1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
     end

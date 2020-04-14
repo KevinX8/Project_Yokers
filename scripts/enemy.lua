@@ -20,6 +20,8 @@ local playerAttackDistance = 600 -- If the player comes closer than this distanc
 local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 local Decor = require("scripts.Decor")
 
+local explosionSound = audio.loadSound("audio/Explosion.wav")
+
 --      AI States: 
 -- roaming - Randomly wandering around.
 -- attackCoop - Going after the closest chicken coop
@@ -73,6 +75,7 @@ function enemy.collisionEvent(self, event)
                 event.other.fireEggImage:removeSelf()
                 self.instance.health = 0
                 Decor.SparkExplosion(event.other.x,event.other.y)
+                audio.play(explosionSound,{channel = 9, loops = 0, duration = 5000})
                 Explosion = true
                 ExplosionX = event.other.x
                 ExplosionY = event.other.y
