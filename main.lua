@@ -21,6 +21,7 @@ EnemyAmount = 0
 EnemyLimit = 50
 
 local newLevelSound = audio.loadSound("audio/newLevel.mp3")
+local music = audio.loadSound("audio/music.mp3")
 
 Physics.start()
 Physics.setGravity(0, 0)
@@ -139,6 +140,7 @@ BackgroundGroup:insert(15, LavaWallLeft)
 
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
+audio.play(music, {channel = 1, loops = 0, duration = 135000})
 Player.start()
 UserInteface.InitialiseUI()
 
