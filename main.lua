@@ -13,7 +13,7 @@ LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Level = 1
-TimeDifficulty = 6000 --Don't change and commit, if changed, change back before commit
+TimeDifficulty = 120000 --Don't change and commit, if changed, change back before commit
 EnemiesPerWave = 5
 MinTimeBetweenWaves = 5000
 MaxTimeBetweenWaves = 10000
@@ -140,7 +140,7 @@ BackgroundGroup:insert(15, LavaWallLeft)
 
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
-audio.play(music, {channel = 1, loops = 0, duration = 135000})
+audio.play(music, {channel = 1, loops = 0, duration = 270000})
 Player.start()
 UserInteface.InitialiseUI()
 
@@ -191,7 +191,7 @@ local function progressLevel()
         transition.to(SandwallBottom, {time = 2000, rotation = SandwallBottom.rotation+90, alpha = 0.2, onComplete = function() SandwallBottom:removeSelf() end})
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
-        --TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty+30000
         Coops = {coop1, coop2, coop3, coop4}
         EnemyLimit = 75
         timer.performWithDelay(1000, displayArrow, 4)
@@ -202,7 +202,7 @@ local function progressLevel()
         transition.to(IceWallLeft, {time = 3000, rotation = IceWallLeft.rotation-90, alpha = 0.2, onComplete = function() IceWallLeft:removeSelf() end})
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
-        --TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty+30000
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
         EnemyLimit =  125
         timer.performWithDelay(1000, displayArrow, 4)
@@ -213,7 +213,7 @@ local function progressLevel()
         transition.to(LavaWallLeft, {time = 3000, rotation = LavaWallLeft.rotation+90, alpha = 0.2, onComplete = function() LavaWallLeft:removeSelf() end})
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
         Level = 4
-        --TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty+30000
         EnemyLimit = 175
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
