@@ -178,7 +178,7 @@ function player.enterFrame()
             local angle = math.pi/9 * (i-1)
             explosion:setLinearVelocity(math.cos(angle)*675, math.sin(angle)*675)
             explosion.myName = "explosion"
-            timer.performWithDelay(400, function() explosion:removeSelf() end, 1)
+            explosion.timer = timer.performWithDelay(400, function() explosion:removeSelf() end, 1)
         end
     end
 end

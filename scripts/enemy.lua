@@ -86,11 +86,16 @@ function enemy.collisionEvent(self, event)
             self.instance:push(0.1, pushX, pushY)
         elseif event.other.myName == "cactus" or event.other.myName == "lavaLake" or event.other.myName == "explosion"then
             self.instance.health = self.instance.health - 1
-            if self.instance.type == 2 and event.other.myName == "lavaLake" then
-                self.instance.health = 0 -- blue chickens die instantly in lava
-            end
-            if self.instance.type == 1 and event.other.myName == "cactus" then
-                self.instance.health = self.instance.health + 1 -- red chickens are immune to cacti
+            if event.other.myName == "explosion" then
+                timer.cancel(event.other.timer)
+                event.other:removeSelf()
+            else
+                if self.instance.type == 2 and event.other.myName == "lavaLake" then
+                    self.instance.health = 0 -- blue chickens die instantly in lava
+                end
+                if self.instance.type == 1 and event.other.myName == "cactus" then
+                    self.instance.health = self.instance.health + 1 -- red chickens are immune to cacti
+                end
             end
         elseif event.other.myName == "iceLake" and self.instance.type == 2 then
             self.instance.currentMovementSpeed = iceChickenAcceleratedSpeed -- ice chickens move faster on ice lakes
