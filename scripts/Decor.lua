@@ -204,4 +204,18 @@ function SpawnFireEggImage(egg)
     transition.to(fireEggImage,{time = fireEggLifeTime*(937),x = fireEggImage.x + vX*fireEggLifeTime, y = fireEggImage.y + vY*fireEggLifeTime})
 end
 
+function Decor.SparkExplosion(xValue, yValue)
+    for i=1,200 do
+        local size = math.random(3, 6)
+        local sparkExplosion = display.newImageRect(BackgroundGroup, "assets/spark.png", size, size)
+        local angle = math.random(0, 4*math.pi)
+        local distance = math.random(-30,30)
+        local offsetX = distance*math.cos(angle)
+        local offsetY = distance*math.sin(angle)
+        sparkExplosion.x = xValue + offsetX
+        sparkExplosion.y = yValue + offsetY
+        transition.to(sparkExplosion,{time = 400, x = xValue+11*(offsetX), y = yValue+11*(offsetY), onComplete = function() sparkExplosion:removeSelf() end}) --onComplete = sparkExplosion:removeSelf()})
+    end
+end
+
 return Decor

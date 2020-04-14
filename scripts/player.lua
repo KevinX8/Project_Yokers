@@ -39,6 +39,9 @@ Health = 5
 local isInvincible = false
 EggCapacity = 50
 EgginInv = 50
+Explosion = false
+ExplosionX = 0
+ExplosionY = 0
 
 function player.start()
     Cursor = display.newImageRect(ForegroundGroup, "assets/cursor.png", 100, 100)
@@ -164,6 +167,20 @@ function player.enterFrame()
     end
     -- Force the player to be in the middle of the screen at all times
     playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
+
+    if(Explosion) then
+        Explosion = false
+        for i=1,18 do
+            local explosion = display.newImageRect(BackgroundGroup, "assets/blank.png", 120, 120)
+            explosion.x = ExplosionX
+            explosion.y = ExplosionY
+            Physics.addBody(explosion, "dynamic", {radius=10, isSensor=true})
+            local angle = math.pi/9 * (i-1)
+            explosion:setLinearVelocity(math.cos(angle)*675, math.sin(angle)*675)
+            explosion.myName = "explosion"
+            timer.performWithDelay(400, function() explosion:removeSelf() end, 1)
+        end
+    end
 end
 
 function player.damage(damageAmount)

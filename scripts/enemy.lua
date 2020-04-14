@@ -18,6 +18,7 @@ local movementSpeed = 250
 local iceChickenAcceleratedSpeed = 600
 local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
 local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
+local Decor = require("scripts.Decor")
 
 --      AI States: 
 -- roaming - Randomly wandering around.
@@ -68,16 +69,22 @@ function enemy.collisionEvent(self, event)
     -- In this case, "self" refers to "enemyImage"
     if event.phase == "began" then
         if event.other.myName == "playerProjectile" then
-            self.instance.health = self.instance.health - 1
-            timer.cancel(event.other.despawnTimer)
             if(event.other.isFireEgg) then
                 event.other.fireEggImage:removeSelf()
+                self.instance.health = 0
+                Decor.SparkExplosion(event.other.x,event.other.y)
+                Explosion = true
+                ExplosionX = event.other.x
+                ExplosionY = event.other.y
+            else
+                self.instance.health = self.instance.health - 1
             end
+            timer.cancel(event.other.despawnTimer)
             event.other:removeSelf()
             local pushX = (event.other.x - event.target.x)
             local pushY = (event.other.y - event.target.y)
             self.instance:push(0.1, pushX, pushY)
-        elseif event.other.myName == "cactus" or event.other.myName == "lavaLake" then
+        elseif event.other.myName == "cactus" or event.other.myName == "lavaLake" or event.other.myName == "explosion"then
             self.instance.health = self.instance.health - 1
             if self.instance.type == 2 and event.other.myName == "lavaLake" then
                 self.instance.health = 0 -- blue chickens die instantly in lava
