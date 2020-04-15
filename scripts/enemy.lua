@@ -93,6 +93,7 @@ function enemy.collisionEvent(self, event)
     if event.phase == "began" then
         if event.other.myName == "player" and self.myName == "heart" then
             Player.damage(-1)
+            timer.cancel(self.despawnTimer)
             self:removeSelf()
             return
         end
@@ -153,7 +154,7 @@ function enemy.SpawnHeart(heartx, hearty)
         heartPickup.myName = "heart"
         heartPickup.collision = enemy.collisionEvent
         heartPickup:addEventListener("collision")
-        timer.performWithDelay(HeartLifeTime * 1000, function() heartPickup:removeSelf() end, 1)
+        heartPickup.despawnTimer = timer.performWithDelay(HeartLifeTime * 1000, function() heartPickup:removeSelf() end, 1)
     end
 end
 
