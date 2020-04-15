@@ -56,7 +56,7 @@ function userinterface.InitialiseUI()
         align = "centre"
     }
     local optionse = {
-        text = "20 / 50",
+        text = "20 / 30",
         x = display.contentCenterX - 790,
         y = display.contentCenterY + 390,
         font = "assets/coolfont.fnt",

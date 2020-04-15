@@ -41,7 +41,7 @@ local slideInitialY = 0
 
 Health = 5
 local isInvincible = false
-EggCapacity = 50
+EggCapacity = 30
 EgginInv = 20
 Explosion = false
 ExplosionX = 0

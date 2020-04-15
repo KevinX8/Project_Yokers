@@ -198,7 +198,7 @@ local function progressLevel()
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
-        EggCapacity = 60
+        EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
     elseif Level == 2 then
         transition.to(IceWallRight, {time = 3000, rotation = IceWallRight.rotation+90, alpha = 0.2, onComplete = function() IceWallRight:removeSelf() end})
@@ -212,7 +212,7 @@ local function progressLevel()
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
         MaxEggsPerEnemy = 3
-        EggCapacity = 70
+        EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
     elseif Level == 3 then
         transition.to(LavaWallRight, {time = 3000, rotation = LavaWallRight.rotation-90, alpha = 0.2, onComplete = function() LavaWallRight:removeSelf() end})
@@ -224,7 +224,7 @@ local function progressLevel()
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8, coop9, coop10, coop11, coop12}
-        EggCapacity = 80
+        EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
     end
 end
