@@ -13,7 +13,7 @@ LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Level = 1
-TimeDifficulty = 6000 --Don't change and commit, if changed, change back before commit
+TimeDifficulty = 120000 --Don't change and commit, if changed, change back before commit
 EnemiesPerWave = 5
 MinTimeBetweenWaves = 5000
 MaxTimeBetweenWaves = 10000
@@ -21,6 +21,12 @@ EnemyAmount = 0
 EnemyLimit = 50
 
 local newLevelSound = audio.loadSound("audio/newLevel.mp3")
+local music = audio.loadSound("audio/music.mp3")
+
+local muteSoundEffects = "m"
+local mutedEffects = false
+local muteMusic = "n"
+local musicIsMuted = false
 
 Physics.start()
 Physics.setGravity(0, 0)
@@ -85,6 +91,7 @@ end
 
 local function addCoop(x, y)
     local coop = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+    coop.ammo = 0
     BackgroundGroup:insert(15, coop)
     coop.x = x
     coop.y = y
@@ -139,6 +146,7 @@ BackgroundGroup:insert(15, LavaWallLeft)
 
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
+audio.play(music, {channel = 1, loops = 0, duration = 450000})
 Player.start()
 UserInteface.InitialiseUI()
 
@@ -189,33 +197,43 @@ local function progressLevel()
         transition.to(SandwallBottom, {time = 2000, rotation = SandwallBottom.rotation+90, alpha = 0.2, onComplete = function() SandwallBottom:removeSelf() end})
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
-        --TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty+30000
         Coops = {coop1, coop2, coop3, coop4}
         EnemyLimit = 75
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
+        EggCapacity = EggCapacity +10
+        UserInteface.updateEggs()
+        MinPlayerAccuracy = 0.75
     elseif Level == 2 then
         transition.to(IceWallRight, {time = 3000, rotation = IceWallRight.rotation+90, alpha = 0.2, onComplete = function() IceWallRight:removeSelf() end})
         transition.to(IceWallLeft, {time = 3000, rotation = IceWallLeft.rotation-90, alpha = 0.2, onComplete = function() IceWallLeft:removeSelf() end})
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
-        --TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty+30000
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
         EnemyLimit =  125
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
+        MaxEggsPerEnemy = 3
+        EggCapacity = EggCapacity +10
+        UserInteface.updateEggs()
+        MinPlayerAccuracy = 0.8
     elseif Level == 3 then
         transition.to(LavaWallRight, {time = 3000, rotation = LavaWallRight.rotation-90, alpha = 0.2, onComplete = function() LavaWallRight:removeSelf() end})
         transition.to(LavaWallLeft, {time = 3000, rotation = LavaWallLeft.rotation+90, alpha = 0.2, onComplete = function() LavaWallLeft:removeSelf() end})
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
         Level = 4
-        --TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty+30000
         EnemyLimit = 175
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8, coop9, coop10, coop11, coop12}
+        EggCapacity = EggCapacity +10
+        UserInteface.updateEggs()
+        MinPlayerAccuracy = 0.85
     end
 end
 
@@ -225,10 +243,34 @@ timer.performWithDelay(100, UserInteface.updatetime, 0)
 
 local function keyEvent(event)
     Player.handleMovement(event)
+    MuteSound(event)
 end
 
 local function mouseEvent(event)
     Player.handleMouse(event)
+end
+
+function MuteSound(event)
+    local phase = event.phase
+    local name = event.keyName
+    local keyState = false
+    if phase == "down" then keyState = true end
+    if name == muteSoundEffects and keyState then
+        if(mutedEffects) then
+            audio.setVolume(1.0,{})
+        else
+            audio.setVolume(0.0,{})
+            audio.setVolume(1.0,{channel = 1})
+        end
+        mutedEffects = not(mutedEffects)
+    elseif name == muteMusic and keyState then
+        if(musicIsMuted) then
+            audio.setVolume(1.0,{channel = 1})
+        else
+            audio.setVolume(0.0,{channel = 1})
+        end
+        musicIsMuted = not(musicIsMuted)
+    end
 end
 
 Runtime:addEventListener("key", keyEvent)

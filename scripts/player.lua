@@ -41,13 +41,14 @@ local slideInitialY = 0
 
 Health = 5
 local isInvincible = false
-EggCapacity = 50
-EgginInv = 50
+EggCapacity = 30
+EgginInv = 20
 Explosion = false
 ExplosionX = 0
 ExplosionY = 0
 
 function player.start()
+    local self = setmetatable({}, player)
     Cursor = display.newImageRect(ForegroundGroup, "assets/cursor.png", 100, 100)
     Cursor.alpha = 0.65
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
@@ -58,6 +59,27 @@ function player.start()
     playerImage.x = display.contentCenterX
     playerImage.y = display.contentCenterY
     Runtime:addEventListener("enterFrame", player.enterFrame)
+    playerImage.collision = player.collisionEvent
+    playerImage:addEventListener("collision")
+end
+
+function player.collisionEvent(self, event)
+    if event.phase == "began" then
+        if event.other.myName == "coop" then
+            if(event.other.ammo > 0)then
+                if EggCapacity-EgginInv < event.other.ammo then
+                    event.other.ammo = event.other.ammo - EggCapacity+EgginInv
+                    EgginInv = EggCapacity
+                    UserInteface.updateEggs()
+                else
+                    EgginInv = EgginInv + event.other.ammo
+                    UserInteface.updateEggs()
+                    event.other.ammo = 0
+                    event.other.eggImage:removeSelf()
+                end
+            end
+        end
+    end
 end
 
 function player.getPosition()
@@ -190,7 +212,7 @@ function player.enterFrame()
             explosion.myName = "explosion"
             explosion.timer = timer.performWithDelay(400, function() explosion:removeSelf() end, 1)
         end
-    end
+    end    
 end
 
 function player.damage(damageAmount)
