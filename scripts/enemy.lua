@@ -15,7 +15,7 @@ local enemy = {
 }
 enemy.__index = enemy
 MaxEggsPerEnemy = 2
-local minPlayerAccuracy = 0.7
+MinPlayerAccuracy = 0.7
 local movementSpeed = 250
 local iceChickenAcceleratedSpeed = 600
 local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
@@ -73,7 +73,7 @@ function enemy.new(startX, startY)
         ammoCoop.eggImage.x = math.random(-200,200) + ammoCoop.x
         ammoCoop.eggImage.y = ammoCoop.y+math.random(50,150)
     end
-    if math.random() < minPlayerAccuracy then
+    if math.random() < MinPlayerAccuracy then
         ammoCoop.ammo = ammoCoop.ammo + 1
     else
         ammoCoop.ammo = ammoCoop.ammo + math.random(1,MaxEggsPerEnemy)
