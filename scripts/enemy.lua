@@ -74,7 +74,7 @@ function enemy.new(startX, startY)
         ammoCoop.eggImage.y = ammoCoop.y+math.random(50,150)
     end
     if math.random() < minPlayerAccuracy then
-        ammoCoop.ammo = ammoCoop + 1
+        ammoCoop.ammo = ammoCoop.ammo + 1
     else
         ammoCoop.ammo = ammoCoop.ammo + math.random(1,MaxEggsPerEnemy)
     end
