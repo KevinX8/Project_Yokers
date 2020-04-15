@@ -1,7 +1,7 @@
 Physics = require("physics")
 Player = require("scripts.player")
 local enemy = require("scripts.enemy")
-local Decor = require("scripts.Decor")
+Decor = require("scripts.Decor")
 local UserInteface = require("scripts.UI")
 native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
@@ -19,6 +19,7 @@ MinTimeBetweenWaves = 5000
 MaxTimeBetweenWaves = 10000
 EnemyAmount = 0
 EnemyLimit = 50
+CoopInvincibilityTime = 1000
 
 local newLevelSound = audio.loadSound("audio/newLevel.mp3")
 local music = audio.loadSound("audio/music.mp3")
@@ -87,7 +88,18 @@ function addCoopHealth(coop)
     coop.healthImage:setFillColor( 232/255, 14/255, 14/255)
     coop.healthGray:setFillColor(82/255,8/255,82/255)
     coop.healthBorder:setFillColor(0)
-end    
+    coop.invincible = false
+end
+
+function CoopDamage(coop, damageAmount)
+    if coop.invincible == true then
+        return
+    end
+    coop.health = coop.health - damageAmount
+    coop.healthImage.width = coop.health / 6.6666666667
+    coop.invincible = true
+    timer.performWithDelay(CoopInvincibilityTime, function() coop.invincible = false end, 1)
+end
 
 local function addCoop(x, y)
     local coop = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)

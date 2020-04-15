@@ -25,8 +25,7 @@ local dropHearty = 0
 local iceChickenAcceleratedSpeed = 600
 local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
 local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
-local Decor = require("scripts.Decor")
-local Player = require("scripts.player")
+local coopDamagePerHit = 100
 
 local explosionSound = audio.loadSound("audio/Explosion.wav")
 
@@ -130,6 +129,9 @@ function enemy.collisionEvent(self, event)
         elseif event.other.myName == "iceLake" and self.instance.type == 2 then
             self.instance.currentMovementSpeed = iceChickenAcceleratedSpeed -- ice chickens move faster on ice lakes
         end
+        if self.myName == "enemy" and event.other.myName == "coop" then
+            CoopDamage(event.other, coopDamagePerHit)
+        end
         if self.myName == "enemy" and self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
             EnemyAmount = EnemyAmount - 1
@@ -197,6 +199,7 @@ end
 function enemy:aiUpdate() -- Called 30 times a second
     local playerX, playerY = Player.getPosition()
     local playerDistance = CalculateDistance(self.enemyImage.x, self.enemyImage.y, playerX, playerY)
+    local closestCoop = ClosestCoop(self.enemyImage.x, self.enemyImage.y) -- Find the closest coop to this enemy
     if self.aiState == "roaming" then
         if math.random(0, 200) == 0 then -- 1 in 200 chance, 30 times a second - on average will roam for 6 seconds
             self.aiState = "attackCoop"
@@ -210,8 +213,6 @@ function enemy:aiUpdate() -- Called 30 times a second
             self.targetY = math.random(LevelBoundTop, LevelBoundBottom)
         end
     elseif self.aiState == "attackCoop" then
-        -- Find the closest coop to this enemy
-        local closestCoop = ClosestCoop(self.enemyImage.x, self.enemyImage.y)
         if playerDistance < playerAttackDistance then
             self.aiState = "attackPlayer"
         end
