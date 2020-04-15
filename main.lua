@@ -23,6 +23,11 @@ EnemyLimit = 50
 local newLevelSound = audio.loadSound("audio/newLevel.mp3")
 local music = audio.loadSound("audio/music.mp3")
 
+local muteSoundEffects = "m"
+local mutedEffects = false
+local muteMusic = "n"
+local musicIsMuted = false
+
 Physics.start()
 Physics.setGravity(0, 0)
 
@@ -238,10 +243,34 @@ timer.performWithDelay(100, UserInteface.updatetime, 0)
 
 local function keyEvent(event)
     Player.handleMovement(event)
+    MuteSound(event)
 end
 
 local function mouseEvent(event)
     Player.handleMouse(event)
+end
+
+function MuteSound(event)
+    local phase = event.phase
+    local name = event.keyName
+    local keyState = false
+    if phase == "down" then keyState = true end
+    if name == muteSoundEffects and keyState then
+        if(mutedEffects) then
+            audio.setVolume(1.0,{})
+        else
+            audio.setVolume(0.0,{})
+            audio.setVolume(1.0,{channel = 1})
+        end
+        mutedEffects = not(mutedEffects)
+    elseif name == muteMusic and keyState then
+        if(musicIsMuted) then
+            audio.setVolume(1.0,{channel = 1})
+        else
+            audio.setVolume(0.0,{channel = 1})
+        end
+        musicIsMuted = not(musicIsMuted)
+    end
 end
 
 Runtime:addEventListener("key", keyEvent)

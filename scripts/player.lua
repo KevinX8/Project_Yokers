@@ -212,7 +212,7 @@ function player.enterFrame()
             explosion.myName = "explosion"
             explosion.timer = timer.performWithDelay(400, function() explosion:removeSelf() end, 1)
         end
-    end
+    end    
 end
 
 function player.damage(damageAmount)
