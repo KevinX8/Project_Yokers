@@ -3,6 +3,7 @@ Player = require("scripts.player")
 local enemy = require("scripts.enemy")
 local Decor = require("scripts.Decor")
 local UserInteface = require("scripts.UI")
+local options = require("main-menu.options")
 native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
@@ -13,12 +14,8 @@ LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Level = 1
-TimeDifficulty = 120000 --Don't change and commit, if changed, change back before commit
-EnemiesPerWave = 5
-MinTimeBetweenWaves = 5000
-MaxTimeBetweenWaves = 10000
+options.SetDifficulty("debug")
 EnemyAmount = 0
-EnemyLimit = 50
 
 local newLevelSound = audio.loadSound("audio/newLevel.mp3")
 local music = audio.loadSound("audio/music.mp3")
@@ -197,7 +194,7 @@ local function progressLevel()
         transition.to(SandwallBottom, {time = 2000, rotation = SandwallBottom.rotation+90, alpha = 0.2, onComplete = function() SandwallBottom:removeSelf() end})
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
-        TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty + TimeIncrease
         Coops = {coop1, coop2, coop3, coop4}
         EnemyLimit = 75
         timer.performWithDelay(1000, displayArrow, 4)
@@ -211,7 +208,7 @@ local function progressLevel()
         transition.to(IceWallLeft, {time = 3000, rotation = IceWallLeft.rotation-90, alpha = 0.2, onComplete = function() IceWallLeft:removeSelf() end})
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
-        TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty + TimeIncrease
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
         EnemyLimit =  125
         timer.performWithDelay(1000, displayArrow, 4)
@@ -226,7 +223,7 @@ local function progressLevel()
         transition.to(LavaWallLeft, {time = 3000, rotation = LavaWallLeft.rotation+90, alpha = 0.2, onComplete = function() LavaWallLeft:removeSelf() end})
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
         Level = 4
-        TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty + TimeIncrease
         EnemyLimit = 175
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()

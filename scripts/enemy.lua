@@ -14,10 +14,6 @@ local enemy = {
     currentMovementSpeed = 0
 }
 enemy.__index = enemy
-HeartDropChance = 30
-HeartLifeTime = 5
-MaxEggsPerEnemy = 2
-MinPlayerAccuracy = 0.7
 local movementSpeed = 250
 local dropHeart = false
 local dropHeartx = 0
@@ -41,13 +37,13 @@ local explosionSound = audio.loadSound("audio/Explosion.wav")
 
 function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
-    local pickred = math.random(9) + Level - 1
-    local pickblue = math.random(19) + Level - 2
-    if pickred > 9 then
+    local pickred = math.random(RedChance) + Level - 1
+    local pickblue = math.random(BlueChance) + Level - 2
+    if pickred > RedChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
         self.type = 1
         self.health = 1
-    elseif pickblue > 19 then
+    elseif pickblue > BlueChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blueenemy.png", 93, 120)
         self.type = 2
         self.health = 3
@@ -114,7 +110,7 @@ function enemy.collisionEvent(self, event)
             local pushX = (event.other.x - event.target.x)
             local pushY = (event.other.y - event.target.y)
             self.instance:push(0.1, pushX, pushY)
-        elseif event.other.myName == "cactus" or event.other.myName == "lavaLake" or event.other.myName == "explosion"then
+        elseif (event.other.myName == "cactus" or event.other.myName == "lavaLake" or event.other.myName == "explosion") and self.myName == "enemy" then
             self.instance.health = self.instance.health - 1
             if event.other.myName == "explosion" then
                 timer.cancel(event.other.timer)

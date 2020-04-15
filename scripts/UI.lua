@@ -23,14 +23,13 @@ Timeloaded = 0
 
 function userinterface.InitialiseUI()
     i = 1
-    MaxHearts = 5
     repeat
         heart[i] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
         heart[i].y = display.contentCenterY - 440
         heart[i].x = display.contentCenterX - 1010 + (i * 120)
         heart[i].alpha = 0.7
         i = i + 1
-    until i > 5
+    until i > MaxHearts
     timeLoaded = system.getTimer()
     local optionsm = {
         text = "0m",
