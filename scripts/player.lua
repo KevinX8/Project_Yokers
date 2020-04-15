@@ -194,6 +194,14 @@ function player.enterFrame()
 end
 
 function player.damage(damageAmount)
+    if damageAmount < 0 then
+        local heal = Health - damageAmount
+        while (Health < MaxHearts) and not (heal == Health) do
+        Health = Health + 1
+        UserInteface.updatehearts(true)
+        end
+        return
+    end
     if not isInvincible then
         local hurt = Health - damageAmount
         while not (Health == 0) and not (hurt == Health) do

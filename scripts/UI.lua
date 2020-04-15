@@ -23,6 +23,7 @@ Timeloaded = 0
 
 function userinterface.InitialiseUI()
     i = 1
+    MaxHearts = 5
     repeat
         heart[i] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
         heart[i].y = display.contentCenterY - 440
@@ -82,16 +83,17 @@ function userinterface.InitialiseUI()
 end
 
 function userinterface.updatehearts(added)
-    if added then
+    if added and MaxHearts >= Health then
         if(Health == 1)then
             timer.cancel(Blink)
             heart[1] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
         end
-    heart[Health] = display.newImageRect(ForegroundGroup, "assets/heart.png", 96, 84)
-    heart[Health].alpha = 0.7
-    heart[Health].y = display.contentCenterY - 440
-    heart[Health + 1].x = heart[Health].x + 120
-   else
+        heart[Health]:removeSelf()
+        heart[Health] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
+        heart[Health].y = display.contentCenterY - 440
+        heart[Health].x = heart[Health - 1].x + 120
+        heart[Health].alpha = 0.7
+    elseif not added then
         audio.play(damageSound,{channel = 2, loops = 0, duration = 2000})
         local heartx = heart[Health + 1].x
         local hearty = heart[Health + 1].y
@@ -106,7 +108,7 @@ function userinterface.updatehearts(added)
         end
         transition.to(animationImage,{time=2000, y = animationImage.y-200, alpha = 0.4, onComplete=function() animationImage:removeSelf() end})
         heart[Health + 1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
-        heart[Health+1].alpha = 0.7
+        heart[Health + 1].alpha = 0.7
         heart[Health + 1].x = heartx
         heart[Health + 1].y = hearty
         if(Health == 1) then

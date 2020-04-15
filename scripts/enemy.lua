@@ -14,11 +14,17 @@ local enemy = {
     currentMovementSpeed = 0
 }
 enemy.__index = enemy
+HeartDropChance = 30
+HeartLifeTime = 5
 local movementSpeed = 250
+local dropHeart = false
+local dropHeartx = 0
+local dropHearty = 0
 local iceChickenAcceleratedSpeed = 600
 local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
 local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 local Decor = require("scripts.Decor")
+local Player = require("scripts.player")
 
 local explosionSound = audio.loadSound("audio/Explosion.wav")
 
@@ -70,7 +76,12 @@ end
 function enemy.collisionEvent(self, event)
     -- In this case, "self" refers to "enemyImage"
     if event.phase == "began" then
-        if event.other.myName == "playerProjectile" then
+        if event.other.myName == "player" and self.myName == "heart" then
+            Player.damage(-1)
+            self:removeSelf()
+            return
+        end
+        if event.other.myName == "playerProjectile" and self.myName == "enemy" then
             if(event.other.isFireEgg) then
                 event.other.fireEggImage:removeSelf()
                 self.instance.health = 0
@@ -103,15 +114,31 @@ function enemy.collisionEvent(self, event)
         elseif event.other.myName == "iceLake" and self.instance.type == 2 then
             self.instance.currentMovementSpeed = iceChickenAcceleratedSpeed -- ice chickens move faster on ice lakes
         end
-        if self.instance.health <= 0 then
+        if self.myName == "enemy" and self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
             EnemyAmount = EnemyAmount - 1
+            dropHeart = true
+            dropHeartx = self.x
+            dropHearty = self.y
             self:removeSelf()
         end
     elseif event.phase == "ended" then
         if event.other.myName == "iceLake" and self.instance.type == 2 then
             self.instance.currentMovementSpeed = movementSpeed
         end
+    end
+end
+
+function enemy.SpawnHeart(heartx, hearty)
+    if math.random(1,HeartDropChance) == HeartDropChance then
+        local heartPickup = display.newImageRect(BackgroundGroup, "assets/fullheart.png", 96, 84)
+        heartPickup.x = heartx
+        heartPickup.y = hearty
+        Physics.addBody(heartPickup, "static", {isSensor = true})
+        heartPickup.myName = "heart"
+        heartPickup.collision = enemy.collisionEvent
+        heartPickup:addEventListener("collision")
+        timer.performWithDelay(HeartLifeTime * 1000, function() heartPickup:removeSelf() end, 1)
     end
 end
 
@@ -126,7 +153,10 @@ function enemy:enterFrame()
     if self.enemyImage.y == nil then -- chicken has already died
         return
     end
-
+    if dropHeart then
+        dropHeart = false
+        enemy.SpawnHeart(dropHeartx, dropHearty)
+    end
     -- Point towards the target position
     self.enemyImage.rotation = math.deg(math.atan2(self.enemyImage.y - self.targetY, self.enemyImage.x - self.targetX)) - 90
     -- Move towards the target position
