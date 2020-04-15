@@ -86,6 +86,7 @@ end
 
 local function addCoop(x, y)
     local coop = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
+    coop.ammo = 0
     BackgroundGroup:insert(15, coop)
     coop.x = x
     coop.y = y
@@ -208,6 +209,7 @@ local function progressLevel()
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
+        MaxEggsPerEnemy = 3
     elseif Level == 3 then
         transition.to(LavaWallRight, {time = 3000, rotation = LavaWallRight.rotation-90, alpha = 0.2, onComplete = function() LavaWallRight:removeSelf() end})
         transition.to(LavaWallLeft, {time = 3000, rotation = LavaWallLeft.rotation+90, alpha = 0.2, onComplete = function() LavaWallLeft:removeSelf() end})

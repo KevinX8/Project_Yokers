@@ -14,6 +14,7 @@ local enemy = {
     currentMovementSpeed = 0
 }
 enemy.__index = enemy
+MaxEggsPerEnemy = 2
 local movementSpeed = 250
 local iceChickenAcceleratedSpeed = 600
 local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
@@ -63,6 +64,15 @@ function enemy.new(startX, startY)
 
     self.targetX = math.random(LevelBoundLeft, LevelBoundRight) -- Generate an initial random target (enemy starts in "roaming" mode)
     self.targetY = math.random(LevelBoundTop, LevelBoundBottom)
+
+    local ammoCoop = ClosestCoop(startX, startY)
+    if ammoCoop.ammo == 0 then
+        ammoCoop.eggImage = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
+        BackgroundGroup:insert(21+lavaLimit+iceLimit,ammoCoop.eggImage)
+        ammoCoop.eggImage.x = math.random(-200,200) + ammoCoop.x
+        ammoCoop.eggImage.y = ammoCoop.y+math.random(50,150)
+    end
+    ammoCoop.ammo = ammoCoop.ammo + math.random(1,MaxEggsPerEnemy)
 
     return self
 end
@@ -165,15 +175,7 @@ function enemy:aiUpdate() -- Called 30 times a second
         end
     elseif self.aiState == "attackCoop" then
         -- Find the closest coop to this enemy
-        local lowestDistance = 100000
-        local closestCoop = nil
-        for i, coop in ipairs(Coops) do
-            local distance = CalculateDistance(self.enemyImage.x, self.enemyImage.y, coop.x, coop.y)
-            if distance < lowestDistance or closestCoop == nil then
-                lowestDistance = distance
-                closestCoop = coop
-            end
-        end
+        local closestCoop = ClosestCoop(self.enemyImage.x, self.enemyImage.y)
         if playerDistance < playerAttackDistance then
             self.aiState = "attackPlayer"
         end
@@ -194,6 +196,19 @@ function enemy:aiUpdate() -- Called 30 times a second
         end
         Player.damage(playerDamage)
     end
+end
+
+function ClosestCoop(enemyX,enemyY)
+    local lowestDistance = 100000
+    local closestCoop = nil
+    for i, coop in ipairs(Coops) do
+        local distance = CalculateDistance(enemyX, enemyY, coop.x, coop.y)
+        if distance < lowestDistance or closestCoop == nil then
+            lowestDistance = distance
+            closestCoop = coop
+        end
+    end
+    return closestCoop
 end
 
 return enemy
