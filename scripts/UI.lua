@@ -163,4 +163,23 @@ end
 
 end --]]
 
+--[[ 
+function goToPause(event)
+	composer.gotoScene("menus.pause-menu", {effect = "crossFade", time = 500})
+	end 
+
+	 local pause = 
+		 widget.newButton(
+         {
+         width = 40,
+         height = 40,
+         left = 25,
+         top = 960,
+         id = "pause",
+         overFile = "main-menu/Images/pause.png",
+         onEvent = goToPause
+         }
+       ) 
+       --]]
+
 return userinterface
