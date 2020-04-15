@@ -140,7 +140,7 @@ BackgroundGroup:insert(15, LavaWallLeft)
 
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
-audio.play(music, {channel = 1, loops = 0, duration = 270000})
+audio.play(music, {channel = 1, loops = 0, duration = 450000})
 Player.start()
 UserInteface.InitialiseUI()
 
