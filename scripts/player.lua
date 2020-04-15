@@ -33,16 +33,14 @@ local pushX = 0
 local pushY = 0
 local pushFrame = 0
 
+Health = 5
 local slideActive = false
 local slideSpeed = 0
 local lakeWidth = 0
 local slideInitialX = 0
 local slideInitialY = 0
 
-Health = 5
 local isInvincible = false
-EggCapacity = 30
-EgginInv = 20
 Explosion = false
 ExplosionX = 0
 ExplosionY = 0
