@@ -2,7 +2,7 @@ local options = {}
 
 function options.SetDifficulty(difficulty)
     if difficulty == "debug" then
-        EnemyLimit = 1000
+        EnemyLimit = 100
         TimeDifficulty = 5000
         TimeIncrease = 1000
         EnemiesPerWave = 15

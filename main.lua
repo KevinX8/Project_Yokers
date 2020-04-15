@@ -196,13 +196,13 @@ local function progressLevel()
         Level = 2
         TimeDifficulty = TimeDifficulty + TimeIncrease
         Coops = {coop1, coop2, coop3, coop4}
-        EnemyLimit = 75
+        EnemyLimit = EnemyLimit+25
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
         EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
-        MinPlayerAccuracy = 0.75
+        MinPlayerAccuracy = MinPlayerAccuracy+0.05
     elseif Level == 2 then
         transition.to(IceWallRight, {time = 3000, rotation = IceWallRight.rotation+90, alpha = 0.2, onComplete = function() IceWallRight:removeSelf() end})
         transition.to(IceWallLeft, {time = 3000, rotation = IceWallLeft.rotation-90, alpha = 0.2, onComplete = function() IceWallLeft:removeSelf() end})
@@ -210,27 +210,27 @@ local function progressLevel()
         Level = 3
         TimeDifficulty = TimeDifficulty + TimeIncrease
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
-        EnemyLimit =  125
+        EnemyLimit =  EnemyLimit+50
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
         MaxEggsPerEnemy = 3
         EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
-        MinPlayerAccuracy = 0.8
+        MinPlayerAccuracy = MinPlayerAccuracy+0.05
     elseif Level == 3 then
         transition.to(LavaWallRight, {time = 3000, rotation = LavaWallRight.rotation-90, alpha = 0.2, onComplete = function() LavaWallRight:removeSelf() end})
         transition.to(LavaWallLeft, {time = 3000, rotation = LavaWallLeft.rotation+90, alpha = 0.2, onComplete = function() LavaWallLeft:removeSelf() end})
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
         Level = 4
         TimeDifficulty = TimeDifficulty + TimeIncrease
-        EnemyLimit = 175
+        EnemyLimit = EnemyLimit + 50
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8, coop9, coop10, coop11, coop12}
         EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
-        MinPlayerAccuracy = 0.85
+        MinPlayerAccuracy = MinPlayerAccuracy+0.05
     end
 end
 
@@ -255,11 +255,12 @@ function MuteSound(event)
     if name == muteSoundEffects and keyState then
         if(mutedEffects) then
             audio.setVolume(1.0,{})
-            if(musicIsMuted) then
-                audio.setVolume(0.0,{channel = 1})
-            end
         else
             audio.setVolume(0.0,{})
+        end
+        if(musicIsMuted) then
+            audio.setVolume(0.0,{channel = 1})
+        else
             audio.setVolume(1.0,{channel = 1})
         end
         mutedEffects = not(mutedEffects)
