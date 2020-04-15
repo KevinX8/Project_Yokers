@@ -17,10 +17,9 @@ LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Level = 1
-options.SetDifficulty("debug")
+options.SetDifficulty("normal")
 EnemyAmount = 0
 EnemyLimit = 50
-CoopInvincibilityTime = 1000
 
 local newLevelSound = audio.loadSound("audio/newLevel.mp3")
 local music = audio.loadSound("audio/music.mp3")
@@ -82,7 +81,7 @@ function CalculateDistance(object1x, object1y, object2x, object2y) -- Calculates
 end
 
 function addCoopHealth(coop)
-    coop.health = 1000
+    coop.health = InitialCoopHealth
     coop.healthBorder = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 158 ,58, 10)
     coop.healthGray = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 150 ,50, 10)
     coop.healthImage = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 150 ,50, 10)
@@ -93,13 +92,8 @@ function addCoopHealth(coop)
 end
 
 function CoopDamage(coop, damageAmount)
-    if coop.invincible == true then
-        return
-    end
     coop.health = coop.health - damageAmount
-    coop.healthImage.width = coop.health / 6.6666666667
-    coop.invincible = true
-    timer.performWithDelay(CoopInvincibilityTime, function() coop.invincible = false end, 1)
+    coop.healthImage.width = coop.health / InitialCoopHealth * 150
 end
 
 local function addCoop(x, y)

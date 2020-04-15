@@ -21,9 +21,10 @@ local dropHearty = 0
 local iceChickenAcceleratedSpeed = 600
 local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
 local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
-local coopDamagePerHit = 100
+local coopDamagePerHit = 12
 
 local explosionSound = audio.loadSound("audio/Explosion.wav")
+local enemyDamageTime = 1000
 
 --      AI States: 
 -- roaming - Randomly wandering around.
@@ -65,6 +66,7 @@ function enemy.new(startX, startY)
     self.currentMovementSpeed = movementSpeed
     self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
     self.enemyImage.collision = self.collisionEvent
+    self.canDamage = true
     self.enemyImage:addEventListener("collision")
 
     Runtime:addEventListener("enterFrame", function() enemy.enterFrame(self) end)
@@ -131,8 +133,10 @@ function enemy.collisionEvent(self, event)
         elseif event.other.myName == "iceLake" and self.instance.type == 2 then
             self.instance.currentMovementSpeed = iceChickenAcceleratedSpeed -- ice chickens move faster on ice lakes
         end
-        if self.myName == "enemy" and event.other.myName == "coop" then
+        if self.myName == "enemy" and event.other.myName == "coop" and self.instance.canDamage then
+            self.instance.canDamage = false
             CoopDamage(event.other, coopDamagePerHit)
+            timer.performWithDelay(enemyDamageTime, function() self.instance.canDamage = true end, 1)
         end
         if self.myName == "enemy" and self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
