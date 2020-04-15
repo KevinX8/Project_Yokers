@@ -3,6 +3,7 @@ Player = require("scripts.player")
 local enemy = require("scripts.enemy")
 Decor = require("scripts.Decor")
 local UserInteface = require("scripts.UI")
+local options = require("main-menu.options")
 native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
@@ -13,10 +14,7 @@ LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Level = 1
-TimeDifficulty = 120000 --Don't change and commit, if changed, change back before commit
-EnemiesPerWave = 5
-MinTimeBetweenWaves = 5000
-MaxTimeBetweenWaves = 10000
+options.SetDifficulty("debug")
 EnemyAmount = 0
 EnemyLimit = 50
 CoopInvincibilityTime = 1000
@@ -209,43 +207,43 @@ local function progressLevel()
         transition.to(SandwallBottom, {time = 2000, rotation = SandwallBottom.rotation+90, alpha = 0.2, onComplete = function() SandwallBottom:removeSelf() end})
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
-        TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty + TimeIncrease
         Coops = {coop1, coop2, coop3, coop4}
-        EnemyLimit = 75
+        EnemyLimit = EnemyLimit+25
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
         EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
-        MinPlayerAccuracy = 0.75
+        MinPlayerAccuracy = MinPlayerAccuracy+0.05
     elseif Level == 2 then
         transition.to(IceWallRight, {time = 3000, rotation = IceWallRight.rotation+90, alpha = 0.2, onComplete = function() IceWallRight:removeSelf() end})
         transition.to(IceWallLeft, {time = 3000, rotation = IceWallLeft.rotation-90, alpha = 0.2, onComplete = function() IceWallLeft:removeSelf() end})
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
-        TimeDifficulty = TimeDifficulty+30000
+        TimeDifficulty = TimeDifficulty + TimeIncrease
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
-        EnemyLimit =  125
+        EnemyLimit =  EnemyLimit+50
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
         MaxEggsPerEnemy = 3
         EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
-        MinPlayerAccuracy = 0.8
+        MinPlayerAccuracy = MinPlayerAccuracy+0.05
     elseif Level == 3 then
         transition.to(LavaWallRight, {time = 3000, rotation = LavaWallRight.rotation-90, alpha = 0.2, onComplete = function() LavaWallRight:removeSelf() end})
         transition.to(LavaWallLeft, {time = 3000, rotation = LavaWallLeft.rotation+90, alpha = 0.2, onComplete = function() LavaWallLeft:removeSelf() end})
         LevelBoundBottom = display.contentCenterY + 1536 + 3072
         Level = 4
-        TimeDifficulty = TimeDifficulty+30000
-        EnemyLimit = 175
+        TimeDifficulty = TimeDifficulty + TimeIncrease
+        EnemyLimit = EnemyLimit + 50
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8, coop9, coop10, coop11, coop12}
         EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
-        MinPlayerAccuracy = 0.85
+        MinPlayerAccuracy = MinPlayerAccuracy+0.05
     end
 end
 
@@ -272,6 +270,10 @@ function MuteSound(event)
             audio.setVolume(1.0,{})
         else
             audio.setVolume(0.0,{})
+        end
+        if(musicIsMuted) then
+            audio.setVolume(0.0,{channel = 1})
+        else
             audio.setVolume(1.0,{channel = 1})
         end
         mutedEffects = not(mutedEffects)

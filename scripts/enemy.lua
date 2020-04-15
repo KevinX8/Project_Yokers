@@ -14,10 +14,6 @@ local enemy = {
     currentMovementSpeed = 0
 }
 enemy.__index = enemy
-HeartDropChance = 30
-HeartLifeTime = 5
-MaxEggsPerEnemy = 2
-MinPlayerAccuracy = 0.7
 local movementSpeed = 250
 local dropHeart = false
 local dropHeartx = 0
@@ -40,15 +36,20 @@ local explosionSound = audio.loadSound("audio/Explosion.wav")
 
 function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
-    local pickred = math.random(9) + Level - 1
-    local pickblue = math.random(19) + Level - 2
-    if pickred > 9 then
+    local pickred = math.random(RedChance) + Level - 1
+    local pickblue = math.random(BlueChance) + Level - 2
+    local pickblack = math.random(BlackChance) + Level - 3
+    if pickred > RedChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
         self.type = 1
         self.health = 1
-    elseif pickblue > 19 then
+    elseif pickblue > BlueChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blueenemy.png", 93, 120)
         self.type = 2
+        self.health = 3
+    elseif pickblack > BlackChance then
+        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blackenemy.png", 93, 120)
+        self.type = 3
         self.health = 3
     else
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
@@ -92,6 +93,7 @@ function enemy.collisionEvent(self, event)
     if event.phase == "began" then
         if event.other.myName == "player" and self.myName == "heart" then
             Player.damage(-1)
+            timer.cancel(self.blink)
             timer.cancel(self.despawnTimer)
             self:removeSelf()
             return
@@ -113,7 +115,7 @@ function enemy.collisionEvent(self, event)
             local pushX = (event.other.x - event.target.x)
             local pushY = (event.other.y - event.target.y)
             self.instance:push(0.1, pushX, pushY)
-        elseif event.other.myName == "cactus" or event.other.myName == "lavaLake" or event.other.myName == "explosion"then
+        elseif (event.other.myName == "cactus" or event.other.myName == "lavaLake" or event.other.myName == "explosion") and self.myName == "enemy" then
             self.instance.health = self.instance.health - 1
             if event.other.myName == "explosion" then
                 timer.cancel(event.other.timer)
@@ -149,7 +151,8 @@ end
 
 function enemy.SpawnHeart(heartx, hearty)
     if math.random(1,HeartDropChance) == HeartDropChance then
-        local heartPickup = display.newImageRect(BackgroundGroup, "assets/fullheart.png", 96, 84)
+        local heartPickup = display.newImageRect(BackgroundGroup, "assets/fullheart.png", 48, 42)
+        local blink = false
         heartPickup.x = heartx
         heartPickup.y = hearty
         Physics.addBody(heartPickup, "static", {isSensor = true})
@@ -157,6 +160,7 @@ function enemy.SpawnHeart(heartx, hearty)
         heartPickup.collision = enemy.collisionEvent
         heartPickup:addEventListener("collision")
         heartPickup.despawnTimer = timer.performWithDelay(HeartLifeTime * 1000, function() heartPickup:removeSelf() end, 1)
+        heartPickup.blink = timer.performWithDelay(200, function() if blink then heartPickup.alpha = 1.0 else heartPickup.alpha = 0.4 end blink = not(blink) end, 0)
     end
 end
 
