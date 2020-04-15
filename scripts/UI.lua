@@ -83,9 +83,14 @@ end
 
 function userinterface.updatehearts(added)
     if added and MaxHearts >= Health then
-        if(Health == 1)then
+        if(Health == 2)then
             timer.cancel(Blink)
+            heart[1]:removeSelf()
             heart[1] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
+            heart[1].y = display.contentCenterY - 440
+            heart[1].x = display.contentCenterX - 890
+            heart[1].alpha = 0.7
+
         end
         heart[Health]:removeSelf()
         heart[Health] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)

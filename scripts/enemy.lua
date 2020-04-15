@@ -94,6 +94,7 @@ function enemy.collisionEvent(self, event)
     if event.phase == "began" then
         if event.other.myName == "player" and self.myName == "heart" then
             Player.damage(-1)
+            timer.cancel(self.blink)
             timer.cancel(self.despawnTimer)
             self:removeSelf()
             return
@@ -148,7 +149,8 @@ end
 
 function enemy.SpawnHeart(heartx, hearty)
     if math.random(1,HeartDropChance) == HeartDropChance then
-        local heartPickup = display.newImageRect(BackgroundGroup, "assets/fullheart.png", 96, 84)
+        local heartPickup = display.newImageRect(BackgroundGroup, "assets/fullheart.png", 48, 42)
+        local blink = false
         heartPickup.x = heartx
         heartPickup.y = hearty
         Physics.addBody(heartPickup, "static", {isSensor = true})
@@ -156,6 +158,7 @@ function enemy.SpawnHeart(heartx, hearty)
         heartPickup.collision = enemy.collisionEvent
         heartPickup:addEventListener("collision")
         heartPickup.despawnTimer = timer.performWithDelay(HeartLifeTime * 1000, function() heartPickup:removeSelf() end, 1)
+        heartPickup.blink = timer.performWithDelay(200, function() if blink then heartPickup.alpha = 1.0 else heartPickup.alpha = 0.4 end blink = not(blink) end, 0)
     end
 end
 

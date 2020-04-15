@@ -255,6 +255,9 @@ function MuteSound(event)
     if name == muteSoundEffects and keyState then
         if(mutedEffects) then
             audio.setVolume(1.0,{})
+            if(musicIsMuted) then
+                audio.setVolume(0.0,{channel = 1})
+            end
         else
             audio.setVolume(0.0,{})
             audio.setVolume(1.0,{channel = 1})
