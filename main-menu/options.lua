@@ -15,8 +15,9 @@ function options.SetDifficulty(difficulty)
         HeartLifeTime = 10
         MaxEggsPerEnemy = 5
         MinPlayerAccuracy = 0.2
-        RedChance = 3
-        BlueChance = 2
+        RedChance = 4
+        BlueChance = 3
+        BlackChance = 2
     end
     if difficulty == "normal" then
         EnemyLimit = 50
@@ -34,6 +35,7 @@ function options.SetDifficulty(difficulty)
         MinPlayerAccuracy = 0.7
         RedChance = 9
         BlueChance = 19
+        BlackChance = 19
     end
 end
 

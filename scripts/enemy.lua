@@ -39,6 +39,7 @@ function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
     local pickred = math.random(RedChance) + Level - 1
     local pickblue = math.random(BlueChance) + Level - 2
+    local pickblack = math.random(BlackChance) + Level - 3
     if pickred > RedChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
         self.type = 1
@@ -46,6 +47,10 @@ function enemy.new(startX, startY)
     elseif pickblue > BlueChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blueenemy.png", 93, 120)
         self.type = 2
+        self.health = 3
+    elseif pickblack > BlackChance then
+        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blackenemy.png", 93, 120)
+        self.type = 3
         self.health = 3
     else
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
