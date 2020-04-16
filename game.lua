@@ -121,8 +121,8 @@ Coops = {coop1, coop2}
 CoopsAlive = 2
 
 local function addCoopToGame(coop)
-    Coops[CoopsAlive] = coop
     CoopsAlive = CoopsAlive + 1
+    Coops[CoopsAlive] = coop
 end
 
 local function removeCoopFromGame(coop)
