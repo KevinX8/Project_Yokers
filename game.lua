@@ -22,7 +22,7 @@ EnemyAmount = 0
 EnemyLimit = 50
 
 local newLevelSound = audio.loadSound("audio/newLevel.mp3")
-local music = audio.loadSound("audio/music.mp3")--Orginal music composed, performed and recorded by Thomas Greaney for the purpose of the game
+local music = audio.loadSound("audio/music.mp3")--Original music composed, performed, and recorded by Thomas Greaney for the purpose of the game
 
 local muteSoundEffects = "m"
 local mutedEffects = false
