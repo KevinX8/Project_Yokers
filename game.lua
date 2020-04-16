@@ -86,14 +86,9 @@ function addCoopHealth(coop)
     coop.healthGray = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 150 ,50, 10)
     coop.healthImage = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 150 ,50, 10)
     coop.healthImage:setFillColor( 232/255, 14/255, 14/255)
-    coop.healthGray:setFillColor(82/255,8/255,82/255)
+    coop.healthGray:setFillColor(116/255,7/255,7/255)
     coop.healthBorder:setFillColor(0)
     coop.invincible = false
-end
-
-function CoopDamage(coop, damageAmount)
-    coop.health = coop.health - damageAmount
-    coop.healthImage.width = coop.health / InitialCoopHealth * 150
 end
 
 local function addCoop(x, y)
@@ -121,7 +116,42 @@ local coop9 = addCoop(0, 3072)
 local coop10 = addCoop(1000, 4372)
 local coop11 = addCoop(3800, 3372)
 local coop12 = addCoop(4850, 4472)
+
 Coops = {coop1, coop2}
+CoopsAlive = 2
+
+local function addCoopToGame(coop)
+    Coops[CoopsAlive] = coop
+    CoopsAlive = CoopsAlive + 1
+end
+
+local function removeCoopFromGame(coop)
+    if CoopsAlive > 0 then
+        for i =1, CoopsAlive do
+            if coop.x == Coops[i].x and coop.y == Coops[i].y then
+                Coops[i]:removeSelf()
+                Coops[i].healthBorder:removeSelf()
+                Coops[i].healthGray:removeSelf()
+                Coops[i].healthImage:removeSelf()
+                if Coops[i].ammo > 0 then
+                    Coops[i].eggImage:removeSelf()
+                end
+                for i=i, (CoopsAlive-1) do
+                    Coops[i] = Coops[i+1]
+                end
+                CoopsAlive = CoopsAlive - 1              
+            end
+        end
+    end
+end
+
+function CoopDamage(coop, damageAmount)
+    coop.health = coop.health - damageAmount
+    coop.healthImage.width = coop.health / InitialCoopHealth * 150
+    if coop.health < 1 then
+        removeCoopFromGame(coop)
+    end
+end
 
 SandwallTop = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 102, 3072)
 SandwallTop.x = display.contentCenterX + 1585
@@ -205,7 +235,8 @@ local function progressLevel()
         LevelBoundRight = display.contentCenterX + 1536 + 3072
         Level = 2
         TimeDifficulty = TimeDifficulty + TimeIncrease
-        Coops = {coop1, coop2, coop3, coop4}
+        addCoopToGame(coop3)
+        addCoopToGame(coop4)
         EnemyLimit = EnemyLimit+25
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
@@ -219,7 +250,10 @@ local function progressLevel()
         LevelBoundTop = display.contentCenterY - 1536 - 3072
         Level = 3
         TimeDifficulty = TimeDifficulty + TimeIncrease
-        Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8}
+        addCoopToGame(coop5)
+        addCoopToGame(coop6)
+        addCoopToGame(coop7)
+        addCoopToGame(coop8)
         EnemyLimit =  EnemyLimit+50
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
@@ -237,7 +271,10 @@ local function progressLevel()
         EnemyLimit = EnemyLimit + 50
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
-        Coops = {coop1, coop2, coop3, coop4, coop5, coop6, coop7, coop8, coop9, coop10, coop11, coop12}
+        addCoopToGame(coop9)
+        addCoopToGame(coop10)
+        addCoopToGame(coop11)
+        addCoopToGame(coop12)
         EggCapacity = EggCapacity +10
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05

@@ -77,9 +77,8 @@ function enemy.new(startX, startY)
     local ammoCoop = ClosestCoop(startX, startY)
     if ammoCoop.ammo == 0 then
         ammoCoop.eggImage = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
-        BackgroundGroup:insert(21+lavaLimit+iceLimit,ammoCoop.eggImage)
-        ammoCoop.eggImage.x = math.random(-200,200) + ammoCoop.x
-        ammoCoop.eggImage.y = ammoCoop.y+math.random(50,150)
+        ammoCoop.eggImage.x = ammoCoop.x
+        ammoCoop.eggImage.y = ammoCoop.y-100
     end
     if math.random() < MinPlayerAccuracy then
         ammoCoop.ammo = ammoCoop.ammo + 1
@@ -246,7 +245,8 @@ end
 function ClosestCoop(enemyX,enemyY)
     local lowestDistance = 100000
     local closestCoop = nil
-    for i, coop in ipairs(Coops) do
+    for i=1, CoopsAlive do
+        local coop = Coops[i]
         local distance = CalculateDistance(enemyX, enemyY, coop.x, coop.y)
         if distance < lowestDistance or closestCoop == nil then
             lowestDistance = distance
