@@ -3,7 +3,7 @@ local scene = composer.newScene()
 
 
 local function closeGame(event)
-          native.requestExit()
+		  native.requestExit()
        end
 
 local function goToGame(event)
