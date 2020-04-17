@@ -350,6 +350,12 @@ end
 Runtime:addEventListener("key", keyEvent)
 Runtime:addEventListener("mouse", mouseEvent)
 
+
+local function keyEvent(event)
+    Player.handleMovement(event)
+    pauseGame(event)
+ end
+
 local function closeGame()
            native.requestExit()
         end
@@ -375,7 +381,10 @@ function pauseGame(event)
 		timer.cancel(TimeUI)
 		timer.cancel(ProgressTimer)
 		timer.cancel(EnemySpawner)
-		display.add(uiPause)
+		display.add(newGameImage)
+		display.add(resumeGameImage)
+		display.add(optionsImage)
+		display.add(quitImage)
 		display.remove(ForegroundGroup)
 		display.remove(timemImage)
 		display.remove(timesImage)
@@ -383,18 +392,13 @@ function pauseGame(event)
 		display.remove(sImage)
 		display.remove(eggCounter)
   
-		pauseMenuBackground.alpha = 1
-		pause.alpha = 0
-		newGame:addEventListener("tap", goToGame)
-		newGame.alpha = 1
-		resume:addEventListener("tap", resumeGame)
-		resume.alpha = 1
-		options:addEventListener("tap", goToOptions)
-		options.alpha = 1
-		quit:addEventListener("tap", closeGame)
-		quit.alpha = 1
-     end
-  end
+		newGameImage:addEventListener("tap", goToGame)
+		resumeGameImage:addEventListener("tap", resumeGame)
+		optionsImage:addEventListener("tap", goToOptions)
+		quitImage:addEventListener("tap", closeGame)
+		
+   end
+end
 
 Runtime:addEventListener("key", keyEvent)
 Runtime:addEventListener("mouse", mouseEvent)
@@ -406,7 +410,10 @@ function resumeGame(event)
   timer.start(TimeUI)
   timer.start(ProgressTimer)
   timer.start(EnemySpawner)
-  display.remove(uiPause)
+  display.remove(newGameImage)
+  display.remove(resumeGameImage)
+  display.remove(optionsImage)
+  display.remove(quitImage)
   display.add(ForegroundGroup)
   display.add(timemImage)
   display.add(timesImage)
@@ -414,16 +421,10 @@ function resumeGame(event)
   display.add(sImage)
   display.add(eggCounter)
   
-  pauseMenuBackground.alpha = 0
-  pause.alpha = 1
-  newGame:removeEventListener("tap", gotoGame)
-  newGame.alpha = 0
-  resume:removeEventListener("tap", resumeGame)
-  resume.alpha = 0
-  options:removeEventListener("tap", gotoOptions)
-  options.alpha = 0
-  quit:removeEventListener("tap", closeGame)
-  quit.alpha = 0
+  newGameImage:removeEventListener("tap", gotoGame)
+  resumeGameImage:removeEventListener("tap", resumeGame)
+  optionsImage:removeEventListener("tap", gotoOptions)
+  quitImage:removeEventListener("tap", closeGame)
   
 end
 
