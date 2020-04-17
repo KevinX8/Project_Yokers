@@ -17,11 +17,11 @@ function scene:create(event)
     
     local sceneGroup = self.view
 
-       local background = display.newImageRect(sceneGroup, "Images/Title_Screen.png", 1920, 1080)
+       local background = display.newImageRect(sceneGroup, "assets/Title Screen.png", 1920, 1080)
 			  background.x = display.contentCenterX
 			  background.y = display.contentCenterY
 
-	local muteSound = display.newImageRect(sceneGroup, "Images/mute.png", 500, 75)
+	local muteSound = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
 			  muteSound.x = display.contentCenterX
 			  muteSound.y = 655
 			  DifficultyText = Ponyfont.newText({
