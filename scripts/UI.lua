@@ -238,6 +238,10 @@ function userinterface.updatecoopscreen(cooptoflash)
     userinterface.coopfadeOut(coopicon[cooptoflash])
 end
 
+function userinterface.deletecoop(cooptodelete)
+    display.remove(coopicon[cooptodelete])
+end
+
 function userinterface.coopfadeOut(flashme)
     counter = counter-1
     if(not(counter == 0) and flashme.beingdamaged == false) then
