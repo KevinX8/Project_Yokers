@@ -37,7 +37,7 @@ function scene:create(event)
 	local newGame = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
 	newGame.x = display.contentCenterX
 	newGame.y = 705
-	local newGameText = Ponyfont.newText({
+	NewGameText = Ponyfont.newText({
 	text = "New Game",
 	x = newGame.x,
 	y = newGame.y,
@@ -70,7 +70,7 @@ function scene:create(event)
 	align = "centre"
 	})
 		
-	newGame:addEventListener("tap", goToGame)
+	newGame:addEventListener("tap", function() NewGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end)
 	options:addEventListener("tap", changeDifficulty)
 	quit:addEventListener("tap", closeGame)
 end
