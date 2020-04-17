@@ -209,7 +209,7 @@ function userinterface.deathscreen()
             fontSize = 32,
             align = "left"
         }
-        Ponyfont.newText(optionsD)
+        Ponyfont.newText(optionsD)	
 end
 
 --[[ 
@@ -244,5 +244,119 @@ function userinterface.coopfadeOut(flashme)
         timer.performWithDelay(1000, function() flashme.beingdamaged = false flashme.alpha = 0.7 end,1)
     end
 end
+--[[   
+function userinterface.pauseButton()
+	    local pause = {
+	    display.newImageRect(ForegroundGroup, "main-menu/Images/pause.png", 70, 70)
+        x = display.contentCenterX 
+        y = 1000
+        alpha = 1 
+        onEvent = pauseGame
+        }
+     end
+        
+        pauseMenuBackground = display.newImageRect(uiPause, "main-menu/Images/Title_Screen.png", 1280, 720)
+        pauseMenuBackground.x = display.contentCenterX
+        pauseMenuBackground.y = display.contentCenterY
+        pauseMenuBackground.alpha = 0 
+
+        newGame = display.newImageRect(uiPause, "main-menu/Images/new_game.png", 289, 40)
+        newGame.x = display.contentCenterX
+        newGame.y = 630
+        newGame.alpha = 0
+ 
+        resume = display.newImageRect(uiPause, "main-menu/Images/resume_Game.png", 289, 40)
+        resume.x = display.contentCenterX
+        resume.y = 670
+        resume.alpha = 0
+
+        options = display.newImageRect(uiPause, "main-menu/Images/options.png", 289, 40)
+        options.x = display.contentCenterX
+        options.y = 710
+        options.alpha = 0
+       
+        quit = display.newImageRect(uiPause, "main-menu/Images/quit.png", 289, 40)
+        quit.x = display.contentCenterX
+        quit.y = 750
+        quit.alpha = 0
+end
+
+local function closeGame()
+           native.requestExit()
+        end
+
+local function goToGame()
+           composer.gotoScene("game")
+        end
+ 
+local function goToOptions()
+           composer.gotoScene("main-menu.optionsMenu")
+        end
+
+local function resumeGame()
+  physics.start()
+  audio.start()
+  transition.start()
+  timer.start(TimeUI)
+  timer.start(ProgressTimer)
+  timer.start(EnemySpawner)
+  display.remove(uiPause)
+  display.add(ForegroundGroup
+  display.add(timemImage)
+  display.add(timesImage)
+  display.add(currentLevel)
+  display.add(sImage)
+  display.add(eggCounter)
+  
+  pauseMenuBackground.alpha = 0
+  pause.alpha = 1
+  newGame:removeEventListener("tap", gotoGame)
+  newGame.alpha = 0
+  resume:removeEventListener("tap", resumeGame)
+  resume.alpha = 0
+  options:removeEventListener("tap", gotoOptions)
+  options.alpha = 0
+  quit:removeEventListener("tap", closeGame)
+  quit.alpha = 0
+  
+end
+
+local function pauseGame(event)
+  physics.pause()
+  audio.pause()
+  transition.pause()
+  timer.cancel(TimeUI)
+  timer.cancel(ProgressTimer)
+  timer.cancel(EnemySpawner)
+  display.add(uiPause)
+  display.remove(ForegroundGroup)
+  display.remove(timemImage)
+  display.remove(timesImage)
+  display.remove(currentLevel)
+  display.remove(sImage)
+  display.remove(eggCounter)
+  
+  pauseMenuBackground.alpha = 1
+  pause.alpha = 0
+  newGame:addEventListener("tap", gotoGame)
+  newGame.alpha = 1
+  resume:addEventListener("tap", resumeGame)
+  resume.alpha = 1
+  options:addEventListener("tap", gotoOptions)
+  options.alpha = 1
+  quit:addEventListener("tap", closeGame)
+  quit.alpha = 1
+  
+end
+--]]
+
+--[[function userinterface.updatecoophealth()
+    if gain then
+
+
+    else
+        local lifex = life[]
+
+end --]]
 
 return userinterface

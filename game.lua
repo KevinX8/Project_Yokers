@@ -142,10 +142,9 @@ local function removeCoopFromGame(coop)
                     Coops[i] = Coops[i+1]
                 end
                 CoopsAlive = CoopsAlive - 1
-                if(CoopsAlive <= 0) then
+                if(CoopsAlive <= 0) and PlayerActive then
                     transition.pause()
                     Physics.pause() --stops crashing lol
-                    audio.pause()
                     PlayerActive = false
                     UserInteface.deathscreen()
                 end
@@ -193,7 +192,7 @@ BackgroundGroup:insert(15, LavaWallLeft)
 
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
-audio.play(music, {channel = 1, loops = 0, duration = 660000})
+audio.play(music, {channel = 1, loops = -1, duration = 660000})
 Player.start()
 UserInteface.InitialiseUI()
 TimeLoaded = system.getTimer()
