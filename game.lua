@@ -95,7 +95,7 @@ end
 local function addCoop(x, y, number)
     local coop = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
     coop.ammo = 0
-    coop.number = number
+    coop.number = number --refrence points for the minimap
     BackgroundGroup:insert(15, coop)
     coop.x = x
     coop.y = y
@@ -128,6 +128,7 @@ local function addCoopToGame(coop)
 end
 
 local function removeCoopFromGame(coop)
+    UserInteface.deletecoop(coop)
     if CoopsAlive > 0 then
         for i =1, CoopsAlive do
             if coop.x == Coops[i].x and coop.y == Coops[i].y then
