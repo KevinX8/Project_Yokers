@@ -205,17 +205,19 @@ UserInteface.InitialiseUI()
 TimeLoaded = system.getTimer()
 
 local function displayArrow()
-    local arrow = display.newImageRect("assets/arrow.png", 500, 102)
-    ForegroundGroup:insert(1, arrow)
-    arrow.x = display.contentCenterX
-    arrow.y = display.contentCenterY
-    audio.play(newLevelSound,{channel = 6, loops = 0, duration = 800})
-    if Level == 3 then
-        arrow.rotation = arrow.rotation - 90
-    elseif Level == 4 then
-        arrow.rotation = arrow.rotation + 90
+    if PlayerActive then
+        local arrow = display.newImageRect("assets/arrow.png", 500, 102)
+        ForegroundGroup:insert(1, arrow)
+        arrow.x = display.contentCenterX
+        arrow.y = display.contentCenterY
+        audio.play(newLevelSound,{channel = 6, loops = 0, duration = 800})
+        if Level == 3 then
+            arrow.rotation = arrow.rotation - 90
+        elseif Level == 4 then
+            arrow.rotation = arrow.rotation + 90
+        end
+        arrow.despawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
     end
-    arrow.despawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
 end
 
 local function spawnEnemyWave()
