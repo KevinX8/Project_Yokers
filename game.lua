@@ -1,5 +1,5 @@
 local composer = require("composer")
-local scene = composer.newScene()
+local game = composer.newScene()
 
 local options = require("main-menu.options")
 options.SetDifficulty()
@@ -430,7 +430,7 @@ function resumeGame(event)
   
 end
 
-function scene:show(event)
+function game:show(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -440,7 +440,7 @@ function scene:show(event)
     end
 end
 
-function scene:hide(event)
+function game:hide(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -451,7 +451,7 @@ function scene:hide(event)
     end
 end
 
-function scene:destroy(event)
+function game:destroy(event)
     local sceneGroup = self.view
    
 end
@@ -459,10 +459,10 @@ end
 -- -----------------------------------------------------------------------------------
 -- Scene event function listeners
 -- -----------------------------------------------------------------------------------
-scene:addEventListener("create", scene)
-scene:addEventListener("show", scene)
-scene:addEventListener("hide", scene)
-scene:addEventListener("destroy", scene)
+game:addEventListener("create", game)
+game:addEventListener("show", game)
+game:addEventListener("hide", game)
+game:addEventListener("destroy", game)
 -- -----------------------------------------------------------------------------------
 
-return scene
+return game

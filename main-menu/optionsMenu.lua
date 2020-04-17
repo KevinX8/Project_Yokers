@@ -1,5 +1,5 @@
 local composer = require("composer")
-local scene = composer.newScene()
+local options = composer.newScene()
 
 local function goToMenu(event)
 	composer.gotoScene("menu")
@@ -13,7 +13,7 @@ local function volumeDown(event)
 	audio.setVolume(audio.getVolume() - 0.1)
 end     
 
-function scene:create(event)
+function options:create(event)
     
 	local sceneGroup = self.view
 
@@ -75,7 +75,7 @@ function scene:create(event)
 	back:addEventListener("tap", goToMenu)
 end
 
-function scene:show(event)
+function options:show(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -87,7 +87,7 @@ function scene:show(event)
  end
 
 
-function scene:hide(event)
+function options:hide(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -98,17 +98,17 @@ function scene:hide(event)
     end
 end
 
-function scene:destroy(event)
+function options:destroy(event)
     local sceneGroup = self.view
 end
 
 -- -----------------------------------------------------------------------------------
 -- Scene event function listeners
 -- -----------------------------------------------------------------------------------
-scene:addEventListener("create", scene)
-scene:addEventListener("show", scene)
-scene:addEventListener("hide", scene)
-scene:addEventListener("destroy", scene)
+options:addEventListener("create", options)
+options:addEventListener("show", options)
+options:addEventListener("hide", options)
+options:addEventListener("destroy", options)
 -- -----------------------------------------------------------------------------------
 
-return scene
+return options

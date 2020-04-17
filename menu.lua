@@ -1,5 +1,5 @@
 local composer = require("composer")
-local scene = composer.newScene()
+local menu = composer.newScene()
 Difficulty = 2
 
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
@@ -30,7 +30,7 @@ local function changeDifficulty(event)
 	end
 end
 
-function scene:create(event)
+function menu:create(event)
     
     local sceneGroup = self.view
 
@@ -92,7 +92,7 @@ function scene:create(event)
 	quit:addEventListener("tap", closeGame)
 end
 
-function scene:show(event)
+function menu:show(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -104,7 +104,7 @@ function scene:show(event)
  end
 
 
-function scene:hide(event)
+function menu:hide(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -115,17 +115,17 @@ function scene:hide(event)
     end
 end
 
-function scene:destroy(event)
+function menu:destroy(event)
     local sceneGroup = self.view
   end
 
 -- -----------------------------------------------------------------------------------
 -- Scene event function listeners
 -- -----------------------------------------------------------------------------------
-scene:addEventListener("create", scene)
-scene:addEventListener("show", scene)
-scene:addEventListener("hide", scene)
-scene:addEventListener("destroy", scene)
+menu:addEventListener("create", menu)
+menu:addEventListener("show", menu)
+menu:addEventListener("hide", menu)
+menu:addEventListener("destroy", menu)
 -- -----------------------------------------------------------------------------------
 
-return scene
+return menu
