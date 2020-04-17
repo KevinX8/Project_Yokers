@@ -1,6 +1,7 @@
 local composer = require("composer")
 local scene = composer.newScene()
 
+Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
 
 local function closeGame(event)
 		  native.requestExit()
@@ -18,31 +19,47 @@ function scene:create(event)
     
     local sceneGroup = self.view
 
-	local background = display.newImageRect(sceneGroup, "main-menu/Images/Title_Screen.png", 1920, 1080)
-        background.x = display.contentCenterX
-        background.y = display.contentCenterY
+	local background = display.newImageRect(sceneGroup, "assets/Title Screen.png", 1920, 1080)
+	background.x = display.contentCenterX
+	background.y = display.contentCenterY
 
-		local newGame = display.newImageRect(sceneGroup, "main-menu/Images/new_game.png", 500, 75)
-			newGame.x = display.contentCenterX
-			newGame.y = 705
+	local newGame = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
+	newGame.x = display.contentCenterX
+	newGame.y = 705
+	local newGameText = Ponyfont.newText({
+	text = "New Game",x = newGame.x,
+	y = newGame.y,
+	font = "assets/coolfont.fnt",
+	fontSize = 32,
+	align = "centre"
+	})
+		
+	local options = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
+	options.x = display.contentCenterX
+	options.y = 780
+	local optionsText = Ponyfont.newText({
+	text = "Options",x = options.x,
+	y = options.y,
+	font = "assets/coolfont.fnt",
+	fontSize = 32,
+	align = "centre"
+	})
 
-		local loadGame = display.newImageRect(sceneGroup, "main-menu/Images/load_game.png", 500, 75)
-			loadGame.x = display.contentCenterX
-			loadGame.y = 780
-			
-		local options = display.newImageRect(sceneGroup, "main-menu/Images/options.png",  500, 75)
-			options.x = display.contentCenterX
-			options.y = 855
-
-		local quit = display.newImageRect(sceneGroup, "main-menu/Images/quit_game.png",  500, 75)
-			quit.x = display.contentCenterX
-			quit.y = 930
-			
-			newGame:addEventListener("tap", goToGame)
-			loadGame:addEventListener("tap", goToGame)
-			options:addEventListener("tap", goToOptions)
-			quit:addEventListener("tap", closeGame)
-	      end
+	local quit = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
+	quit.x = display.contentCenterX
+	quit.y = 855
+	local optionsText = Ponyfont.newText({
+	text = "Quit Game",x = quit.x,
+	y = quit.y,
+	font = "assets/coolfont.fnt",
+	fontSize = 32,
+	align = "centre"
+	})
+		
+	newGame:addEventListener("tap", goToGame)
+	options:addEventListener("tap", goToOptions)
+	quit:addEventListener("tap", closeGame)
+end
 
 function scene:show(event)
     local sceneGroup = self.view
