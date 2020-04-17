@@ -75,15 +75,17 @@ function enemy.new(startX, startY)
     self.targetY = math.random(LevelBoundTop, LevelBoundBottom)
 
     local ammoCoop = ClosestCoop(startX, startY)
-    if ammoCoop.ammo == 0 then
-        ammoCoop.eggImage = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
-        ammoCoop.eggImage.x = ammoCoop.x
-        ammoCoop.eggImage.y = ammoCoop.y-100
-    end
-    if math.random() < MinPlayerAccuracy then
-        ammoCoop.ammo = ammoCoop.ammo + 1
-    else
-        ammoCoop.ammo = ammoCoop.ammo + math.random(1,MaxEggsPerEnemy)
+    if(PlayerActive) then
+        if ammoCoop.ammo == 0 then
+            ammoCoop.eggImage = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
+            ammoCoop.eggImage.x = ammoCoop.x
+            ammoCoop.eggImage.y = ammoCoop.y-100
+        end
+        if math.random() < MinPlayerAccuracy then
+            ammoCoop.ammo = ammoCoop.ammo + 1
+        else
+            ammoCoop.ammo = ammoCoop.ammo + math.random(1,MaxEggsPerEnemy)
+        end
     end
 
     return self
@@ -223,8 +225,10 @@ function enemy:aiUpdate() -- Called 30 times a second
         if playerDistance < playerAttackDistance then
             self.aiState = "attackPlayer"
         end
-        self.targetX = closestCoop.x
-        self.targetY = closestCoop.y
+        if(PlayerActive) then
+            self.targetX = closestCoop.x
+            self.targetY = closestCoop.y
+        end
     elseif self.aiState == "attackPlayer" then
         if playerDistance > playerForgetDistance then
             self.aiState = "attackCoop"

@@ -36,7 +36,7 @@ function scene:create(event)
 
 	local newGame = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
 	newGame.x = display.contentCenterX
-	newGame.y = 705
+	newGame.y = 655
 	NewGameText = Ponyfont.newText({
 	text = "New Game",
 	x = newGame.x,
@@ -48,7 +48,7 @@ function scene:create(event)
 		
 	local options = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	options.x = display.contentCenterX
-	options.y = 780
+	options.y = 755
 	DifficultyText = Ponyfont.newText({
 	text = "Difficulty: Normal",
 	x = options.x,
