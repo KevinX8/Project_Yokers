@@ -5,9 +5,6 @@ Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfo
 local damageSound = audio.loadSound("audio/Damage Sound.wav")
 local oneHeart = audio.loadSound("audio/OneHeart.mp3")
 
-local livesText
-local scoreText
-
 local timemImage
 local timesImage
 local sImage
