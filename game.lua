@@ -249,7 +249,7 @@ local function progressLevel()
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
-        EggCapacity = EggCapacity +10
+        EggCapacity = EggCapacity*1.5
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
     elseif Level == 2 then
@@ -267,7 +267,7 @@ local function progressLevel()
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
         MaxEggsPerEnemy = 3
-        EggCapacity = EggCapacity +10
+        EggCapacity = EggCapacity+EggCapacity/3
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
     elseif Level == 3 then
@@ -283,7 +283,7 @@ local function progressLevel()
         addCoopToGame(coop10)
         addCoopToGame(coop11)
         addCoopToGame(coop12)
-        EggCapacity = EggCapacity +10
+        EggCapacity = EggCapacity+EggCapacity/4
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
     end

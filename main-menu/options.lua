@@ -27,8 +27,8 @@ function options.SetDifficulty()
         EnemiesPerWave = 4
         MinTimeBetweenWaves = 5000
         MaxTimeBetweenWaves = 10000
-        EggCapacity = 40
-        EgginInv = 30
+        EggCapacity = 30
+        EgginInv = 15
         MaxHearts = 6
         HeartDropChance = 25
         HeartLifeTime = 5
@@ -45,8 +45,8 @@ function options.SetDifficulty()
         EnemiesPerWave = 5
         MinTimeBetweenWaves = 5000
         MaxTimeBetweenWaves = 10000
-        EggCapacity = 30
-        EgginInv = 20
+        EggCapacity = 20
+        EgginInv = 10
         MaxHearts = 5
         HeartDropChance = 30
         HeartLifeTime = 4
