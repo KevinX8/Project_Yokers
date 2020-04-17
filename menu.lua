@@ -40,7 +40,7 @@ function scene:create(event)
 
 	local newGame = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
 	newGame.x = display.contentCenterX
-	newGame.y = 655
+	newGame.y = 605
 	NewGameText = Ponyfont.newText({
 	text = "New Game",
 	x = newGame.x,
@@ -52,7 +52,7 @@ function scene:create(event)
 		
 	local options = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	options.x = display.contentCenterX
-	options.y = 755
+	options.y = 705
 	DifficultyText = Ponyfont.newText({
 	text = "Difficulty: Normal",
 	x = options.x,
@@ -64,9 +64,9 @@ function scene:create(event)
 	
 	local optionsMenu = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	optionsMenu.x = display.contentCenterX
-	optionsMenu.y = 855
+	optionsMenu.y = 805
 	DifficultyText = Ponyfont.newText({
-	text = "options,
+	text = "options",
 	x = optionsMenu.x,
 	y = optionsMenu.y,
 	font = "assets/coolfont.fnt",
@@ -76,7 +76,7 @@ function scene:create(event)
 
 	local quit = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	quit.x = display.contentCenterX
-	quit.y = 955
+	quit.y = 905
 	local quitText = Ponyfont.newText({
 	text = "Quit Game",
 	x = quit.x,
