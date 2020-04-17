@@ -12,6 +12,10 @@ local function goToGame(event)
 	composer.gotoScene("game")
 end
 
+local function goToOptions(event)
+          composer.gotoScene("optionsMenu")
+end
+
 local function changeDifficulty(event)
 	Difficulty = Difficulty+1
 	if(Difficulty == 4) then
@@ -57,10 +61,22 @@ function scene:create(event)
 	fontSize = 32,
 	align = "centre"
 	})
+	
+	local optionsMenu = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
+	optionsMenu.x = display.contentCenterX
+	optionsMenu.y = 855
+	DifficultyText = Ponyfont.newText({
+	text = "options,
+	x = optionsMenu.x,
+	y = optionsMenu.y,
+	font = "assets/coolfont.fnt",
+	fontSize = 32,
+	align = "centre"
+	})
 
 	local quit = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	quit.x = display.contentCenterX
-	quit.y = 855
+	quit.y = 955
 	local quitText = Ponyfont.newText({
 	text = "Quit Game",
 	x = quit.x,
@@ -71,6 +87,7 @@ function scene:create(event)
 	})
 		
 	newGame:addEventListener("tap", function() NewGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end)
+	optionsMenu:addEventListener("tap", optionsMenu)
 	options:addEventListener("tap", changeDifficulty)
 	quit:addEventListener("tap", closeGame)
 end

@@ -154,16 +154,18 @@ function userinterface.updatehearts(added)
 end 
 
 function BlinkHealth()
-    heart[1]:removeSelf()
-    if(fullHeart) then
-        heart[1] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
-        audio.play(oneHeart,{loops = 0, channel = 7, duration = 550})
-    else
-        heart[1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
+    if PlayerActive then
+        heart[1]:removeSelf()
+        if(fullHeart) then
+            heart[1] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
+            audio.play(oneHeart,{loops = 0, channel = 7, duration = 550})
+        else
+            heart[1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
+        end
+        heart[1].alpha = 0.7
+        heart[1].y = display.contentCenterY - 440
+        heart[1].x = display.contentCenterX - 890
     end
-    heart[1].alpha = 0.7
-    heart[1].y = display.contentCenterY - 440
-    heart[1].x = display.contentCenterX - 890
 end
 
 function userinterface.updatetime()
@@ -202,7 +204,7 @@ function userinterface.deathscreen()
         display.remove(eggCounter)
         Score = (timeSurvived/100 + 100*Health + 80*CoopsAlive) * DifficultyScore
         local optionsD = {
-            text = "Time Survived: " .. displayTime .. " +" .. (timeSurvived/100)*DifficultyScore .. " points\nHealth Remaining: " .. Health .. " +".. (100*Health)*DifficultyScore .. " points\nRemaining Coops: " .. CoopsAlive .. " +" .. (80*CoopsAlive)*DifficultyScore .. " points\nFinal Score: " .. Score .. " points",
+            text = "Time Survived: " .. displayTime .. ". +" .. (timeSurvived/100)*DifficultyScore .. " points\nHealth Remaining: " .. Health .. ". +".. (100*Health)*DifficultyScore .. " points\nRemaining Coops: " .. CoopsAlive .. ". +" .. (80*CoopsAlive)*DifficultyScore .. " points\nDifficulty Multiplier : x"..DifficultyScore.."\nFinal Score: " .. Score .. " points",
             x = display.contentCenterX,
             y = display.contentCenterY,
             font = "assets/coolfont.fnt",
