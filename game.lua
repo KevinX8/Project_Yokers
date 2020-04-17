@@ -349,6 +349,83 @@ end
 Runtime:addEventListener("key", keyEvent)
 Runtime:addEventListener("mouse", mouseEvent)
 
+local function closeGame()
+           native.requestExit()
+        end
+
+local function goToGame()
+           composer.gotoScene("game")
+        end
+ 
+local function goToOptions()
+           composer.gotoScene("main-menu.optionsMenu")
+        end
+
+function pauseGame(event)
+
+ local phase = event.phase
+    local name = event.keyName
+    local keyState = false
+    if phase == "down" then keyState = true end
+    if name == pauseKey and keyState then
+		physics.pause()
+		audio.pause()
+		transition.pause()
+		timer.cancel(TimeUI)
+		timer.cancel(ProgressTimer)
+		timer.cancel(EnemySpawner)
+		display.add(uiPause)
+		display.remove(ForegroundGroup)
+		display.remove(timemImage)
+		display.remove(timesImage)
+		display.remove(currentLevel)
+		display.remove(sImage)
+		display.remove(eggCounter)
+  
+		pauseMenuBackground.alpha = 1
+		pause.alpha = 0
+		newGame:addEventListener("tap", goToGame)
+		newGame.alpha = 1
+		resume:addEventListener("tap", resumeGame)
+		resume.alpha = 1
+		options:addEventListener("tap", goToOptions)
+		options.alpha = 1
+		quit:addEventListener("tap", closeGame)
+		quit.alpha = 1
+     end
+  end
+
+Runtime:addEventListener("key", keyEvent)
+Runtime:addEventListener("mouse", mouseEvent)
+
+function resumeGame(event)
+  physics.start()
+  audio.start()
+  transition.start()
+  timer.start(TimeUI)
+  timer.start(ProgressTimer)
+  timer.start(EnemySpawner)
+  display.remove(uiPause)
+  display.add(ForegroundGroup)
+  display.add(timemImage)
+  display.add(timesImage)
+  display.add(currentLevel)
+  display.add(sImage)
+  display.add(eggCounter)
+  
+  pauseMenuBackground.alpha = 0
+  pause.alpha = 1
+  newGame:removeEventListener("tap", gotoGame)
+  newGame.alpha = 0
+  resume:removeEventListener("tap", resumeGame)
+  resume.alpha = 0
+  options:removeEventListener("tap", gotoOptions)
+  options.alpha = 0
+  quit:removeEventListener("tap", closeGame)
+  quit.alpha = 0
+  
+end
+
 function scene:show(event)
     local sceneGroup = self.view
     local phase = event.phase
