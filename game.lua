@@ -1,5 +1,6 @@
 local composer = require("composer")
 local scene = composer.newScene()
+local timer = 0
 
 local options = require("main-menu.options")
 options.SetDifficulty()
@@ -301,6 +302,7 @@ local function progressLevel()
         EggCapacity = EggCapacity+EggCapacity/4
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
+        timer.performWithDelay(TimeDifficulty, enemy.boss, 0)
     end
 end
 
