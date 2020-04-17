@@ -90,6 +90,7 @@ function addCoopHealth(coop)
     coop.healthGray:setFillColor(116/255,7/255,7/255)
     coop.healthBorder:setFillColor(0)
     coop.invincible = false
+    coop.isActive = false
 end
 
 local function addCoop(x, y, number)
@@ -121,10 +122,13 @@ local coop12 = addCoop(3072, 4372, 12)
 
 Coops = {coop1, coop2}
 CoopsAlive = 2
+coop1.isActive = true
+coop2.isActive = true
 
 local function addCoopToGame(coop)
     CoopsAlive = CoopsAlive + 1
     Coops[CoopsAlive] = coop
+    coop.isActive = true
 end
 
 local function removeCoopFromGame(coop)
