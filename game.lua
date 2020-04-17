@@ -92,9 +92,10 @@ function addCoopHealth(coop)
     coop.invincible = false
 end
 
-local function addCoop(x, y)
+local function addCoop(x, y, number)
     local coop = display.newImageRect(BackgroundGroup, "assets/coop.png", 512, 512)
     coop.ammo = 0
+    coop.number = number
     BackgroundGroup:insert(15, coop)
     coop.x = x
     coop.y = y
@@ -105,18 +106,18 @@ local function addCoop(x, y)
     return coop
 end
 
-local coop1 = addCoop(0, 0)
-local coop2 = addCoop(1000, 1300)
-local coop3 = addCoop(3800, 300)
-local coop4 = addCoop(4850, 1400)
-local coop5 = addCoop(0, -3072)
-local coop6 = addCoop(1000, -1772)
-local coop7 = addCoop(3800, -2772)
-local coop8 = addCoop(4850, -1672)
-local coop9 = addCoop(0, 3072)
-local coop10 = addCoop(3072, 2772)
-local coop11 = addCoop(5072,3072)
-local coop12 = addCoop(3072, 4372)
+local coop1 = addCoop(0, 0, 5)
+local coop2 = addCoop(1000, 1300, 6)
+local coop3 = addCoop(3800, 300, 7)
+local coop4 = addCoop(4850, 1400, 8)
+local coop5 = addCoop(0, -3072, 1)
+local coop6 = addCoop(1000, -1772, 2)
+local coop7 = addCoop(3800, -2772, 3)
+local coop8 = addCoop(4850, -1672, 4)
+local coop9 = addCoop(0, 3072, 9)
+local coop10 = addCoop(3072, 2772, 10)
+local coop11 = addCoop(5072,3072, 11)
+local coop12 = addCoop(3072, 4372, 12)
 
 Coops = {coop1, coop2}
 CoopsAlive = 2
@@ -154,6 +155,7 @@ local function removeCoopFromGame(coop)
 end
 
 function CoopDamage(coop, damageAmount)
+    UserInteface.updatecoopscreen(coop.number)
     coop.health = coop.health - damageAmount
     coop.healthImage.width = coop.health / InitialCoopHealth * 150
     if coop.health < 1 then

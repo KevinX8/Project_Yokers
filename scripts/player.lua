@@ -250,7 +250,7 @@ function player.damage(damageAmount)
 end
 
 function player.fadeOut()
-    counter = counter-1
+    counter = counter - 1
     if(not(counter == 0)) then
         transition.fadeOut(playerImage, {time = (1000/(blinkSpeed*2)), onComplete = function() transition.fadeIn(playerImage, {time = 1000/(blinkSpeed*2), onComplete = player.fadeOut}) end})
     else

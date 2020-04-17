@@ -16,8 +16,11 @@ local eggImage
 local eggCounter
 local fullHeart = false
 local blinkTime = 300
+local counter = 0
+local blinkCoop = 3
 
 local heart = {}
+local coopicon = {}
 Timeloaded = 0
 
 function userinterface.InitialiseUI()
@@ -77,6 +80,36 @@ function userinterface.InitialiseUI()
     eggImage.x = display.contentCenterX - 920
     eggImage.y = display.contentCenterY + 400
     eggCounter = Ponyfont.newText(optionse)
+    coopUImap = display.newImageRect(ForegroundGroup, "assets/map.png", 300, 350)
+    coopUImap.alpha = 0.5
+    coopUImap.x = display.contentCenterX + 800
+    coopUImap.y = display.contentCenterY
+    local i = 1
+    local level = 3
+    local startx = coopUImap.x - 120
+    local starty = coopUImap.y - 130
+    local offsety = 0
+    local offsetx = 0
+    repeat
+    coopicon[i] = display.newImageRect(ForegroundGroup,"assets/coopicon" .. level .. ".png", 40 , 40)
+    coopicon[i].alpha = 0.7
+    coopicon[i].x = startx + offsetx
+    coopicon[i].y = starty + offsety
+    coopicon[i].beingdamaged = false
+    if i == 4 then
+        level = 1
+    elseif i == 6 then
+        level = 2
+    elseif i == 8 then
+        level = 4
+    end
+    offsetx = offsetx + 80
+    if i % 4 == 0 then
+        offsetx = 0
+        offsety = offsety + 130
+    end
+    i = i + 1
+    until i > 12
 end
 
 function userinterface.updatehearts(added)
@@ -179,15 +212,6 @@ function userinterface.deathscreen()
         Ponyfont.newText(optionsD)
 end
 
---[[function userinterface.updatecoophealth()
-    if gain then
-
-
-    else
-        local lifex = life[]
-
-end --]]
-
 --[[ 
 function goToPause(event)
 	composer.gotoScene("menus.pause-menu", {effect = "crossFade", time = 500})
@@ -206,5 +230,19 @@ function goToPause(event)
          }
        ) 
        --]]
+
+function userinterface.updatecoopscreen(cooptoflash)
+    counter = 2
+    userinterface.coopfadeOut(coopicon[cooptoflash])
+end
+
+function userinterface.coopfadeOut(flashme)
+    counter = counter-1
+    if(not(counter == 0) and flashme.beingdamaged == false) then
+        flashme.beingdamaged = true
+        transition.fadeOut(flashme, {time = (1000/(blinkCoop*2)), onComplete = function() transition.fadeIn(flashme, {time = 1000/(blinkCoop*2), onComplete = userinterface.coopfadeOut(flashme)}) end})
+        timer.performWithDelay(1000, function() flashme.beingdamaged = false flashme.alpha = 0.7 end,1)
+    end
+end
 
 return userinterface
