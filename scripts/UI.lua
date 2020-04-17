@@ -56,7 +56,7 @@ function userinterface.InitialiseUI()
         align = "centre"
     }
     local optionse = {
-        text = "20 / 30",
+        text = EgginInv.." / "..EggCapacity,
         x = display.contentCenterX - 790,
         y = display.contentCenterY + 390,
         font = "assets/coolfont.fnt",

@@ -1,19 +1,30 @@
 local composer = require("composer")
 local scene = composer.newScene()
+Difficulty = 2
 
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
 
 local function closeGame(event)
-		  native.requestExit()
-       end
+	native.requestExit()
+end
 
 local function goToGame(event)
-              composer.gotoScene("game")
-          end
+	composer.gotoScene("game")
+end
 
-local function goToOptions(event)
-              composer.gotoScene("options")
-          end
+local function changeDifficulty(event)
+	Difficulty = Difficulty+1
+	if(Difficulty == 4) then
+		Difficulty = 1
+	end
+	if(Difficulty == 1) then
+		DifficultyText.text = "Difficulty: Easy"
+	elseif (Difficulty == 2) then
+		DifficultyText.text = "Difficulty: Normal"
+	else
+		DifficultyText.text = "Difficulty: Hard"
+	end
+end
 
 function scene:create(event)
     
@@ -27,7 +38,8 @@ function scene:create(event)
 	newGame.x = display.contentCenterX
 	newGame.y = 705
 	local newGameText = Ponyfont.newText({
-	text = "New Game",x = newGame.x,
+	text = "New Game",
+	x = newGame.x,
 	y = newGame.y,
 	font = "assets/coolfont.fnt",
 	fontSize = 32,
@@ -37,8 +49,9 @@ function scene:create(event)
 	local options = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	options.x = display.contentCenterX
 	options.y = 780
-	local optionsText = Ponyfont.newText({
-	text = "Options",x = options.x,
+	DifficultyText = Ponyfont.newText({
+	text = "Difficulty: Normal",
+	x = options.x,
 	y = options.y,
 	font = "assets/coolfont.fnt",
 	fontSize = 32,
@@ -48,8 +61,9 @@ function scene:create(event)
 	local quit = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	quit.x = display.contentCenterX
 	quit.y = 855
-	local optionsText = Ponyfont.newText({
-	text = "Quit Game",x = quit.x,
+	local quitText = Ponyfont.newText({
+	text = "Quit Game",
+	x = quit.x,
 	y = quit.y,
 	font = "assets/coolfont.fnt",
 	fontSize = 32,
@@ -57,7 +71,7 @@ function scene:create(event)
 	})
 		
 	newGame:addEventListener("tap", goToGame)
-	options:addEventListener("tap", goToOptions)
+	options:addEventListener("tap", changeDifficulty)
 	quit:addEventListener("tap", closeGame)
 end
 

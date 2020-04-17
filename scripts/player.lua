@@ -33,7 +33,7 @@ local pushX = 0
 local pushY = 0
 local pushFrame = 0
 
-Health = 5
+Health = MaxHearts
 local slideActive = false
 local slideSpeed = 0
 local lakeWidth = 0

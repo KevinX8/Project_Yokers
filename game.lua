@@ -1,12 +1,13 @@
 local composer = require("composer")
 local scene = composer.newScene()
 
+local options = require("main-menu.options")
+options.SetDifficulty()
 Physics = require("physics")
 Player = require("scripts.player")
 local enemy = require("scripts.enemy")
 Decor = require("scripts.Decor")
 local UserInteface = require("scripts.UI")
-local options = require("main-menu.options")
 native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
@@ -17,7 +18,6 @@ LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Level = 1
-options.SetDifficulty("normal")
 EnemyAmount = 0
 EnemyLimit = 50
 
