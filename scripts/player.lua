@@ -217,14 +217,6 @@ end
 end
 
 function player.damage(damageAmount)
-    if Health <= 0 and PlayerActive then
-        transition.pause()
-        Physics.pause() --stops crashing lol
-        audio.pause()
-        PlayerActive = false
-        UserInteface.deathscreen()
-        return
-    end
     if damageAmount < 0 then
         local heal = Health - damageAmount
         while (Health < MaxHearts) and not (heal == Health) do
@@ -246,6 +238,14 @@ function player.damage(damageAmount)
         isInvincible = true
         player.fadeOut()
         counter = invincibilityTime * blinkSpeed
+    end
+    if Health <= 0 and PlayerActive then
+        transition.pause()
+        Physics.pause() --stops crashing lol
+        audio.pause()
+        PlayerActive = false
+        UserInteface.deathscreen()
+        return
     end
 end
 

@@ -141,7 +141,7 @@ local function removeCoopFromGame(coop)
                     Coops[i] = Coops[i+1]
                 end
                 CoopsAlive = CoopsAlive - 1
-                if(CoopsAlive <= 0) then
+                if(CoopsAlive <= 0) and PlayerActive then
                     transition.pause()
                     Physics.pause() --stops crashing lol
                     audio.pause()
