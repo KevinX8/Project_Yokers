@@ -1,6 +1,5 @@
 local composer = require("composer")
 local scene = composer.newScene()
-local timer = 0
 
 local options = require("main-menu.options")
 options.SetDifficulty()
