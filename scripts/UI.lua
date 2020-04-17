@@ -82,6 +82,8 @@ function userinterface.InitialiseUI()
     eggCounter = Ponyfont.newText(optionse)
     coopUImap = display.newImageRect(ForegroundGroup, "assets/map.png", 300, 350)
     coopUImap.alpha = 0.5
+    local coopUImap = display.newImageRect(ForegroundGroup, "assets/map.png", 300, 350)
+    coopUImap.alpha = 0.4
     coopUImap.x = display.contentCenterX + 800
     coopUImap.y = display.contentCenterY
     local i = 1
