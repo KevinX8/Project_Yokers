@@ -13,7 +13,7 @@ local function goToGame(event)
 end
 
 local function goToOptions(event)
-          composer.gotoScene("optionsMenu")
+          composer.gotoScene("main-menu.optionsMenu")
 end
 
 local function changeDifficulty(event)
@@ -66,7 +66,7 @@ function scene:create(event)
 	optionsMenu.x = display.contentCenterX
 	optionsMenu.y = 805
 	local optionsText = Ponyfont.newText({
-	text = "options",
+	text = "Options",
 	x = optionsMenu.x,
 	y = optionsMenu.y,
 	font = "assets/coolfont.fnt",
@@ -88,7 +88,7 @@ function scene:create(event)
 		
 	newGame:addEventListener("tap", function() NewGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end)
 	options:addEventListener("tap", changeDifficulty)
-	optionsMenu:addEventListener("tap", optionsMenu)
+	optionsMenu:addEventListener("tap", goToOptions)
 	quit:addEventListener("tap", closeGame)
 end
 
