@@ -17,25 +17,57 @@ function scene:create(event)
     
     local sceneGroup = self.view
 
-		local background = display.newImageRect(sceneGroup, "Images/Title_Screen.png", 1920, 1080)
+       local background = display.newImageRect(sceneGroup, "Images/Title_Screen.png", 1920, 1080)
 			  background.x = display.contentCenterX
 			  background.y = display.contentCenterY
 
-	    local muteSound = display.newImageRect(sceneGroup, "Images/mute.png", 500, 75)
+	local muteSound = display.newImageRect(sceneGroup, "Images/mute.png", 500, 75)
 			  muteSound.x = display.contentCenterX
-			  muteSound.y = 705
+			  muteSound.y = 655
+			  DifficultyText = Ponyfont.newText({
+			  text = "Difficulty: Normal",
+			  x = muteSound.x,
+			  y = muteSound.y,
+			  font = "assets/coolfont.fnt",
+		  	  fontSize = 32,
+		 	  align = "centre"
+		      })
 
-	    local volUp = display.newImageRect(sceneGroup, "Images/volup.png", 500, 75)
+	    local volUp = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
 			  volUp.x = display.contentCenterX
-			  volUp.y = 780
+			  volUp.y = 755
+			  DifficultyText = Ponyfont.newText({
+                          text = "Difficulty: Normal",
+			  x = volUp.x,
+			  y = volUp.y,
+			  font = "assets/coolfont.fnt",
+			  fontSize = 32,
+		          align = "centre"
+		      })
 			
-	    local volDown = display.newImageRect(sceneGroup, "Images/voldown.png",  500, 75)
+	  local volDown = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 			  volDown.x = display.contentCenterX
 			  volDown.y = 855
+			  DifficultyText = Ponyfont.newText({
+			  text = "Difficulty: Normal",
+			  x = volDown.x,
+			  y = volDown.y,
+			  font = "assets/coolfont.fnt",
+			  fontSize = 32,
+	 		  align = "centre"
+		     })
 
-	    local back = display.newImageRect(sceneGroup, "Images/back.png",  500, 75)
+	    local back = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 			  back.x = display.contentCenterX
-			  back.y = 930
+			  back.y = 955
+			  DifficultyText = Ponyfont.newText({
+			  text = "Difficulty: Normal",
+			  x = back.x,
+			  y = back.y,
+			  font = "assets/coolfont.fnt",
+			  fontSize = 32,
+			  align = "centre"
+		     })
 			
 			  muteSound:addEventListener("tap", MuteSound)
 			  volUp:addEventListener("tap", volumeUp)
