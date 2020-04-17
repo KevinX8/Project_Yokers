@@ -81,20 +81,28 @@ function userinterface.InitialiseUI()
     eggImage.y = display.contentCenterY + 400
     eggCounter = Ponyfont.newText(optionse)
     coopUImap = display.newImageRect(ForegroundGroup, "assets/map.png", 300, 350)
-    coopUImap.alpha = 0.4
+    coopUImap.alpha = 0.5
     coopUImap.x = display.contentCenterX + 800
-    coopUImap.y = display.contentCenterY + 280
+    coopUImap.y = display.contentCenterY
     local i = 1
+    local level = 3
     local startx = coopUImap.x - 120
     local starty = coopUImap.y - 130
     local offsety = 0
     local offsetx = 0
     repeat
-    coopicon[i] = display.newImageRect(ForegroundGroup,"assets/coop icon.png", 40 , 40)
-    coopicon[i].alpha = 0.9
+    coopicon[i] = display.newImageRect(ForegroundGroup,"assets/coopicon" .. level .. ".png", 40 , 40)
+    coopicon[i].alpha = 0.7
     coopicon[i].x = startx + offsetx
     coopicon[i].y = starty + offsety
     coopicon[i].beingdamaged = false
+    if i == 4 then
+        level = 1
+    elseif i == 6 then
+        level = 2
+    elseif i == 8 then
+        level = 4
+    end
     offsetx = offsetx + 80
     if i % 4 == 0 then
         offsetx = 0
@@ -146,18 +154,16 @@ function userinterface.updatehearts(added)
 end 
 
 function BlinkHealth()
-    if PlayerActive then
-        heart[1]:removeSelf()
-        if(fullHeart) then
-            heart[1] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
-            audio.play(oneHeart,{loops = 0, channel = 7, duration = 550})
-        else
-            heart[1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
-        end
-        heart[1].alpha = 0.7
-        heart[1].y = display.contentCenterY - 440
-        heart[1].x = display.contentCenterX - 890
+    heart[1]:removeSelf()
+    if(fullHeart) then
+        heart[1] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
+        audio.play(oneHeart,{loops = 0, channel = 7, duration = 550})
+    else
+        heart[1] = display.newImageRect(ForegroundGroup, "assets/emptyheart.png", 96, 84)
     end
+    heart[1].alpha = 0.7
+    heart[1].y = display.contentCenterY - 440
+    heart[1].x = display.contentCenterX - 890
 end
 
 function userinterface.updatetime()
@@ -196,7 +202,7 @@ function userinterface.deathscreen()
         display.remove(eggCounter)
         Score = (timeSurvived/100 + 100*Health + 80*CoopsAlive) * DifficultyScore
         local optionsD = {
-            text = "Time Survived: " .. displayTime .. ". +" .. (timeSurvived/100)*DifficultyScore .. " points\nHealth Remaining: " .. Health .. ". +".. (100*Health)*DifficultyScore .. " points\nRemaining Coops: " .. CoopsAlive .. ". +" .. (80*CoopsAlive)*DifficultyScore .. " points\nDifficulty Multiplier : x"..DifficultyScore.."\nFinal Score: " .. Score .. " points",
+            text = "Time Survived: " .. displayTime .. " +" .. (timeSurvived/100)*DifficultyScore .. " points\nHealth Remaining: " .. Health .. " +".. (100*Health)*DifficultyScore .. " points\nRemaining Coops: " .. CoopsAlive .. " +" .. (80*CoopsAlive)*DifficultyScore .. " points\nFinal Score: " .. Score .. " points",
             x = display.contentCenterX,
             y = display.contentCenterY,
             font = "assets/coolfont.fnt",
@@ -228,10 +234,6 @@ function goToPause(event)
 function userinterface.updatecoopscreen(cooptoflash)
     counter = 2
     userinterface.coopfadeOut(coopicon[cooptoflash])
-end
-
-function userinterface.deletecoop(cooptodelete)
-    display.remove(coopicon[cooptodelete])
 end
 
 function userinterface.coopfadeOut(flashme)

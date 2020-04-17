@@ -40,6 +40,7 @@ function enemy.new(startX, startY)
     local pickred = math.random(RedChance) + Level - 1
     local pickblue = math.random(BlueChance) + Level - 2
     local pickblack = math.random(BlackChance) + Level - 3
+    local boss = 1.1
     if pickred > RedChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
         self.type = 1
@@ -57,6 +58,7 @@ function enemy.new(startX, startY)
         self.type = 0
         self.health = 1
     end
+    self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 198, 250)
     BackgroundGroup:insert(21+iceLimit+lavaLimit,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
@@ -89,6 +91,10 @@ function enemy.new(startX, startY)
     end
 
     return self
+end
+
+function enemy.boss(self)
+    self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 198.4, 250)
 end
 
 function enemy.collisionEvent(self, event)
