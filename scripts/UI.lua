@@ -81,28 +81,20 @@ function userinterface.InitialiseUI()
     eggImage.y = display.contentCenterY + 400
     eggCounter = Ponyfont.newText(optionse)
     coopUImap = display.newImageRect(ForegroundGroup, "assets/map.png", 300, 350)
-    coopUImap.alpha = 0.5
+    coopUImap.alpha = 0.4
     coopUImap.x = display.contentCenterX + 800
-    coopUImap.y = display.contentCenterY
+    coopUImap.y = display.contentCenterY + 280
     local i = 1
-    local level = 3
     local startx = coopUImap.x - 120
     local starty = coopUImap.y - 130
     local offsety = 0
     local offsetx = 0
     repeat
-    coopicon[i] = display.newImageRect(ForegroundGroup,"assets/coopicon" .. level .. ".png", 40 , 40)
-    coopicon[i].alpha = 0.7
+    coopicon[i] = display.newImageRect(ForegroundGroup,"assets/coop icon.png", 40 , 40)
+    coopicon[i].alpha = 0.9
     coopicon[i].x = startx + offsetx
     coopicon[i].y = starty + offsety
     coopicon[i].beingdamaged = false
-    if i == 4 then
-        level = 1
-    elseif i == 6 then
-        level = 2
-    elseif i == 8 then
-        level = 4
-    end
     offsetx = offsetx + 80
     if i % 4 == 0 then
         offsetx = 0
