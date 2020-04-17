@@ -17,6 +17,7 @@ local leftButton = "a"
 local rightButton = "d"
 
 local playerImage
+PlayerActive = true
 
 local pressUp = false
 local pressDown = false
@@ -126,7 +127,7 @@ end
 function player.handleMouse(event)
     mouseX = event.x
     mouseY = event.y
-    if not(mouseX == display.contentCenterX and mouseY == display.contentCenterY) then
+    if not(mouseX == display.contentCenterX and mouseY == display.contentCenterY) and PlayerActive then
         mouseRotation = math.atan((mouseY-display.contentCenterY)/ (mouseX-display.contentCenterX))
         Cursor.x = mouseX
         Cursor.y = mouseY
@@ -158,6 +159,7 @@ end
 
 function player.enterFrame()
     local dt = getDeltaTime() -- Incorporating the Delta Time into the player speed makes the player go the same speed regardless of the framerate
+if PlayerActive then
     if pressUp == true and (playerImage.y - 64) > LevelBoundTop then
         BackgroundGroup.y = BackgroundGroup.y + (PlayerSpeed * dt)
     end
@@ -173,6 +175,7 @@ function player.enterFrame()
     -- Update player rotation
     local adjMouseX, adjMouseY = BackgroundGroup:contentToLocal(mouseX, mouseY)
     playerImage.rotation = math.deg(math.atan2(playerImage.y - adjMouseY, playerImage.x - adjMouseX)) - 90
+end
     -- Apply push / ice slide if one is active
     if slideActive then
         BackgroundGroup.x = BackgroundGroup.x + (slideSpeed * pushX)
@@ -214,6 +217,14 @@ function player.enterFrame()
 end
 
 function player.damage(damageAmount)
+    if Health <= 0 and PlayerActive then
+        transition.pause()
+        Physics.pause() --stops crashing lol
+        audio.pause()
+        PlayerActive = false
+        UserInteface.deathscreen()
+        return
+    end
     if damageAmount < 0 then
         local heal = Health - damageAmount
         while (Health < MaxHearts) and not (heal == Health) do

@@ -16,6 +16,7 @@ LevelBoundTop = display.contentCenterY - 1536
 LevelBoundBottom = display.contentCenterY + 1536
 LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
+Score = 0
 Level = 1
 options.SetDifficulty("normal")
 EnemyAmount = 0
@@ -186,6 +187,7 @@ native.setProperty( "mouseCursorVisible", false )
 audio.play(music, {channel = 1, loops = 0, duration = 660000})
 Player.start()
 UserInteface.InitialiseUI()
+TimeLoaded = system.getTimer()
 
 local function displayArrow()
     local arrow = display.newImageRect("assets/arrow.png", 500, 102)
@@ -289,9 +291,9 @@ local function progressLevel()
     end
 end
 
-timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
-timer.performWithDelay(TimeDifficulty, progressLevel, 1)
-timer.performWithDelay(100, UserInteface.updatetime, 0)
+EnemySpawner = timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
+ProgessTimer = timer.performWithDelay(TimeDifficulty, progressLevel, 1)
+TimeUI = timer.performWithDelay(100, UserInteface.updatetime, 0)
 
 local function keyEvent(event)
     Player.handleMovement(event)

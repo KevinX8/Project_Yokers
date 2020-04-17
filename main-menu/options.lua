@@ -19,6 +19,7 @@ function options.SetDifficulty(difficulty)
         BlueChance = 3
         BlackChance = 2
         InitialCoopHealth = 1000
+        DifficultyScore = 0
     end
     if difficulty == "normal" then
         EnemyLimit = 50
@@ -38,6 +39,7 @@ function options.SetDifficulty(difficulty)
         BlueChance = 19
         BlackChance = 19
         InitialCoopHealth = 1000
+        DifficultyScore = 1
     end
 end
 

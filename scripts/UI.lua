@@ -8,7 +8,6 @@ local oneHeart = audio.loadSound("audio/OneHeart.mp3")
 local livesText
 local scoreText
 
-local timeLoaded
 local timemImage
 local timesImage
 local sImage
@@ -30,7 +29,6 @@ function userinterface.InitialiseUI()
         heart[i].alpha = 0.7
         i = i + 1
     until i > MaxHearts
-    timeLoaded = system.getTimer()
     local optionsm = {
         text = "0m",
         x = display.contentCenterX + 762,
@@ -136,22 +134,49 @@ function BlinkHealth()
 end
 
 function userinterface.updatetime()
-    local timem = math.floor(((system.getTimer() - timeLoaded) / 60000)) .. "m"
-    local times = math.floor((((system.getTimer() - timeLoaded) % 60000) /1000) *10) * 0.1
+    local timem = math.floor(((system.getTimer() - TimeLoaded) / 60000)) .. "m"
+    local times = math.floor((((system.getTimer() - TimeLoaded) % 60000) /1000) *10) * 0.1
     timemImage.text = timem
     timesImage.text = times
 end
 
 function userinterface.updateEggs()
+    if PlayerActive then
     eggCounter.text = EgginInv .. " / " .. EggCapacity
+    end
 end
 
 function userinterface.updateLevelDisp()
+    if PlayerActive then
     currentLevel.text = "Level " .. Level 
+    end
 end
 
 function userinterface.deathscreen()
-    local deathmessage = display.newText
+        local timeSurvived = system.getTimer() - TimeLoaded
+        timer.cancel(TimeUI)
+        timer.cancel(ProgessTimer)
+        timer.cancel(EnemySpawner)
+        display.remove(ForegroundGroup)
+        local displayTime = timemImage.text .. " " .. timesImage.text .. "s"
+        display.remove(timemImage)
+        --timemImage.text = ""
+        display.remove(timesImage)
+        --timesImage.text = ""
+        display.remove(currentLevel)
+        --currentLevel.text = ""
+        display.remove(sImage)
+        display.remove(eggCounter)
+        Score = (timeSurvived + 100*Health + 80*CoopsAlive) * DifficultyScore
+        local optionsD = {
+            text = "Time Survived: " .. displayTime .. "\nHealth Remaining: " .. Health .. "\nRemaining Coops: " .. CoopsAlive .. "\nFinal Score: " .. Score,
+            x = display.contentCenterX,
+            y = display.contentCenterY,
+            font = "assets/coolfont.fnt",
+            fontSize = 32,
+            align = "left"
+        }
+        Ponyfont.newText(optionsD)
 end
 
 --[[function userinterface.updatecoophealth()
