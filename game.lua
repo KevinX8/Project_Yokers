@@ -1,12 +1,13 @@
 local composer = require("composer")
 local scene = composer.newScene()
 
+local options = require("main-menu.options")
+options.SetDifficulty()
 Physics = require("physics")
 Player = require("scripts.player")
 local enemy = require("scripts.enemy")
 Decor = require("scripts.Decor")
 local UserInteface = require("scripts.UI")
-local options = require("main-menu.options")
 native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
@@ -18,7 +19,6 @@ LevelBoundLeft = display.contentCenterX - 1536
 LevelBoundRight = display.contentCenterX + 1536
 Score = 0
 Level = 1
-options.SetDifficulty("normal")
 EnemyAmount = 0
 EnemyLimit = 50
 
@@ -251,7 +251,7 @@ local function progressLevel()
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
-        EggCapacity = EggCapacity +10
+        EggCapacity = EggCapacity*1.5
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
     elseif Level == 2 then
@@ -269,7 +269,7 @@ local function progressLevel()
         UserInteface.updateLevelDisp()
         timer.performWithDelay(TimeDifficulty, progressLevel, 1)
         MaxEggsPerEnemy = 3
-        EggCapacity = EggCapacity +10
+        EggCapacity = EggCapacity+EggCapacity/3
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
     elseif Level == 3 then
@@ -285,7 +285,7 @@ local function progressLevel()
         addCoopToGame(coop10)
         addCoopToGame(coop11)
         addCoopToGame(coop12)
-        EggCapacity = EggCapacity +10
+        EggCapacity = EggCapacity+EggCapacity/4
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
     end
