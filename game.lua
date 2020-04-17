@@ -128,7 +128,7 @@ local function addCoopToGame(coop)
 end
 
 local function removeCoopFromGame(coop)
-    UserInteface.deletecoop(coop)
+    UserInteface.deletecoop(coop.number)
     if CoopsAlive > 0 then
         for i =1, CoopsAlive do
             if coop.x == Coops[i].x and coop.y == Coops[i].y then
