@@ -6,12 +6,12 @@ local function goToMenu(event)
        end
        
 local function volumeUp(event)
-            audio.setVolume(audio.getVolume() + 0.1)
-        end
+          audio.setVolume(audio.getVolume() + 0.1)
+       end
 
 local function volumeDown(event)
-            audio.setVolume(audio.getVolume() - 0.1)
-        end     
+          audio.setVolume(audio.getVolume() - 0.1)
+       end     
 
 function scene:create(event)
     
@@ -24,8 +24,8 @@ function scene:create(event)
 	local muteSound = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
 			  muteSound.x = display.contentCenterX
 			  muteSound.y = 655
-			  DifficultyText = Ponyfont.newText({
-			  text = "Difficulty: Normal",
+			  local muteSoundText = Ponyfont.newText({
+			  text = "Mute Sound",
 			  x = muteSound.x,
 			  y = muteSound.y,
 			  font = "assets/coolfont.fnt",
@@ -36,8 +36,8 @@ function scene:create(event)
 	    local volUp = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
 			  volUp.x = display.contentCenterX
 			  volUp.y = 755
-			  DifficultyText = Ponyfont.newText({
-                          text = "Difficulty: Normal",
+			  local volUpText = Ponyfont.newText({
+                          text = "Volume Down",
 			  x = volUp.x,
 			  y = volUp.y,
 			  font = "assets/coolfont.fnt",
@@ -48,8 +48,8 @@ function scene:create(event)
 	  local volDown = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 			  volDown.x = display.contentCenterX
 			  volDown.y = 855
-			  DifficultyText = Ponyfont.newText({
-			  text = "Difficulty: Normal",
+			  local volDownText = Ponyfont.newText({
+			  text = "Volume Down",
 			  x = volDown.x,
 			  y = volDown.y,
 			  font = "assets/coolfont.fnt",
@@ -60,8 +60,8 @@ function scene:create(event)
 	    local back = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 			  back.x = display.contentCenterX
 			  back.y = 955
-			  DifficultyText = Ponyfont.newText({
-			  text = "Difficulty: Normal",
+			  local backText = Ponyfont.newText({
+			  text = "Back",
 			  x = back.x,
 			  y = back.y,
 			  font = "assets/coolfont.fnt",
