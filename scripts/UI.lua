@@ -167,9 +167,9 @@ function userinterface.deathscreen()
         --currentLevel.text = ""
         display.remove(sImage)
         display.remove(eggCounter)
-        Score = (timeSurvived + 100*Health + 80*CoopsAlive) * DifficultyScore
+        Score = (timeSurvived/100 + 100*Health + 80*CoopsAlive) * DifficultyScore
         local optionsD = {
-            text = "Time Survived: " .. displayTime .. "\nHealth Remaining: " .. Health .. "\nRemaining Coops: " .. CoopsAlive .. "\nFinal Score: " .. Score,
+            text = "Time Survived: " .. displayTime .. " +" .. (timeSurvived/100)*DifficultyScore .. " points\nHealth Remaining: " .. Health .. " +".. (100*Health)*DifficultyScore .. " points\nRemaining Coops: " .. CoopsAlive .. " +" .. (80*CoopsAlive)*DifficultyScore .. " points\nFinal Score: " .. Score .. " points",
             x = display.contentCenterX,
             y = display.contentCenterY,
             font = "assets/coolfont.fnt",
