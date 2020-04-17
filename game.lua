@@ -31,6 +31,8 @@ local mutedEffects = false
 local muteMusic = "n"
 local musicIsMuted = false
 
+local pauseKey = "esc"
+
 Physics.start()
 Physics.setGravity(0, 0)
 
