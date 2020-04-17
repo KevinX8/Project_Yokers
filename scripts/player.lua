@@ -242,7 +242,6 @@ function player.damage(damageAmount)
     if Health <= 0 and PlayerActive then
         transition.pause()
         Physics.pause() --stops crashing lol
-        audio.pause()
         PlayerActive = false
         UserInteface.deathscreen()
         return
