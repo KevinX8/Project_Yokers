@@ -206,6 +206,14 @@ local function spawnEnemyWave()
         local pickrandomedge = math.random(0,3)
         local enemyX
         local enemyY
+        if(Level == 3 and pickrandomedge == 0 and math.random() <  0.8) then
+            pickrandomedge = math.random(1,3)
+        elseif(Level == 4 and pickrandomedge == 1 and math.random() < 0.8)then
+            pickrandomedge = math.random(0,2)
+            if not pickrandomedge == 0 then
+                pickrandomedge = pickrandomedge+1
+            end
+        end
         if pickrandomedge == 0 then
             enemyX = math.random(LevelBoundLeft, LevelBoundRight)
             enemyY = LevelBoundBottom + 540
