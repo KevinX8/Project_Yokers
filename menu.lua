@@ -65,7 +65,7 @@ function scene:create(event)
 	local optionsMenu = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	optionsMenu.x = display.contentCenterX
 	optionsMenu.y = 805
-	DifficultyText = Ponyfont.newText({
+	local optionsText = Ponyfont.newText({
 	text = "options",
 	x = optionsMenu.x,
 	y = optionsMenu.y,
@@ -87,8 +87,8 @@ function scene:create(event)
 	})
 		
 	newGame:addEventListener("tap", function() NewGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end)
-	optionsMenu:addEventListener("tap", optionsMenu)
 	options:addEventListener("tap", changeDifficulty)
+	optionsMenu:addEventListener("tap", optionsMenu)
 	quit:addEventListener("tap", closeGame)
 end
 
