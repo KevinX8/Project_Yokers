@@ -135,11 +135,9 @@ function enemy.collisionEvent(self, event)
             self.instance.currentMovementSpeed = iceChickenAcceleratedSpeed -- ice chickens move faster on ice lakes
         end
         if self.myName == "enemy" and event.other.myName == "coop" and self.instance.canDamage and event.other.isActive then
-            if(event.other == Coops[i]) then
                 self.instance.canDamage = false
                 CoopDamage(event.other, coopDamagePerHit)
                 timer.performWithDelay(enemyDamageTime, function() self.instance.canDamage = true end, 1)
-            end
         end
         if self.myName == "enemy" and self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
