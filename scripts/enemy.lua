@@ -21,7 +21,7 @@ local dropHearty = 0
 local iceChickenAcceleratedSpeed = 600
 local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
 local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
-local coopDamagePerHit = 12
+SpawnBoss = false
 
 local explosionSound = audio.loadSound("audio/Explosion.wav")
 local enemyDamageTime = 1000
@@ -40,32 +40,58 @@ function enemy.new(startX, startY)
     local pickred = math.random(RedChance) + Level - 1
     local pickblue = math.random(BlueChance) + Level - 2
     local pickblack = math.random(BlackChance) + Level - 3
-    local boss = 1.1
+if not SpawnBoss then
     if pickred > RedChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
         self.type = 1
         self.health = 1
+        self.playerForgetDistance = 900
+        self.playerAttackDistance = 600
+        self.coopDamagePerHit = 12
+        self.currentMovementSpeed = movementSpeed
     elseif pickblue > BlueChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blueenemy.png", 93, 120)
         self.type = 2
         self.health = 3
+        self.playerForgetDistance = 900
+        self.playerAttackDistance = 600
+        self.coopDamagePerHit = 12
+        self.currentMovementSpeed = movementSpeed
     elseif pickblack > BlackChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blackenemy.png", 93, 120)
         self.type = 3
         self.health = 3
+        self.playerForgetDistance = 900
+        self.playerAttackDistance = 600
+        self.coopDamagePerHit = 12
+        self.currentMovementSpeed = movementSpeed
     else
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
         self.type = 0
         self.health = 1
+        self.playerForgetDistance = 900
+        self.playerAttackDistance = 600
+        self.coopDamagePerHit = 12
+        self.currentMovementSpeed = movementSpeed
     end
-    self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 198, 250)
+else
+        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 197, 256)
+        self.type = 4
+        self.health = 50
+        self.playerForgetDistance = 1300
+        self.playerAttackDistance = 1000
+        self.coopDamagePerHit = 100
+        self.currentMovementSpeed = 100
+        SpawnBoss = false
+end
     BackgroundGroup:insert(21+iceLimit+lavaLimit,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
     self.enemyImage.myName = "enemy"
+    self.enemyImage.type = self.type
+    self.enemyImage.coopDamagePerHit = self.coopDamagePerHit
     self.enemyImage.x = startX
     self.enemyImage.y = startY
-    self.currentMovementSpeed = movementSpeed
     self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
     self.enemyImage.collision = self.collisionEvent
     self.canDamage = true
@@ -91,10 +117,6 @@ function enemy.new(startX, startY)
     end
 
     return self
-end
-
-function enemy.boss(self)
-    self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 198.4, 250)
 end
 
 function enemy.collisionEvent(self, event)
@@ -142,7 +164,7 @@ function enemy.collisionEvent(self, event)
         end
         if self.myName == "enemy" and event.other.myName == "coop" and self.instance.canDamage and event.other.isActive then
                 self.instance.canDamage = false
-                CoopDamage(event.other, coopDamagePerHit)
+                CoopDamage(event.other, self.coopDamagePerHit)
                 timer.performWithDelay(enemyDamageTime, function() self.instance.canDamage = true end, 1)
         end
         if self.myName == "enemy" and self.instance.health <= 0 then
@@ -228,7 +250,7 @@ function enemy:aiUpdate() -- Called 30 times a second
             self.targetY = math.random(LevelBoundTop, LevelBoundBottom)
         end
     elseif self.aiState == "attackCoop" then
-        if playerDistance < playerAttackDistance then
+        if playerDistance < self.playerAttackDistance then
             self.aiState = "attackPlayer"
         end
         if(PlayerActive) then
@@ -236,7 +258,7 @@ function enemy:aiUpdate() -- Called 30 times a second
             self.targetY = closestCoop.y
         end
     elseif self.aiState == "attackPlayer" then
-        if playerDistance > playerForgetDistance then
+        if playerDistance > self.playerForgetDistance then
             self.aiState = "attackCoop"
         end
         self.targetX = playerX
@@ -245,7 +267,7 @@ function enemy:aiUpdate() -- Called 30 times a second
 
     if playerDistance < 150 then
         local playerDamage = 1
-        if self.type == 1 then
+        if self.type == 1 or self.type == 4 then
             playerDamage = 2
         end
         Player.damage(playerDamage)
