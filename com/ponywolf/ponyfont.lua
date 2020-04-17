@@ -10,7 +10,7 @@ M.cache = {} -- cache for loaded fonts
 -- build settings
 -- https://docs.coronalabs.com/plugin/utf8/index.html
 
-local utf8 = require("plugin.utf8") -- or require("lua-utf8") via luarocks 
+--local utf8 = require("plugin.utf8") -- or require("lua-utf8") via luarocks 
 
 -- property update events by Jonathan Beebe
 -- https://coronalabs.com/blog/2012/05/01/tutorial-property-callbacks/
