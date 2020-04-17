@@ -245,7 +245,8 @@ end
 function ClosestCoop(enemyX,enemyY)
     local lowestDistance = 100000
     local closestCoop = nil
-    for i, coop in ipairs(Coops) do
+    for i=1, CoopsAlive do
+        local coop = Coops[i]
         local distance = CalculateDistance(enemyX, enemyY, coop.x, coop.y)
         if distance < lowestDistance or closestCoop == nil then
             lowestDistance = distance
