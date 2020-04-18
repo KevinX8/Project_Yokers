@@ -166,11 +166,13 @@ function Decor.collisionEvent(self, event)
 end
 
  function Decor.enterFrame()
-    if (select(2,Player.getPosition()) < -1*(display.contentHeight/2+500)) then
-        SpawnSnowFlake()
-    elseif(select(2,Player.getPosition()) > (display.contentHeight/2+1500)) then
-        if(math.random() < .5) then
-            SpawnSpark()
+    if(PlayerActive) then
+        if (select(2,Player.getPosition()) < -1*(display.contentHeight/2+500)) then
+            SpawnSnowFlake()
+        elseif(select(2,Player.getPosition()) > (display.contentHeight/2+1500)) then
+            if(math.random() < .5) then
+                SpawnSpark()
+            end
         end
     end
 end

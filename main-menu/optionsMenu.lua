@@ -25,9 +25,9 @@ local function volumeUp(event)
 		lastVolume = (math.ceil(lastVolume *10) + 1)/10
 		audio.setVolume(lastVolume)
 		if (audio.getVolume() < 0.91) then
-			volumeText.text = "Volume: "..lastVolume
+			volumeText.text = "Volume: "..(lastVolume*100)
 		else
-			volumeText.text = "Volume: "..1
+			volumeText.text = "Volume: "..(100)
 			audio.setVolume(1)
 			lastVolume = 1
 		end
@@ -39,9 +39,9 @@ local function volumeDown(event)
 		lastVolume = (math.ceil(lastVolume *10) - 1)/10
 		audio.setVolume(lastVolume)
 		if(lastVolume > 0.09) then
-			volumeText.text = "Volume: "..lastVolume
+			volumeText.text = "Volume: "..(lastVolume*100)
 		else			
-			volumeText.text = "Volume: "..0
+			volumeText.text = "Volume: "..(0)
 			audio.setVolume(0)
 			lastVolume = 0
 		end		
@@ -104,7 +104,7 @@ function optionsMenu:create(event)
 	})
 	
 	volumeText = Ponyfont.newText({
-	text = "Volume: "..audio.getVolume(),
+	text = "Volume: "..(100),
 	x = display.contentCenterX,
 	y = 825,
 	font = "assets/coolfont.fnt",
@@ -134,7 +134,7 @@ function optionsMenu:show(event)
     muteSoundText.text = "Mute Sound"
     volUpText.text = "Volume Up"
 	volDownText.text = "Volume Down"
-	volumeText.text = "Volume: "..audio.getVolume()
+	volumeText.text = "Volume: "..(lastVolume*100)
     backText.text = "Back"
     hidden = false
 end
