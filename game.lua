@@ -364,14 +364,15 @@ Runtime:addEventListener("mouse", mouseEvent)
 local function keyEvent(event)
     Player.handleMovement(event)
     pauseGame(event)
- end
+end
 
 local function closeGame()
            native.requestExit()
         end
 
 local function goToGame()
-           composer.gotoScene("game")
+	   composer.removeScene("game")
+           composer.gotoScene("menu")
         end
  
 local function goToOptions()
