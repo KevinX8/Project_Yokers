@@ -135,32 +135,30 @@ end
         end
     end
 
-    --local bossammoCoop = CoopMostHealth(startX, startY)
     local totalAmmoGiven = 1/MinPlayerAccuracy*BossHealth
-    local temp = 0
     if(PlayerActive) and level == 4 then
         for i=1, 12 do
             for j=1, 12 do
                 if coop[i].health > coop[j].health then
-                    temp = coop[i].health
-                    if BossHealth == BossHealth/5*4 then
-                        temp.ammo = totalAmmoGiven/100*20
-                    elseif BossHealth == BossHealth/5*3 then
-                        temp.ammo = totalAmmoGiven/100*20
-                    elseif BossHealth == BossHealth/5*2 then
-                        temp.ammo = totalAmmoGiven/100*20
-                    elseif BossHealth == BossHealth/5*1 then
-                        temp.ammo = totalAmmoGiven/100*20
-                    end
+                    ammoCoop = coop[i].health
+
                 end
                 j = j+1
             end
             i = i+1
         end
+
+        if BossHealth == (BossHealth/5)*4 then
+            ammoCoop.ammo = ammoCoop.ammo + totalAmmoGiven/5
+        elseif BossHealth == (BossHealth/5)*3 then
+            ammoCoop.ammo = ammoCoop.ammo + totalAmmoGiven/5
+        elseif BossHealth == (BossHealth/5)*2 then
+            ammoCoop.ammo = ammoCoop.ammo + totalAmmoGiven/5
+        elseif BossHealth == BossHealth/5 then
+            ammoCoop.ammo = ammoCoop.ammo + totalAmmoGiven/5
+        end
         
     end
-
-
     return self
 end
 
