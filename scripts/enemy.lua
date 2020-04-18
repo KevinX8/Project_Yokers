@@ -210,17 +210,20 @@ function enemy.collisionEvent(self, event)
                 if self.instance.type == 2 and event.other.myName == "lavaLake" then
                     self.instance.health = 0 -- blue chickens die instantly in lava
                 end
-                if (self.instance.type == 1 or (self.instance.type == 4 and self.isInvincible)) and event.other.myName == "cactus" then
+                if ((self.instance.type == 1 or (self.instance.type == 4 and self.isInvincible)) and event.other.myName == "cactus") then
                     self.instance.health = self.instance.health + 1 -- red chickens are immune to cacti
+                end
+                if((self.instance.type == 3 or (self.instance.type == 4 and self.isInvincible)) and event.other.myName == "lavaLake") then
+                    self.instance.health = self.instance.health + 1--black chickens are immune to lava
                 end
             end
         elseif event.other.myName == "iceLake" and self.instance.type == 2 then
             self.instance.currentMovementSpeed = iceChickenAcceleratedSpeed -- ice chickens move faster on ice lakes
         end
         if self.myName == "enemy" and event.other.myName == "coop" and self.instance.canDamage and event.other.isActive then
-                self.instance.canDamage = false
-                CoopDamage(event.other, self.instance.coopDamagePerHit)
-                timer.performWithDelay(enemyDamageTime, function() self.instance.canDamage = true end, 1)
+            self.instance.canDamage = false
+            CoopDamage(event.other, self.instance.coopDamagePerHit)
+            timer.performWithDelay(enemyDamageTime, function() self.instance.canDamage = true end, 1)
         end
         if self.myName == "enemy" and self.instance.type == 4 and not self.isInvincible and self.instance.health % 10 == 0 then
             --after 10 hits the boss turns invincible and goes on a rampage at high speed
