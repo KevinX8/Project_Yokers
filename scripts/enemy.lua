@@ -317,6 +317,7 @@ end
 local function fireballCollision(self, event)
     if event.other.myName == "player" then
         Player.damage(fireballDamage)
+        timer.cancel(self.despawnTimer)
         self:removeSelf()
     end
 end
