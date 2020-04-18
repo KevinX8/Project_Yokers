@@ -322,7 +322,7 @@ local function fireballCollision(self, event)
 end
 
 function enemy:fireProjectile()
-    local newProjectile = display.newImageRect(BackgroundGroup, "assets/fireball.png", 300 / 8, 380 / 8)
+    local newProjectile = display.newImageRect(BackgroundGroup, "assets/fireBall.png", 300 / 8, 380 / 8)
     BackgroundGroup:insert(21+iceLimit+lavaLimit+BrokenCoops,newProjectile)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
     newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)

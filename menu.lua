@@ -51,7 +51,7 @@ function menu:create(event)
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 
-	local newGame = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
+	local newGame = display.newImageRect(sceneGroup, "assets/blank.png", 500, 75)
 	newGame.x = display.contentCenterX
 	newGame.y = 605
 	newGameText = Ponyfont.newText({
@@ -63,7 +63,7 @@ function menu:create(event)
 	align = "centre"
 	})
 		
-	local options = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
+	local options = display.newImageRect(sceneGroup, "assets/blank.png",  500, 75)
 	options.x = display.contentCenterX
 	options.y = 705
 	difficultyText = Ponyfont.newText({
@@ -75,7 +75,7 @@ function menu:create(event)
 	align = "centre"
 	})
 	
-	local optionsMenu = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
+	local optionsMenu = display.newImageRect(sceneGroup, "assets/blank.png",  500, 75)
 	optionsMenu.x = display.contentCenterX
 	optionsMenu.y = 805
 	optionsText = Ponyfont.newText({
@@ -87,7 +87,7 @@ function menu:create(event)
 	align = "centre"
 	})
 
-	local quit = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
+	local quit = display.newImageRect(sceneGroup, "assets/blank.png",  500, 75)
 	quit.x = display.contentCenterX
 	quit.y = 905
 	quitText = Ponyfont.newText({
