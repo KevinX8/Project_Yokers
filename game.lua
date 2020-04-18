@@ -439,6 +439,15 @@ function game:hide(event)
 
     if (phase == "will") then
        
+	Physics.stop()
+        audio.stop()
+	transition.stop()
+        timer.cancel(TimeUI)
+        timer.cancel(ProgressTimer)
+        timer.cancel(EnemySpawner)
+        Runtime:removeEventListener("key", keyEvent)
+        Runtime:removeEventListener("mouse", mouseEvent)	
+		
     elseif (phase == "did") then
    
     end
