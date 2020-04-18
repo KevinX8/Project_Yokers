@@ -19,8 +19,8 @@ local dropHeart = false
 local dropHeartx = 0
 local dropHearty = 0
 local iceChickenAcceleratedSpeed = 600
-local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
-local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
+--local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
+--local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 SpawnBoss = false
 
 local explosionSound = audio.loadSound("audio/Explosion.wav")
@@ -81,6 +81,7 @@ else
         self.playerForgetDistance = 1300
         self.playerAttackDistance = 1000
         self.coopDamagePerHit = 100
+        self.enemyImage.isInvincible = false
         self.currentMovementSpeed = 100
         SpawnBoss = false
 end
@@ -88,8 +89,6 @@ end
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
     self.enemyImage.myName = "enemy"
-    self.enemyImage.type = self.type
-    self.enemyImage.coopDamagePerHit = self.coopDamagePerHit
     self.enemyImage.x = startX
     self.enemyImage.y = startY
     self.aiLoopTimer = timer.performWithDelay(33.333333, function() enemy.aiUpdate(self) end, 0) -- 33.3333 ms delay = 30 times a second, 0 means it will repeat forever
@@ -132,20 +131,28 @@ function enemy.collisionEvent(self, event)
         if event.other.myName == "playerProjectile" and self.myName == "enemy" then
             if(event.other.isFireEgg) then
                 event.other.fireEggImage:removeSelf()
+                if not self.instance.type == 4 then
                 self.instance.health = 0
+                elseif not self.isInvincible then
+                    self.instance.health = self.instance.health - (self.instance.health % 10)  -- brings boss to next phase
+                end
                 Decor.SparkExplosion(event.other.x,event.other.y)
                 audio.play(explosionSound,{channel = 9, loops = 0, duration = 5000})
                 Explosion = true
                 ExplosionX = event.other.x
                 ExplosionY = event.other.y
             else
+                if not self.instance.type == 4 or not self.isInvincible then
                 self.instance.health = self.instance.health - 1
+                end
             end
             timer.cancel(event.other.despawnTimer)
             event.other:removeSelf()
+            if not self.instance.type == 4 or not self.isInvincible then
             local pushX = (event.other.x - event.target.x)
             local pushY = (event.other.y - event.target.y)
             self.instance:push(0.1, pushX, pushY)
+            end
         elseif (event.other.myName == "cactus" or event.other.myName == "lavaLake" or event.other.myName == "explosion") and self.myName == "enemy" then
             self.instance.health = self.instance.health - 1
             if event.other.myName == "explosion" then
@@ -155,7 +162,7 @@ function enemy.collisionEvent(self, event)
                 if self.instance.type == 2 and event.other.myName == "lavaLake" then
                     self.instance.health = 0 -- blue chickens die instantly in lava
                 end
-                if self.instance.type == 1 and event.other.myName == "cactus" then
+                if (self.instance.type == 1 or (self.instance.type == 4 and self.isInvincible)) and event.other.myName == "cactus" then
                     self.instance.health = self.instance.health + 1 -- red chickens are immune to cacti
                 end
             end
@@ -164,8 +171,14 @@ function enemy.collisionEvent(self, event)
         end
         if self.myName == "enemy" and event.other.myName == "coop" and self.instance.canDamage and event.other.isActive then
                 self.instance.canDamage = false
-                CoopDamage(event.other, self.coopDamagePerHit)
+                CoopDamage(event.other, self.instance.coopDamagePerHit)
                 timer.performWithDelay(enemyDamageTime, function() self.instance.canDamage = true end, 1)
+        end
+        if self.myName == "enemy" and self.instance.type == 4 and not self.isInvincible and self.instance.health % 10 == 0 then
+            --after 10 hits the boss turns invincible and goes on a rampage at high speed
+            self.isInvincible = true
+            self.instance.currentMovementSpeed = 400
+            timer.performWithDelay(8000, function() self.isInvincible = false self.instance.currentMovementSpeed = 100 end, 1)
         end
         if self.myName == "enemy" and self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
@@ -241,7 +254,7 @@ function enemy:aiUpdate() -- Called 30 times a second
         if math.random(0, 200) == 0 then -- 1 in 200 chance, 30 times a second - on average will roam for 6 seconds
             self.aiState = "attackCoop"
         end
-        if playerDistance < playerAttackDistance then
+        if playerDistance < self.playerAttackDistance then
             self.aiState = "attackPlayer"
         end
         if CalculateDistance(self.enemyImage.x, self.enemyImage.y, self.targetX, self.targetY) < 100 then
