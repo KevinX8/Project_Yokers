@@ -133,7 +133,7 @@ function Decor.collisionEvent(self, event)
                 local pushY = -1 * (event.target.y - event.other.y)
                 Player.slideOnIce(0.075, pushX, pushY, event.target.width)
             end
-        elseif (event.other.myName == "player" or (event.other.myName == "enemy" and not(event.other.instance.type == 3))) and (event.target.myName == "cactus" or event.target.myName == "lavaLake") then
+        elseif (event.other.myName == "player" or (event.other.myName == "enemy" and not(event.other.instance.type == 3 and event.target.myName == "lavaLake"))) and (event.target.myName == "cactus" or event.target.myName == "lavaLake") then
             local pushAmount
             if(event.target.myName == "cactus") then
                 pushAmount = 0.1
