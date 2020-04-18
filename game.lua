@@ -119,8 +119,8 @@ local coop7 = addCoop(3800, -2772, 3)
 local coop8 = addCoop(4850, -1672, 4)
 local coop9 = addCoop(0, 3072, 9)
 local coop10 = addCoop(3072, 2772, 10)
-local coop11 = addCoop(5072,3072, 11)
-local coop12 = addCoop(3072, 4372, 12)
+local coop11 = addCoop(3072,4372, 11)
+local coop12 = addCoop(5072, 3072, 12)
 
 Coops = {coop1, coop2}
 CoopsAlive = 2
