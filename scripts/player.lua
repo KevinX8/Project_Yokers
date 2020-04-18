@@ -44,6 +44,8 @@ local slideInitialY = 0
 local runtime = 0
 
 local isInvincible = false
+local updateAmmo = false
+local ammoCoop
 Explosion = false
 ExplosionX = 0
 ExplosionY = 0
@@ -66,20 +68,12 @@ function player.start()
 end
 
 function player.collisionEvent(self, event)
-    if event.phase == "began" then
-        if event.other.myName == "coop" then
-            if(event.other.ammo > 0)then
-                if EggCapacity-EgginInv < event.other.ammo then
-                    event.other.ammo = event.other.ammo - EggCapacity+EgginInv
-                    EgginInv = EggCapacity
-                    UserInteface.updateEggs()
-                else
-                    EgginInv = EgginInv + event.other.ammo
-                    UserInteface.updateEggs()
-                    event.other.ammo = 0
-                    event.other.eggImage:removeSelf()
-                end
-            end
+    if event.other.myName == "coop" then
+        if event.phase == "began" then
+            updateAmmo = true
+            ammoCoop = event.other
+        elseif(event.phase == "ended") then
+            updateAmmo = false
         end
     end
 end
@@ -216,6 +210,20 @@ end
             explosion.timer = timer.performWithDelay(400, function() explosion:removeSelf() end, 1)
         end
     end    
+    if(updateAmmo) then
+        if(ammoCoop.ammo > 0)then
+            if EggCapacity-EgginInv < ammoCoop.ammo then
+                ammoCoop.ammo = ammoCoop.ammo - EggCapacity+EgginInv
+                EgginInv = EggCapacity
+                UserInteface.updateEggs()
+            else
+                EgginInv = EgginInv + ammoCoop.ammo
+                UserInteface.updateEggs()
+                ammoCoop.ammo = 0
+                ammoCoop.eggImage:removeSelf()
+            end
+        end
+    end
 end
 
 function player.damage(damageAmount)
