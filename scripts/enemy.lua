@@ -12,7 +12,8 @@ local enemy = {
     pushY = 0,
     pushFrame = 0,
     currentMovementSpeed = 0,
-    readyToFire = true
+    readyToFire = true,
+    bossHealthPhase = 0
 }
 enemy.__index = enemy
 local movementSpeed = 250
@@ -102,6 +103,7 @@ else
         self.flashme = false
         self.flashFactor = 0.04
         self.currentMovementSpeed = 100
+        self.bossHealthPhase = 4
         SpawnBoss = false
 end
     BackgroundGroup:insert(21+iceLimit+lavaLimit+BrokenCoops,self.enemyImage)
@@ -135,31 +137,30 @@ end
         end
     end
 
-    local totalAmmoGiven = 1/MinPlayerAccuracy*BossHealth
-    if(PlayerActive) and level == 4 then
-        for i=1, 12 do
-            for j=1, 12 do
-                if coop[i].health > coop[j].health then
-                    ammoCoop = coop[i].health
-
-                end
-                j = j+1
+    if(PlayerActive) and self.type == 4 then
+        ammoCoop = Coops[1]
+        for i=1, CoopsAlive do
+            if Coops[i].health > ammoCoop.health then
+                ammoCoop = Coops[i]
             end
-            i = i+1
         end
-
-        if BossHealth == (BossHealth/5)*4 then
-            ammoCoop.ammo = ammoCoop.ammo + totalAmmoGiven/5
-        elseif BossHealth == (BossHealth/5)*3 then
-            ammoCoop.ammo = ammoCoop.ammo + totalAmmoGiven/5
-        elseif BossHealth == (BossHealth/5)*2 then
-            ammoCoop.ammo = ammoCoop.ammo + totalAmmoGiven/5
-        elseif BossHealth == BossHealth/5 then
-            ammoCoop.ammo = ammoCoop.ammo + totalAmmoGiven/5
-        end
-        
+        ammoCoop.ammo = ammoCoop.ammo + math.ceil((1/MinPlayerAccuracy*BossHealth)/5)
+        ammoCoop.eggImage = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
+        ammoCoop.eggImage.x = ammoCoop.x
+        ammoCoop.eggImage.y = ammoCoop.y-100       
     end
     return self
+end
+
+function spawnBossAmmo()
+    local ammoCoop
+    ammoCoop = Coops[1]
+    for i=1, CoopsAlive do
+        if Coops[i].health > ammoCoop.health then
+            ammoCoop = Coops[i]
+        end
+    end
+    ammoCoop.ammo = ammoCoop.ammo + math.ceil((1/MinPlayerAccuracy*BossHealth)/5) 
 end
 
 function enemy.collisionEvent(self, event)
@@ -224,15 +225,19 @@ function enemy.collisionEvent(self, event)
         if self.myName == "enemy" and self.instance.type == 4 and not self.isInvincible and self.instance.health % 10 == 0 then
             --after 10 hits the boss turns invincible and goes on a rampage at high speed
             if not bossInvincibilityTimer == nil then
-            timer.cancel(bossInvincibilityTimer)
+                timer.cancel(bossInvincibilityTimer)
             end
             self.instance.flashme = false
             self.isInvincible = true
             if not self.fill.effect == nil then
-            self.fill.effect.a = 0.8 --keeps the bosses phase color, looks cool imo
+                self.fill.effect.a = 0.8 --keeps the bosses phase color, looks cool imo
             end
             self.instance.allowShoot = false
             self.instance.health = self.instance.health - 1 -- to stop the trigger looping ie. makes his health 45 in reality
+            if(self.instance.health <= (self.instance.bossHealthPhase/5)*BossHealth) then
+                spawnBossAmmo()
+                self.instance.bossHealthPhase = self.instance.bossHealthPhase - 1
+            end
             self.instance.currentMovementSpeed = 400 + 50*self.phase
             self.phase = self.phase + 1
             timer.performWithDelay(8000, function() self.instance.currentMovementSpeed = 100 self.instance.allowShoot = true end, 1)
