@@ -112,16 +112,17 @@ end
     self.targetY = math.random(LevelBoundTop, LevelBoundBottom)
 
     local ammoCoop = ClosestCoop(startX, startY)
-    if(PlayerActive) then
+    if(PlayerActive) and not self.type == 4 then
         if ammoCoop.ammo == 0 then
             ammoCoop.eggImage = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
             ammoCoop.eggImage.x = ammoCoop.x
             ammoCoop.eggImage.y = ammoCoop.y-100
         end
+        
         if math.random() < MinPlayerAccuracy then
-            ammoCoop.ammo = ammoCoop.ammo + 1
+            ammoCoop.ammo = ammoCoop.ammo + 1 + math.floor(self.type/2)
         else
-            ammoCoop.ammo = ammoCoop.ammo + math.random(1,MaxEggsPerEnemy)
+            ammoCoop.ammo = ammoCoop.ammo + math.random(1,MaxEggsPerEnemy+math.floor(self.type/2))
         end
     end
 
