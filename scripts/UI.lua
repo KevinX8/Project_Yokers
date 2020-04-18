@@ -262,33 +262,30 @@ end
 
 function userinterface.pauseButtonMenuButtons()
         
-        local resume1 = {
-        text = "Resume",
+        local newGame1 = {
+        text = "New Game",
         x = display.contentCenterX,
         y = display.contentCenterY - 150,
         font = "assets/coolfont.fnt",
         fontSize = 32,
-        alpha = 0,
+        align = "centre"
+        }
+        
+        local resume1 = {
+        text = "Resume",
+        x = display.contentCenterX,
+        y = display.contentCenterY - 225,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
         align = "centre"
         }
         
         local options1 = {
         text = "Options",
         x = display.contentCenterX,
-        y = display.contentCenterY - 225,
-        font = "assets/coolfont.fnt",
-        fontSize = 32,
-        alpha = 0,
-        align = "centre"
-        }
-        
-        local newGame1 = {
-        text = "New Game",
-        x = display.contentCenterX,
         y = display.contentCenterY - 300,
         font = "assets/coolfont.fnt",
         fontSize = 32,
-        alpha = 0,
         align = "centre"
         }
         
@@ -298,7 +295,6 @@ function userinterface.pauseButtonMenuButtons()
         y = display.contentCenterY - 375,
         font = "assets/coolfont.fnt",
         fontSize = 32,
-        alpha = 0,
         align = "centre"
         }
         
