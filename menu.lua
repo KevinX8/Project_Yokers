@@ -11,7 +11,9 @@ local hidden = false
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
 
 local function closeGame(event)
-	native.requestExit()
+	if(not hidden) then
+		native.requestExit()
+	end
 end
 
 local function goToGame(event)
