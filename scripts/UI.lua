@@ -261,16 +261,6 @@ function userinterface.coopfadeOut(flashme)
 end
 
 function userinterface.pauseButtonMenuButtons()
-		
-        local newGame1 = {
-        text = "New Game",
-        x = display.contentCenterX,
-        y = display.contentCenterY - 75,
-        font = "assets/coolfont.fnt",
-        fontSize = 32,
-        alpha = 0,
-        align = "centre"
-        }
         
         local resume1 = {
         text = "Resume",
@@ -312,11 +302,10 @@ function userinterface.pauseButtonMenuButtons()
         align = "centre"
         }
         
-        newGameImage = Ponyfont.newText(newGame1)
-        resumeGameImage = Ponyfont.newText(resumeGame1)
-        optionsImage = Ponyfont.newText(options1)
-        quitImage = Ponyfont.newText(quit1)
-        
+        NewGameImage = Ponyfont.newText(newGame1)
+        ResumeGameImage = Ponyfont.newText(resume1)
+        OptionsImage = Ponyfont.newText(options1)
+        QuitImage = Ponyfont.newText(quit1)
     end
 
 return userinterface
