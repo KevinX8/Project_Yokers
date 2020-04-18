@@ -145,6 +145,8 @@ local function removeCoopFromGame(coop)
                 if Coops[i].ammo > 0 then
                     Coops[i].eggImage:removeSelf()
                 end
+                local brokenCoop = display.newImageRect(BackgroundGroup, "assets/brokenCoop.png", 512, 512)
+                BackgroundGroup:insert(20+iceLimit+lavaLimit,brokenCoop)
                 for i=i, (CoopsAlive-1) do
                     Coops[i] = Coops[i+1]
                 end
