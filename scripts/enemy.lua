@@ -4,14 +4,15 @@ local enemy = {
     targetX = 0,
     targetY = 0,
     aiLoopTimer = nil,
-    type = 0, -- 0 is normal, red is 1, blue is 2
+    type = 0, -- 0 is normal, red is 1, blue is 2, black is 3
     health = 1,
     pushActive = false,
     pushAmount = 0,
     pushX = 0,
     pushY = 0,
     pushFrame = 0,
-    currentMovementSpeed = 0
+    currentMovementSpeed = 0,
+    readyToFire = true
 }
 enemy.__index = enemy
 local movementSpeed = 250
@@ -19,6 +20,10 @@ local dropHeart = false
 local dropHeartx = 0
 local dropHearty = 0
 local iceChickenAcceleratedSpeed = 600
+local fireballSpeed = 1000
+local fireballLifetime = 5
+local timeBetweenFireballs = 1
+local fireballDamage = 1
 --local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
 --local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 SpawnBoss = false
@@ -31,10 +36,12 @@ local enemyDamageTime = 1000
 -- roaming - Randomly wandering around.
 -- attackCoop - Going after the closest chicken coop
 -- attackPlayer - Going after the player
+-- retreating - Running away from the player (black chicken only)
 --      AI Transitions between States:
 -- Roaming will become attackCoop after waiting a random amount of time
 -- roaming/attackCoop will become attackPlayer if the player comes really close or if the player attacks
 -- attackPlayer will become roaming if the player gets far away
+-- retreating will become attackPlayer once the enemy gets far enough away
 
 function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
@@ -62,8 +69,10 @@ if not SpawnBoss then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blackenemy.png", 93, 120)
         self.type = 3
         self.health = 3
-        self.playerForgetDistance = 900
-        self.playerAttackDistance = 600
+        self.playerForgetDistance = 1200
+        self.playerAttackDistance = 900
+        self.playerRetreatDistance = 500 -- If the player gets closer than this, chicken will retreat.
+        self.playerAcceptableDistance = 800 -- The distance the chicken will go when retreating.
         self.coopDamagePerHit = 12
         self.currentMovementSpeed = movementSpeed
     else
@@ -187,6 +196,9 @@ function enemy.collisionEvent(self, event)
         end
         if self.myName == "enemy" and self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
+            if not (self.instance.projectileReadyTimer == nil) then
+                timer.cancel(self.instance.projectileReadyTimer)
+            end
             EnemyAmount = EnemyAmount - 1
             dropHeart = true
             dropHeartx = self.x
@@ -279,8 +291,22 @@ function enemy:aiUpdate() -- Called 30 times a second
         if playerDistance > self.playerForgetDistance then
             self.aiState = "attackCoop"
         end
+        if self.type == 3 and playerDistance < self.playerRetreatDistance then
+            self.aiState = "retreating"
+        end
+        if self.type == 3 and self.readyToFire == true then
+            self:fireProjectile()
+        end
         self.targetX = playerX
         self.targetY = playerY
+    elseif self.aiState == "retreating" then
+        if playerDistance > self.playerAcceptableDistance then
+            self.aiState = "attackPlayer"
+        end
+        local deltaX = self.enemyImage.x - playerX
+        local deltaY = self.enemyImage.y - playerY
+        self.targetX = self.enemyImage.x + (2 * deltaX)
+        self.targetY = self.enemyImage.y + (2 * deltaY)
     end
 
     if playerDistance < 150 or (self.type == 4 and playerDistance < 200) then
@@ -290,6 +316,32 @@ function enemy:aiUpdate() -- Called 30 times a second
         end
         Player.damage(playerDamage)
     end
+end
+
+local function fireballCollision(self, event)
+    if event.other.myName == "player" then
+        Player.damage(fireballDamage)
+        timer.cancel(self.despawnTimer)
+        self:removeSelf()
+    end
+end
+
+function enemy:fireProjectile()
+    local newProjectile = display.newImageRect(BackgroundGroup, "assets/fireBall.png", 300 / 8, 380 / 8)
+    BackgroundGroup:insert(21+iceLimit+lavaLimit+BrokenCoops,newProjectile)
+    Physics.addBody(newProjectile, "dynamic", {isSensor=true})
+    newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)
+    newProjectile.myName = "enemyProjectile" -- also used for collision detection
+    newProjectile.x = self.enemyImage.x
+    newProjectile.y = self.enemyImage.y
+    newProjectile.rotation = self.enemyImage.rotation
+    local angle = math.rad(newProjectile.rotation - 90) -- use the projectile's direction to see which way it should go
+    newProjectile:setLinearVelocity(math.cos(angle) * fireballSpeed, math.sin(angle) * fireballSpeed)
+    newProjectile.despawnTimer = timer.performWithDelay(fireballLifetime * 1000, function() newProjectile:removeSelf() end, 1)
+    self.readyToFire = false
+    self.projectileReadyTimer = timer.performWithDelay(timeBetweenFireballs * 1000, function() self.readyToFire = true end)
+    newProjectile.collision = fireballCollision
+    newProjectile:addEventListener("collision")
 end
 
 function ClosestCoop(enemyX,enemyY)

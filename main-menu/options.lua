@@ -1,8 +1,8 @@
 local options = {}
-local debug = true
+local isDebug = true
 
 function options.SetDifficulty()
-    if debug then 
+    if isDebug then 
         EnemyLimit = 100
         TimeDifficulty = 5000
         TimeIncrease = 1000
@@ -37,7 +37,7 @@ function options.SetDifficulty()
         MinPlayerAccuracy = 0.5
         RedChance = 9
         BlueChance = 19
-        BlackChance = 19
+        BlackChance = 10
         InitialCoopHealth = 1500
         DifficultyScore = 0.5
     elseif(Difficulty == "Normal") then
@@ -56,7 +56,7 @@ function options.SetDifficulty()
         MinPlayerAccuracy = 0.7
         RedChance = 9
         BlueChance = 19
-        BlackChance = 19
+        BlackChance = 10
         InitialCoopHealth = 1000
         DifficultyScore = 1
     elseif Difficulty == "Hard" then
@@ -75,7 +75,7 @@ function options.SetDifficulty()
         MinPlayerAccuracy = 0.85
         RedChance = 9
         BlueChance = 19
-        BlackChance = 19
+        BlackChance = 10
         InitialCoopHealth = 750
         DifficultyScore = 1.5
     end
