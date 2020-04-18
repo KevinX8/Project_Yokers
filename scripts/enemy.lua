@@ -24,6 +24,7 @@ local fireballSpeed = 1000
 local fireballLifetime = 5
 local timeBetweenFireballs = 1
 local fireballDamage = 1
+local bossInvincibilityTimer
 --local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
 --local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 SpawnBoss = false
@@ -47,6 +48,9 @@ function enemy.new(startX, startY)
     local pickred = math.random(RedChance) + Level - 1
     local pickblue = math.random(BlueChance) + Level - 2
     local pickblack = math.random(BlackChance) + Level - 3
+    if debug then
+        SpawnBoss = true
+    end
 if not SpawnBoss then
     if pickred > RedChance then
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
@@ -90,7 +94,7 @@ else
         self.playerForgetDistance = 1300
         self.playerAttackDistance = 1000
         self.coopDamagePerHit = 100
-        self.enemyImage.isInvincible = false
+        self.enemyImage.isInvincible = true
         self.currentMovementSpeed = 100
         SpawnBoss = false
 end
@@ -185,6 +189,7 @@ function enemy.collisionEvent(self, event)
         end
         if self.myName == "enemy" and self.instance.type == 4 and not self.isInvincible and self.instance.health % 10 == 0 then
             --after 10 hits the boss turns invincible and goes on a rampage at high speed
+            timer.cancel(bossInvincibilityTimer)
             self.isInvincible = true
             self.instance.health = self.instance.health - 1 -- to stop the trigger looping ie. makes his health 45 in reality
             self.instance.currentMovementSpeed = 400
@@ -290,8 +295,12 @@ function enemy:aiUpdate() -- Called 30 times a second
         if self.type == 3 and playerDistance < self.playerRetreatDistance then
             self.aiState = "retreating"
         end
-        if self.type == 3 and self.readyToFire == true then
+        if (self.type == 3 or (self.type == 4 and math.random(30) == 30)) and self.readyToFire == true then
             self:fireProjectile()
+            if self.type == 4 then
+                self.enemyImage.isInvincible = false
+                bossInvincibilityTimer = timer.performWithDelay(5000, function() self.enemyImage.isInvincible = true end, 1)
+            end
         end
         self.targetX = playerX
         self.targetY = playerY

@@ -1,5 +1,5 @@
 local options = {}
-local isDebug = true
+local isDebug = false
 
 function options.SetDifficulty()
     if isDebug then 
