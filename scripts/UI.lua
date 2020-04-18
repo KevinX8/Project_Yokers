@@ -179,31 +179,65 @@ function userinterface.updateLevelDisp()
     end
 end
 
-function userinterface.deathscreen()
-        local timeSurvived = system.getTimer() - TimeLoaded
-        timer.cancel(TimeUI)
-        timer.cancel(ProgessTimer)
-        timer.cancel(EnemySpawner)
-        display.remove(ForegroundGroup)
-        local displayTime = timemImage.text .. " " .. timesImage.text .. "s"
-        display.remove(timemImage)
-        --timemImage.text = ""
-        display.remove(timesImage)
-        --timesImage.text = ""
-        display.remove(currentLevel)
-        --currentLevel.text = ""
-        display.remove(sImage)
-        display.remove(eggCounter)
-        Score = (timeSurvived/100 + 100*Health + 80*CoopsAlive) * DifficultyScore
-        local optionsD = {
-            text = "Time Survived: " .. displayTime .. ". +" .. (timeSurvived/100)*DifficultyScore .. " points\nHealth Remaining: " .. Health .. ". +".. (100*Health)*DifficultyScore .. " points\nRemaining Coops: " .. CoopsAlive .. ". +" .. (80*CoopsAlive)*DifficultyScore .. " points\nDifficulty Multiplier : x"..DifficultyScore.."\nFinal Score: " .. Score .. " points",
-            x = display.contentCenterX,
-            y = display.contentCenterY,
-            font = "assets/coolfont.fnt",
-            fontSize = 32,
-            align = "left"
-        }
-        Ponyfont.newText(optionsD)	
+function userinterface.deathscreen(timeSurvived, coopsAllDead)
+    timer.cancel(TimeUI)
+    timer.cancel(ProgessTimer)
+    timer.cancel(EnemySpawner)
+    display.remove(ForegroundGroup)
+    local displayTime = timemImage.text .. " " .. timesImage.text .. "s"
+    display.remove(timemImage)
+    --timemImage.text = ""
+    display.remove(timesImage)
+    --timesImage.text = ""
+    display.remove(currentLevel)
+    --currentLevel.text = ""
+    display.remove(sImage)
+    display.remove(eggCounter)
+    local originalScore = (math.floor(timeSurvived/100) + 80*CoopsAlive)
+    local symbol = "+"
+    Score = math.ceil(originalScore*DifficultyScore)
+    if(Score<originalScore) then
+        symbol = "-"
+    end
+    local deathText = {
+        text = "You Died!",
+        x = display.contentCenterX,
+        y = display.contentCenterY-200,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "center"
+    }
+    local optionsD = {
+        text = "Time Survived: \nRemaining Coops: \nDifficulty Multiplier : \nFinal Score:",
+        x = display.contentCenterX-500,
+        y = display.contentCenterY,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "left"
+    }
+    local optionsE = {
+        text = timeSurvived .. "ms\n".. CoopsAlive .. "\n"..DifficultyScore.."\n" .. Score,
+        x = display.contentCenterX,
+        y = display.contentCenterY,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "center"
+    }
+    local optionsF = {
+        text = "+" .. math.floor(timeSurvived/100) .. " points\n+" .. (80*CoopsAlive) .. " points\n"..symbol..math.abs(Score-originalScore).."points\n".. Score .. " points",
+        x = display.contentCenterX+500,
+        y = display.contentCenterY,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "right"
+    }
+    if(coopsAllDead) then
+        deathText.text = "All Of Your Coops Were Destroyed!"
+    end
+    Ponyfont.newText(deathText)
+    Ponyfont.newText(optionsD)
+    Ponyfont.newText(optionsE)
+    Ponyfont.newText(optionsF)
 end
 
 

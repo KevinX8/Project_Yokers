@@ -159,7 +159,7 @@ local function removeCoopFromGame(coop)
                     transition.pause()
                     Physics.pause() --stops crashing lol
                     PlayerActive = false
-                    UserInteface.deathscreen()
+                    UserInteface.deathscreen(system.getTimer() - TimeLoaded, true)
                 end
             end
         end

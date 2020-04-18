@@ -221,7 +221,7 @@ function player.damage(damageAmount)
         transition.pause()
         Physics.pause() --stops crashing lol
         PlayerActive = false
-        UserInteface.deathscreen()
+        UserInteface.deathscreen(system.getTimer() - TimeLoaded, false)
         return
     end
     if damageAmount < 0 and PlayerActive then
