@@ -93,7 +93,7 @@ function player.throwProjectile()
         audioChannelSelect = audioChannelSelect + 1
     end
     local newProjectile = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
-    BackgroundGroup:insert(21+iceLimit+lavaLimit,newProjectile)
+    BackgroundGroup:insert(21+iceLimit+lavaLimit+BrokenCoops,newProjectile)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
     newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)
     newProjectile.myName = "playerProjectile" -- also used for collision detection

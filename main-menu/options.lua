@@ -21,7 +21,7 @@ function options.SetDifficulty()
         BlackChance = 2
         InitialCoopHealth = 1000
         DifficultyScore = 1
-    elseif(Difficulty == 1) then
+    elseif(Difficulty == "Easy") then
         EnemyLimit = 30
         TimeDifficulty = 120000
         TimeIncrease = 30000
@@ -40,7 +40,7 @@ function options.SetDifficulty()
         BlackChance = 19
         InitialCoopHealth = 1500
         DifficultyScore = 0.5
-    elseif(Difficulty == 2) then
+    elseif(Difficulty == "Normal") then
         EnemyLimit = 50
         TimeDifficulty = 120000
         TimeIncrease = 30000
@@ -59,7 +59,7 @@ function options.SetDifficulty()
         BlackChance = 19
         InitialCoopHealth = 1000
         DifficultyScore = 1
-    elseif Difficulty == 3 then
+    elseif Difficulty == "Hard" then
         EnemyLimit = 60
         TimeDifficulty = 120000
         TimeIncrease = 30000

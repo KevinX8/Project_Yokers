@@ -1,5 +1,5 @@
 local composer = require("composer")
-local scene = composer.newScene()
+local game = composer.newScene()
 
 local options = require("main-menu.options")
 options.SetDifficulty()
@@ -12,6 +12,7 @@ native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
 LevelObjects = {} -- Holds level objects (coops, ice lakes, etc.) in the form {x, y, size}
+BrokenCoops = 0
 
 LevelBoundTop = display.contentCenterY - 1536
 LevelBoundBottom = display.contentCenterY + 1536
@@ -119,8 +120,8 @@ local coop7 = addCoop(3800, -2772, 3)
 local coop8 = addCoop(4850, -1672, 4)
 local coop9 = addCoop(0, 3072, 9)
 local coop10 = addCoop(3072, 2772, 10)
-local coop11 = addCoop(5072,3072, 11)
-local coop12 = addCoop(3072, 4372, 12)
+local coop11 = addCoop(3072,4372, 11)
+local coop12 = addCoop(5072, 3072, 12)
 
 Coops = {coop1, coop2}
 CoopsAlive = 2
@@ -145,6 +146,11 @@ local function removeCoopFromGame(coop)
                 if Coops[i].ammo > 0 then
                     Coops[i].eggImage:removeSelf()
                 end
+                local brokenCoop = display.newImageRect(BackgroundGroup, "assets/brokenCoop.png", 512, 512)
+                BackgroundGroup:insert(21+iceLimit+lavaLimit,brokenCoop)
+                brokenCoop.x = coop.x
+                brokenCoop.y = coop.y
+                BrokenCoops = BrokenCoops + 1
                 for i=i, (CoopsAlive-1) do
                     Coops[i] = Coops[i+1]
                 end
@@ -205,17 +211,19 @@ UserInteface.InitialiseUI()
 TimeLoaded = system.getTimer()
 
 local function displayArrow()
-    local arrow = display.newImageRect("assets/arrow.png", 500, 102)
-    ForegroundGroup:insert(1, arrow)
-    arrow.x = display.contentCenterX
-    arrow.y = display.contentCenterY
-    audio.play(newLevelSound,{channel = 6, loops = 0, duration = 800})
-    if Level == 3 then
-        arrow.rotation = arrow.rotation - 90
-    elseif Level == 4 then
-        arrow.rotation = arrow.rotation + 90
+    if PlayerActive then
+        local arrow = display.newImageRect("assets/arrow.png", 500, 102)
+        ForegroundGroup:insert(1, arrow)
+        arrow.x = display.contentCenterX
+        arrow.y = display.contentCenterY
+        audio.play(newLevelSound,{channel = 6, loops = 0, duration = 800})
+        if Level == 3 then
+            arrow.rotation = arrow.rotation - 90
+        elseif Level == 4 then
+            arrow.rotation = arrow.rotation + 90
+        end
+        arrow.despawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
     end
-    arrow.despawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
 end
 
 local function spawnEnemyWave()
@@ -428,7 +436,7 @@ function resumeGame(event)
   
 end
 
-function scene:show(event)
+function game:show(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -438,7 +446,7 @@ function scene:show(event)
     end
 end
 
-function scene:hide(event)
+function game:hide(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -449,7 +457,7 @@ function scene:hide(event)
     end
 end
 
-function scene:destroy(event)
+function game:destroy(event)
     local sceneGroup = self.view
    
 end
@@ -457,10 +465,10 @@ end
 -- -----------------------------------------------------------------------------------
 -- Scene event function listeners
 -- -----------------------------------------------------------------------------------
-scene:addEventListener("create", scene)
-scene:addEventListener("show", scene)
-scene:addEventListener("hide", scene)
-scene:addEventListener("destroy", scene)
+game:addEventListener("create", game)
+game:addEventListener("show", game)
+game:addEventListener("hide", game)
+game:addEventListener("destroy", game)
 -- -----------------------------------------------------------------------------------
 
-return scene
+return game

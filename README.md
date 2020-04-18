@@ -23,3 +23,4 @@ Use "W","A","S","D" keys to move.
 Use Mouse1 to shoot.
 Use "M" key to mute sound effects.
 Use "N" key to mute music.
+Use "ESC" key to pause game.
