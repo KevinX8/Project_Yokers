@@ -206,7 +206,6 @@ BackgroundGroup:insert(15, LavaWallLeft)
 Decor.generateDecor()
 native.setProperty( "mouseCursorVisible", false )
 audio.play(music, {channel = 1, loops = -1, duration = 660000})
-Player.start()
 UserInteface.InitialiseUI()
 TimeLoaded = system.getTimer()
 
@@ -320,6 +319,7 @@ ProgessTimer = timer.performWithDelay(TimeDifficulty, progressLevel, 1)
 TimeUI = timer.performWithDelay(100, UserInteface.updatetime, 0)
 BackgroundGroup.x = 0
 BackgroundGroup.y = 0
+Player.start()
 
 local function keyEvent(event)
     Player.handleMovement(event)
