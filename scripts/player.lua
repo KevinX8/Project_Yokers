@@ -219,7 +219,7 @@ end
 end
 
 function player.damage(damageAmount)
-    if Health <= 1 and not isInvincible and PlayerActive then
+    if Health <= 1 and not isInvincible and PlayerActive and damageAmount > 0 then
         transition.pause()
         Physics.pause() --stops crashing lol
         PlayerActive = false
