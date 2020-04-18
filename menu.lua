@@ -1,6 +1,12 @@
 local composer = require("composer")
 local menu = composer.newScene()
-Difficulty = 2
+Difficulty = "Normal"
+local sceneGroup
+local optionsText
+local quitText
+local newGameText
+local difficultyText
+local hidden = false
 
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
 
@@ -9,30 +15,35 @@ local function closeGame(event)
 end
 
 local function goToGame(event)
-	composer.gotoScene("game")
+	if(not hidden) then
+		composer.gotoScene("game")
+	end
 end
 
 local function goToOptions(event)
-          composer.gotoScene("main-menu.optionsMenu")
+	if(not hidden) then
+		composer.gotoScene("main-menu.optionsMenu")
+	end
 end
 
 local function changeDifficulty(event)
-	Difficulty = Difficulty+1
-	if(Difficulty == 4) then
-		Difficulty = 1
-	end
-	if(Difficulty == 1) then
-		DifficultyText.text = "Difficulty: Easy"
-	elseif (Difficulty == 2) then
-		DifficultyText.text = "Difficulty: Normal"
-	else
-		DifficultyText.text = "Difficulty: Hard"
+	if (not hidden) then
+		if(Difficulty == "Hard") then
+			difficultyText.text = "Difficulty: Easy"
+			Difficulty = "Easy"
+		elseif (Difficulty == "Easy") then
+			difficultyText.text = "Difficulty: Normal"
+			Difficulty = "Normal"
+		else
+			difficultyText.text = "Difficulty: Hard"
+			Difficulty = "Hard"
+		end
 	end
 end
 
 function menu:create(event)
     
-    local sceneGroup = self.view
+    sceneGroup = self.view
 
 	local background = display.newImageRect(sceneGroup, "assets/Title Screen.png", 1920, 1080)
 	background.x = display.contentCenterX
@@ -41,7 +52,7 @@ function menu:create(event)
 	local newGame = display.newImageRect(sceneGroup, "Assets/blank.png", 500, 75)
 	newGame.x = display.contentCenterX
 	newGame.y = 605
-	NewGameText = Ponyfont.newText({
+	newGameText = Ponyfont.newText({
 	text = "New Game",
 	x = newGame.x,
 	y = newGame.y,
@@ -53,7 +64,7 @@ function menu:create(event)
 	local options = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	options.x = display.contentCenterX
 	options.y = 705
-	DifficultyText = Ponyfont.newText({
+	difficultyText = Ponyfont.newText({
 	text = "Difficulty: Normal",
 	x = options.x,
 	y = options.y,
@@ -65,7 +76,7 @@ function menu:create(event)
 	local optionsMenu = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	optionsMenu.x = display.contentCenterX
 	optionsMenu.y = 805
-	local optionsText = Ponyfont.newText({
+	optionsText = Ponyfont.newText({
 	text = "Options",
 	x = optionsMenu.x,
 	y = optionsMenu.y,
@@ -77,7 +88,7 @@ function menu:create(event)
 	local quit = display.newImageRect(sceneGroup, "Assets/blank.png",  500, 75)
 	quit.x = display.contentCenterX
 	quit.y = 905
-	local quitText = Ponyfont.newText({
+	quitText = Ponyfont.newText({
 	text = "Quit Game",
 	x = quit.x,
 	y = quit.y,
@@ -86,38 +97,28 @@ function menu:create(event)
 	align = "centre"
 	})
 		
-	newGame:addEventListener("tap", function() NewGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end)
+	newGame:addEventListener("tap", function() if(not hidden) then newGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end end)
 	options:addEventListener("tap", changeDifficulty)
 	optionsMenu:addEventListener("tap", goToOptions)
 	quit:addEventListener("tap", closeGame)
 end
 
 function menu:show(event)
-    local sceneGroup = self.view
-    local phase = event.phase
-
-	if (phase == "will") then
-	
-	elseif (phase == "did") then
-	
-	end
+	newGameText.text = "New Game"
+	difficultyText.text = "Difficulty: "..Difficulty
+	optionsText.text = "Options"
+	quitText.text = "Quit Game"
+	hidden = false
  end
 
 
 function menu:hide(event)
-    local sceneGroup = self.view
-    local phase = event.phase
-
-    if (phase == "will") then
-      
-    elseif (phase == "did") then
-	composer.removeScene("menu")
-    end
+	newGameText.text = ""
+	difficultyText.text = ""
+	optionsText.text = ""
+	quitText.text = ""
+	hidden = true
 end
-
-function menu:destroy(event)
-    local sceneGroup = self.view
-  end
 
 -- -----------------------------------------------------------------------------------
 -- Scene event function listeners
@@ -125,7 +126,6 @@ function menu:destroy(event)
 menu:addEventListener("create", menu)
 menu:addEventListener("show", menu)
 menu:addEventListener("hide", menu)
-menu:addEventListener("destroy", menu)
 -- -----------------------------------------------------------------------------------
 
 return menu
