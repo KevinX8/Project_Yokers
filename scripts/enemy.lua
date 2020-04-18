@@ -77,7 +77,7 @@ if not SpawnBoss then
 else
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 197, 256)
         self.type = 4
-        self.health = 50
+        self.health = BossHealth
         self.playerForgetDistance = 1300
         self.playerAttackDistance = 1000
         self.coopDamagePerHit = 100
