@@ -31,7 +31,7 @@ local mutedEffects = false
 local muteMusic = "n"
 local musicIsMuted = false
 
-local pauseKey = "esc"
+local pauseKey = "escape"
 
 Physics.start()
 Physics.setGravity(0, 0)
@@ -273,7 +273,7 @@ local function progressLevel()
         EnemyLimit = EnemyLimit+25
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
-        timer.performWithDelay(TimeDifficulty, progressLevel, 1)
+        ProgressTimer = timer.performWithDelay(TimeDifficulty, progressLevel, 1)
         EggCapacity = EggCapacity*1.5
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
@@ -290,7 +290,7 @@ local function progressLevel()
         EnemyLimit =  EnemyLimit+50
         timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
-        timer.performWithDelay(TimeDifficulty, progressLevel, 1)
+        ProgressTimer = timer.performWithDelay(TimeDifficulty, progressLevel, 1)
         MaxEggsPerEnemy = 3
         EggCapacity = EggCapacity+EggCapacity/3
         UserInteface.updateEggs()
@@ -311,13 +311,15 @@ local function progressLevel()
         EggCapacity = EggCapacity+EggCapacity/4
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
-        timer.performWithDelay(TimeDifficulty, function() SpawnBoss = true end, 0)
+        ProgressTimer = timer.performWithDelay(TimeDifficulty, function() SpawnBoss = true end, 0)
     end
 end
 
 EnemySpawner = timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
 ProgessTimer = timer.performWithDelay(TimeDifficulty, progressLevel, 1)
 TimeUI = timer.performWithDelay(100, UserInteface.updatetime, 0)
+BackgroundGroup.x = 0
+BackgroundGroup.y = 0
 
 local function keyEvent(event)
     Player.handleMovement(event)
@@ -377,33 +379,26 @@ local function goToOptions()
         end
 
 function pauseGame(event)
-
  local phase = event.phase
     local name = event.keyName
     local keyState = false
     if phase == "down" then keyState = true end
     if name == pauseKey and keyState then
-		physics.pause()
+		Physics.pause()
 		audio.pause()
 		transition.pause()
-		timer.cancel(TimeUI)
-		timer.cancel(ProgressTimer)
-		timer.cancel(EnemySpawner)
-		display.add(newGameImage)
-		display.add(resumeGameImage)
-		display.add(optionsImage)
-		display.add(quitImage)
-		display.remove(ForegroundGroup)
-		display.remove(timemImage)
-		display.remove(timesImage)
-		display.remove(currentLevel)
-		display.remove(sImage)
-		display.remove(eggCounter)
+        timer.pause(TimeUI)
+        if not ProgessTimer == nil then
+        timer.pause(ProgressTimer)
+        end
+        timer.pause(EnemySpawner)
+        PlayerActive = false
+        UserInteface.pauseButtonMenuButtons()
   
-		newGameImage:addEventListener("tap", goToGame)
-		resumeGameImage:addEventListener("tap", resumeGame)
-		optionsImage:addEventListener("tap", goToOptions)
-		quitImage:addEventListener("tap", closeGame)
+		NewGameImage:addEventListener("tap", goToGame)
+		ResumeGameImage:addEventListener("tap", resumeGame)
+		OptionsImage:addEventListener("tap", goToOptions)
+		QuitImage:addEventListener("tap", closeGame)
 		
    end
 end
@@ -412,28 +407,19 @@ Runtime:addEventListener("key", keyEvent)
 Runtime:addEventListener("mouse", mouseEvent)
 
 function resumeGame(event)
-  physics.start()
-  audio.start()
-  transition.start()
-  timer.start(TimeUI)
-  timer.start(ProgressTimer)
-  timer.start(EnemySpawner)
-  display.remove(newGameImage)
-  display.remove(resumeGameImage)
-  display.remove(optionsImage)
-  display.remove(quitImage)
-  display.add(ForegroundGroup)
-  display.add(timemImage)
-  display.add(timesImage)
-  display.add(currentLevel)
-  display.add(sImage)
-  display.add(eggCounter)
-  
-  newGameImage:removeEventListener("tap", gotoGame)
-  resumeGameImage:removeEventListener("tap", resumeGame)
-  optionsImage:removeEventListener("tap", gotoOptions)
-  quitImage:removeEventListener("tap", closeGame)
-  
+  Physics.start()
+  audio.resume()
+  transition.resume()
+  PlayerActive = true
+  timer.resume(TimeUI)
+  if not ProgessTimer == nil then
+  timer.resume(ProgressTimer)
+  end
+  timer.resume(EnemySpawner)
+  display.remove(NewGameImage)
+  display.remove(ResumeGameImage)
+  display.remove(OptionsImage)
+  display.remove(QuitImage)
 end
 
 function game:show(event)

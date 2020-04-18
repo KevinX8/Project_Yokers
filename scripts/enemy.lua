@@ -25,6 +25,7 @@ local fireballLifetime = 5
 local timeBetweenFireballs = 1
 local fireballDamage = 1
 local bossInvincibilityTimer
+--local flashFactor = 0.04
 --local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
 --local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
 SpawnBoss = false
@@ -49,7 +50,7 @@ function enemy.new(startX, startY)
     local pickred = math.random(RedChance) + Level - 1
     local pickblue = math.random(BlueChance) + Level - 2
     local pickblack = math.random(BlackChance) + Level - 3
-    if debug then
+    if IsDebug then
         SpawnBoss = true
     end
 if not SpawnBoss then
@@ -95,7 +96,11 @@ else
         self.playerForgetDistance = 1300
         self.playerAttackDistance = 1000
         self.coopDamagePerHit = 100
-        self.enemyImage.isInvincible = true
+        self.enemyImage.phase = 0
+        self.enemyImage.isInvincible = false
+        self.allowShoot = false
+        self.flashme = false
+        self.flashFactor = 0.04
         self.currentMovementSpeed = 100
         SpawnBoss = false
 end
@@ -220,11 +225,19 @@ function enemy.collisionEvent(self, event)
         end
         if self.myName == "enemy" and self.instance.type == 4 and not self.isInvincible and self.instance.health % 10 == 0 then
             --after 10 hits the boss turns invincible and goes on a rampage at high speed
+            if not bossInvincibilityTimer == nil then
             timer.cancel(bossInvincibilityTimer)
+            end
+            self.instance.flashme = false
             self.isInvincible = true
+            if not self.fill.effect == nil then
+            self.fill.effect.a = 0.8 --keeps the bosses phase color, looks cool imo
+            end
+            self.instance.allowShoot = false
             self.instance.health = self.instance.health - 1 -- to stop the trigger looping ie. makes his health 45 in reality
-            self.instance.currentMovementSpeed = 400
-            timer.performWithDelay(8000, function() self.instance.currentMovementSpeed = 100 end, 1)
+            self.instance.currentMovementSpeed = 400 + 50*self.phase
+            self.phase = self.phase + 1
+            timer.performWithDelay(8000, function() self.instance.currentMovementSpeed = 100 self.instance.allowShoot = true end, 1)
         end
         if self.myName == "enemy" and self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
@@ -243,6 +256,7 @@ function enemy.collisionEvent(self, event)
         end
     end
 end
+
 
 function enemy.SpawnHeart(heartx, hearty)
     if math.random(1,HeartDropChance) == HeartDropChance then
@@ -269,6 +283,33 @@ end
 function enemy:enterFrame()
     if self.enemyImage.y == nil then -- chicken has already died
         return
+    end
+    if self.flashme then
+        self.flashloop = self.flashloop + self.flashFactor
+        self.enemyImage.fill.effect = "filter.monotone"
+        if self.enemyImage.phase == 1 then
+            self.enemyImage.fill.effect.r = 1
+            self.enemyImage.fill.effect.g = 1
+            self.enemyImage.fill.effect.b = 1
+        elseif self.enemyImage.phase == 2 then
+            self.enemyImage.fill.effect.r = 1
+            self.enemyImage.fill.effect.g = 1
+            self.enemyImage.fill.effect.b = 0
+        elseif self.enemyImage.phase == 3 then
+            self.enemyImage.fill.effect.r = 1
+            self.enemyImage.fill.effect.g = 0.5
+            self.enemyImage.fill.effect.b = 0
+        else
+            self.enemyImage.fill.effect.r = 1
+            self.enemyImage.fill.effect.g = 0
+            self.enemyImage.fill.effect.b = 0
+        end
+        self.enemyImage.fill.effect.a = self.flashloop * 0.7
+        if self.flashloop >= 1 then
+            self.flashFactor = -1 * self.flashFactor
+        elseif self.flashloop <= 0 then
+            self.flashFactor = -1 * self.flashFactor
+        end
     end
     if dropHeart then
         dropHeart = false
@@ -326,11 +367,14 @@ function enemy:aiUpdate() -- Called 30 times a second
         if self.type == 3 and playerDistance < self.playerRetreatDistance then
             self.aiState = "retreating"
         end
-        if (self.type == 3 or (self.type == 4 and math.random(30) == 30)) and self.readyToFire == true then
+        if (self.type == 3 or (self.type == 4 and math.random(30) == 30) and self.allowShoot) and self.readyToFire == true then
             self:fireProjectile()
             if self.type == 4 then
                 self.enemyImage.isInvincible = false
-                bossInvincibilityTimer = timer.performWithDelay(5000, function() self.enemyImage.isInvincible = true end, 1)
+                self.allowShoot = false
+                self.flashme = true
+                self.flashloop = 0
+                bossInvincibilityTimer = timer.performWithDelay(5000, function() self.enemyImage.isInvincible = true self.flashme = false self.allowShoot = true end, 1)
             end
         end
         self.targetX = playerX

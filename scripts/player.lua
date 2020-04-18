@@ -41,6 +41,8 @@ local lakeWidth = 0
 local slideInitialX = 0
 local slideInitialY = 0
 
+local runtime = 0
+
 local isInvincible = false
 Explosion = false
 ExplosionX = 0
@@ -60,6 +62,7 @@ function player.start()
     Runtime:addEventListener("enterFrame", player.enterFrame)
     playerImage.collision = player.collisionEvent
     playerImage:addEventListener("collision")
+    runtime = system.getTimer()
 end
 
 function player.collisionEvent(self, event)
@@ -149,7 +152,6 @@ function player.handleMouse(event)
     end
 end
 
-local runtime = 0
 local function getDeltaTime() -- Calculate the "Delta Time" (Time between frames)
     local time = system.getTimer() -- Time since the program started
     local deltaTime = (time - runtime) / (1000 / 60)
