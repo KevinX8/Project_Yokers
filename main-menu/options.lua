@@ -55,7 +55,7 @@ function options.SetDifficulty()
         HeartDropChance = 30
         HeartLifeTime = 4
         MaxEggsPerEnemy = 2
-        MinPlayerAccuracy = 0.7
+        MinPlayerAccuracy = 0.65
         RedChance = 9
         BlueChance = 19
         BlackChance = 10
@@ -75,7 +75,7 @@ function options.SetDifficulty()
         HeartDropChance = 30
         HeartLifeTime = 3
         MaxEggsPerEnemy = 2
-        MinPlayerAccuracy = 0.85
+        MinPlayerAccuracy = 0.8
         RedChance = 9
         BlueChance = 19
         BlackChance = 10
