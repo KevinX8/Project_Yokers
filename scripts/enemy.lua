@@ -30,6 +30,7 @@ local bossInvincibilityTimer
 SpawnBoss = false
 
 local explosionSound = audio.loadSound("audio/Explosion.wav")
+local chickenHurt = audio.loadSound("audio/ChickenHurt.wav")
 local enemyDamageTime = 1000
 
 --      AI States: 
@@ -145,7 +146,7 @@ function enemy.collisionEvent(self, event)
             if(event.other.isFireEgg) then
                 event.other.fireEggImage:removeSelf()
                 if not self.instance.type == 4 then
-                self.instance.health = 0
+                    self.instance.health = 0
                 elseif not self.isInvincible then
                     self.instance.health = self.instance.health - (self.instance.health % 10)  -- brings boss to next phase
                 end
@@ -156,15 +157,18 @@ function enemy.collisionEvent(self, event)
                 ExplosionY = event.other.y
             else
                 if not self.instance.type == 4 or not self.isInvincible then
-                self.instance.health = self.instance.health - 1
+                    self.instance.health = self.instance.health - 1
+                    if self.instance.type > 1 then
+                        audio.play(chickenHurt, {channel = 12, loops = 0, duration = 700})
+                    end
                 end
             end
             timer.cancel(event.other.despawnTimer)
             event.other:removeSelf()
             if not self.instance.type == 4 or not self.isInvincible then
-            local pushX = (event.other.x - event.target.x)
-            local pushY = (event.other.y - event.target.y)
-            self.instance:push(0.1, pushX, pushY)
+                local pushX = (event.other.x - event.target.x)
+                local pushY = (event.other.y - event.target.y)
+                self.instance:push(0.1, pushX, pushY)
             end
         elseif (event.other.myName == "cactus" or event.other.myName == "lavaLake" or event.other.myName == "explosion") and self.myName == "enemy" then
             self.instance.health = self.instance.health - 1
