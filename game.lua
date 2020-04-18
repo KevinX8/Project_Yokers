@@ -407,23 +407,19 @@ Runtime:addEventListener("key", keyEvent)
 Runtime:addEventListener("mouse", mouseEvent)
 
 function resumeGame(event)
-  Physics.resume()
+  Physics.start()
   audio.resume()
   transition.resume()
   PlayerActive = true
   timer.resume(TimeUI)
+  if not ProgessTimer == nil then
   timer.resume(ProgressTimer)
+  end
   timer.resume(EnemySpawner)
   display.remove(NewGameImage)
   display.remove(ResumeGameImage)
   display.remove(OptionsImage)
   display.remove(QuitImage)
-  
-  NewGameImage:removeEventListener("tap", gotoGame)
-  ResumeGameImage:removeEventListener("tap", resumeGame)
-  OptionsImage:removeEventListener("tap", gotoOptions)
-  QuitImage:removeEventListener("tap", closeGame)
-  
 end
 
 function game:show(event)
