@@ -216,7 +216,7 @@ function userinterface.deathscreen(timeSurvived, coopsAllDead)
         align = "left"
     }
     local optionsE = {
-        text = timeSurvived .. "ms\n".. CoopsAlive .. "\n"..DifficultyScore.."\n" .. Score,
+        text = math.floor(timeSurvived/60000) .. "m"..(math.floor((timeSurvived/100)%600)/10).."s\n".. CoopsAlive .. "\n"..DifficultyScore.."\n" .. Score,
         x = display.contentCenterX,
         y = display.contentCenterY,
         font = "assets/coolfont.fnt",
