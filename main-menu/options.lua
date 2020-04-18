@@ -1,5 +1,5 @@
 local options = {}
-local isDebug = true
+local isDebug = false
 
 function options.SetDifficulty()
     if isDebug then 
@@ -19,6 +19,7 @@ function options.SetDifficulty()
         RedChance = 4
         BlueChance = 3
         BlackChance = 2
+        BossHealth = 1
         InitialCoopHealth = 1000
         DifficultyScore = 1
     elseif(Difficulty == "Easy") then
@@ -38,6 +39,7 @@ function options.SetDifficulty()
         RedChance = 9
         BlueChance = 19
         BlackChance = 10
+        BossHealth = 25
         InitialCoopHealth = 1500
         DifficultyScore = 0.5
     elseif(Difficulty == "Normal") then
@@ -57,6 +59,7 @@ function options.SetDifficulty()
         RedChance = 9
         BlueChance = 19
         BlackChance = 10
+        BossHealth = 50
         InitialCoopHealth = 1000
         DifficultyScore = 1
     elseif Difficulty == "Hard" then
@@ -76,6 +79,7 @@ function options.SetDifficulty()
         RedChance = 9
         BlueChance = 19
         BlackChance = 10
+        BossHealth = 75
         InitialCoopHealth = 750
         DifficultyScore = 1.5
     end
