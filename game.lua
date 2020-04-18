@@ -12,6 +12,7 @@ native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
 LevelObjects = {} -- Holds level objects (coops, ice lakes, etc.) in the form {x, y, size}
+BrokenCoops = 0
 
 LevelBoundTop = display.contentCenterY - 1536
 LevelBoundBottom = display.contentCenterY + 1536
@@ -146,7 +147,10 @@ local function removeCoopFromGame(coop)
                     Coops[i].eggImage:removeSelf()
                 end
                 local brokenCoop = display.newImageRect(BackgroundGroup, "assets/brokenCoop.png", 512, 512)
-                BackgroundGroup:insert(20+iceLimit+lavaLimit,brokenCoop)
+                BackgroundGroup:insert(21+iceLimit+lavaLimit,brokenCoop)
+                brokenCoop.x = coop.x
+                brokenCoop.y = coop.y
+                BrokenCoops = BrokenCoops + 1
                 for i=i, (CoopsAlive-1) do
                     Coops[i] = Coops[i+1]
                 end

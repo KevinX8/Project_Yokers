@@ -84,7 +84,7 @@ else
         self.currentMovementSpeed = 100
         SpawnBoss = false
 end
-    BackgroundGroup:insert(21+iceLimit+lavaLimit,self.enemyImage)
+    BackgroundGroup:insert(21+iceLimit+lavaLimit+BrokenCoops,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
     self.enemyImage.myName = "enemy"
