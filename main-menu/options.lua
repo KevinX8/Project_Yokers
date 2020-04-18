@@ -77,7 +77,7 @@ function options.SetDifficulty()
         BlueChance = 19
         BlackChance = 19
         InitialCoopHealth = 750
-        DifficultyScore = 2
+        DifficultyScore = 1.5
     end
 end
 
