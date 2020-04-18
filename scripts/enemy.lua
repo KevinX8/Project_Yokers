@@ -177,8 +177,9 @@ function enemy.collisionEvent(self, event)
         if self.myName == "enemy" and self.instance.type == 4 and not self.isInvincible and self.instance.health % 10 == 0 then
             --after 10 hits the boss turns invincible and goes on a rampage at high speed
             self.isInvincible = true
+            self.instance.health = self.instance.health - 1 -- to stop the trigger looping ie. makes his health 45 in reality
             self.instance.currentMovementSpeed = 400
-            timer.performWithDelay(8000, function() self.isInvincible = false self.instance.currentMovementSpeed = 100 end, 1)
+            timer.performWithDelay(8000, function() self.instance.currentMovementSpeed = 100 end, 1)
         end
         if self.myName == "enemy" and self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
@@ -278,7 +279,7 @@ function enemy:aiUpdate() -- Called 30 times a second
         self.targetY = playerY
     end
 
-    if playerDistance < 150 then
+    if playerDistance < 150 or (self.type == 4 and playerDistance < 200) then
         local playerDamage = 1
         if self.type == 1 or self.type == 4 then
             playerDamage = 2

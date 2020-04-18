@@ -122,7 +122,7 @@ end
 function Decor.collisionEvent(self, event)
     -- In this case, "self" refers to the decor image
     if event.phase == "began" then
-        if (event.other.myName == "enemy" and event.other.type == 4) then 
+        if (event.other.myName == "enemy" and event.other.instance.type == 4) then 
             if event.target.myName == "cactus" or event.target.myName == "bush" then
                 display.remove(event.target) 
             end
