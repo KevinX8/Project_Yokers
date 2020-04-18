@@ -1,8 +1,8 @@
 local options = {}
-local isDebug = false
+IsDebug = true
 
 function options.SetDifficulty()
-    if isDebug then 
+    if IsDebug then 
         EnemyLimit = 100
         TimeDifficulty = 5000
         TimeIncrease = 1000
@@ -11,7 +11,7 @@ function options.SetDifficulty()
         MaxTimeBetweenWaves = 4000
         EggCapacity = 1000
         EgginInv = 1000
-        MaxHearts = 5
+        MaxHearts = 50
         HeartDropChance = 1
         HeartLifeTime = 10
         MaxEggsPerEnemy = 5
@@ -19,7 +19,7 @@ function options.SetDifficulty()
         RedChance = 4
         BlueChance = 3
         BlackChance = 2
-        BossHealth = 1
+        BossHealth = 50
         InitialCoopHealth = 1000
         DifficultyScore = 1
     elseif(Difficulty == "Easy") then
@@ -39,7 +39,7 @@ function options.SetDifficulty()
         RedChance = 9
         BlueChance = 19
         BlackChance = 10
-        BossHealth = 25
+        BossHealth = 30
         InitialCoopHealth = 1500
         DifficultyScore = 0.5
     elseif(Difficulty == "Normal") then
@@ -79,7 +79,7 @@ function options.SetDifficulty()
         RedChance = 9
         BlueChance = 19
         BlackChance = 10
-        BossHealth = 75
+        BossHealth = 80
         InitialCoopHealth = 750
         DifficultyScore = 1.5
     end
