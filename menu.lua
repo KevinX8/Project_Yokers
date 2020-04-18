@@ -122,12 +122,21 @@ function menu:hide(event)
 	hidden = true
 end
 
+function menu:destroy(event)
+	sceneGroup:removeSelf()
+	newGameText.text = ""
+	difficultyText.text = ""
+	optionsText.text = ""
+	quitText.text = ""
+end
+
 -- -----------------------------------------------------------------------------------
 -- Scene event function listeners
 -- -----------------------------------------------------------------------------------
 menu:addEventListener("create", menu)
 menu:addEventListener("show", menu)
 menu:addEventListener("hide", menu)
+menu:addEventListener("destroy",menu)
 -- -----------------------------------------------------------------------------------
 
 return menu
