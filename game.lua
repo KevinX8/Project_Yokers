@@ -318,6 +318,8 @@ end
 EnemySpawner = timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
 ProgessTimer = timer.performWithDelay(TimeDifficulty, progressLevel, 1)
 TimeUI = timer.performWithDelay(100, UserInteface.updatetime, 0)
+BackgroundGroup.x = 0
+BackgroundGroup.y = 0
 
 local function keyEvent(event)
     Player.handleMovement(event)
