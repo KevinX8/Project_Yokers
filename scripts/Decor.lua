@@ -122,7 +122,7 @@ end
 function Decor.collisionEvent(self, event)
     -- In this case, "self" refers to the decor image
     if event.phase == "began" then
-        if (event.other.myName == "enemy" and event.other.type == 4) then 
+        if (event.other.myName == "enemy" and event.other.instance.type == 4) then 
             if event.target.myName == "cactus" or event.target.myName == "bush" then
                 display.remove(event.target) 
             end
@@ -202,7 +202,7 @@ end
 function SpawnFireEggImage(egg)
     local fireEggImage = display.newImageRect(BackgroundGroup, "assets/fireegg.png", 380 / 8, 380 / 4)
     audio.play(fireEggAudio,{channel = 10+channelSelect, loops = 0, duration = 900})
-    BackgroundGroup:insert(21+iceLimit+lavaLimit,fireEggImage)
+    BackgroundGroup:insert(21+iceLimit+lavaLimit+BrokenCoops,fireEggImage)
     fireEggImage.rotation = egg.rotation + 180
     egg.fireEggImage = fireEggImage
     egg.alpha = 0.0

@@ -1,5 +1,5 @@
 local composer = require("composer")
-local scene = composer.newScene()
+local game = composer.newScene()
 
 local options = require("main-menu.options")
 options.SetDifficulty()
@@ -12,6 +12,7 @@ native.setProperty("windowMode", "fullscreen")
 BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
 ForegroundGroup = display.newGroup() -- Holds all UI
 LevelObjects = {} -- Holds level objects (coops, ice lakes, etc.) in the form {x, y, size}
+BrokenCoops = 0
 
 LevelBoundTop = display.contentCenterY - 1536
 LevelBoundBottom = display.contentCenterY + 1536
@@ -22,8 +23,8 @@ Level = 1
 EnemyAmount = 0
 EnemyLimit = 50
 
-local newLevelSound = audio.loadSound("audio/newLevel.mp3")
-local music = audio.loadSound("audio/music.mp3")--Original music composed, performed, and recorded by Thomas Greaney for the purpose of the game
+local newLevelSound = audio.loadSound("audio/NewLevel.mp3")
+local music = audio.loadSound("audio/Music.mp3")--Original music composed, performed, and recorded by Thomas Greaney for the purpose of the game
 
 local muteSoundEffects = "m"
 local mutedEffects = false
@@ -37,7 +38,7 @@ Physics.setGravity(0, 0)
 
 math.randomseed(os.time())
 
-local L2BgImage = display.newImageRect(BackgroundGroup, "assets/sandBackground.png", 3072, 3072)
+local L2BgImage = display.newImageRect(BackgroundGroup, "assets/SandBackground.png", 3072, 3072)
 BackgroundGroup:insert(1,L2BgImage)
 L2BgImage.x = display.contentCenterX + 3072
 L2BgImage.y = display.contentCenterY
@@ -119,8 +120,8 @@ local coop7 = addCoop(3800, -2772, 3)
 local coop8 = addCoop(4850, -1672, 4)
 local coop9 = addCoop(0, 3072, 9)
 local coop10 = addCoop(3072, 2772, 10)
-local coop11 = addCoop(5072,3072, 11)
-local coop12 = addCoop(3072, 4372, 12)
+local coop11 = addCoop(3072,4372, 11)
+local coop12 = addCoop(5072, 3072, 12)
 
 Coops = {coop1, coop2}
 CoopsAlive = 2
@@ -145,6 +146,11 @@ local function removeCoopFromGame(coop)
                 if Coops[i].ammo > 0 then
                     Coops[i].eggImage:removeSelf()
                 end
+                local brokenCoop = display.newImageRect(BackgroundGroup, "assets/brokenCoop.png", 512, 512)
+                BackgroundGroup:insert(21+iceLimit+lavaLimit,brokenCoop)
+                brokenCoop.x = coop.x
+                brokenCoop.y = coop.y
+                BrokenCoops = BrokenCoops + 1
                 for i=i, (CoopsAlive-1) do
                     Coops[i] = Coops[i+1]
                 end
@@ -153,7 +159,7 @@ local function removeCoopFromGame(coop)
                     transition.pause()
                     Physics.pause() --stops crashing lol
                     PlayerActive = false
-                    UserInteface.deathscreen()
+                    UserInteface.deathscreen(system.getTimer() - TimeLoaded, true)
                 end
             end
         end
@@ -205,17 +211,19 @@ UserInteface.InitialiseUI()
 TimeLoaded = system.getTimer()
 
 local function displayArrow()
-    local arrow = display.newImageRect("assets/arrow.png", 500, 102)
-    ForegroundGroup:insert(1, arrow)
-    arrow.x = display.contentCenterX
-    arrow.y = display.contentCenterY
-    audio.play(newLevelSound,{channel = 6, loops = 0, duration = 800})
-    if Level == 3 then
-        arrow.rotation = arrow.rotation - 90
-    elseif Level == 4 then
-        arrow.rotation = arrow.rotation + 90
+    if PlayerActive then
+        local arrow = display.newImageRect("assets/arrow.png", 500, 102)
+        ForegroundGroup:insert(1, arrow)
+        arrow.x = display.contentCenterX
+        arrow.y = display.contentCenterY
+        audio.play(newLevelSound,{channel = 6, loops = 0, duration = 800})
+        if Level == 3 then
+            arrow.rotation = arrow.rotation - 90
+        elseif Level == 4 then
+            arrow.rotation = arrow.rotation + 90
+        end
+        arrow.despawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
     end
-    arrow.despawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
 end
 
 local function spawnEnemyWave()
@@ -350,6 +358,12 @@ end
 Runtime:addEventListener("key", keyEvent)
 Runtime:addEventListener("mouse", mouseEvent)
 
+
+local function keyEvent(event)
+    Player.handleMovement(event)
+    pauseGame(event)
+ end
+
 local function closeGame()
            native.requestExit()
         end
@@ -375,7 +389,10 @@ function pauseGame(event)
 		timer.cancel(TimeUI)
 		timer.cancel(ProgressTimer)
 		timer.cancel(EnemySpawner)
-		display.add(uiPause)
+		display.add(newGameImage)
+		display.add(resumeGameImage)
+		display.add(optionsImage)
+		display.add(quitImage)
 		display.remove(ForegroundGroup)
 		display.remove(timemImage)
 		display.remove(timesImage)
@@ -383,18 +400,13 @@ function pauseGame(event)
 		display.remove(sImage)
 		display.remove(eggCounter)
   
-		pauseMenuBackground.alpha = 1
-		pause.alpha = 0
-		newGame:addEventListener("tap", goToGame)
-		newGame.alpha = 1
-		resume:addEventListener("tap", resumeGame)
-		resume.alpha = 1
-		options:addEventListener("tap", goToOptions)
-		options.alpha = 1
-		quit:addEventListener("tap", closeGame)
-		quit.alpha = 1
-     end
-  end
+		newGameImage:addEventListener("tap", goToGame)
+		resumeGameImage:addEventListener("tap", resumeGame)
+		optionsImage:addEventListener("tap", goToOptions)
+		quitImage:addEventListener("tap", closeGame)
+		
+   end
+end
 
 Runtime:addEventListener("key", keyEvent)
 Runtime:addEventListener("mouse", mouseEvent)
@@ -406,7 +418,10 @@ function resumeGame(event)
   timer.start(TimeUI)
   timer.start(ProgressTimer)
   timer.start(EnemySpawner)
-  display.remove(uiPause)
+  display.remove(newGameImage)
+  display.remove(resumeGameImage)
+  display.remove(optionsImage)
+  display.remove(quitImage)
   display.add(ForegroundGroup)
   display.add(timemImage)
   display.add(timesImage)
@@ -414,20 +429,14 @@ function resumeGame(event)
   display.add(sImage)
   display.add(eggCounter)
   
-  pauseMenuBackground.alpha = 0
-  pause.alpha = 1
-  newGame:removeEventListener("tap", gotoGame)
-  newGame.alpha = 0
-  resume:removeEventListener("tap", resumeGame)
-  resume.alpha = 0
-  options:removeEventListener("tap", gotoOptions)
-  options.alpha = 0
-  quit:removeEventListener("tap", closeGame)
-  quit.alpha = 0
+  newGameImage:removeEventListener("tap", gotoGame)
+  resumeGameImage:removeEventListener("tap", resumeGame)
+  optionsImage:removeEventListener("tap", gotoOptions)
+  quitImage:removeEventListener("tap", closeGame)
   
 end
 
-function scene:show(event)
+function game:show(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -437,7 +446,7 @@ function scene:show(event)
     end
 end
 
-function scene:hide(event)
+function game:hide(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -448,7 +457,7 @@ function scene:hide(event)
     end
 end
 
-function scene:destroy(event)
+function game:destroy(event)
     local sceneGroup = self.view
    
 end
@@ -456,10 +465,10 @@ end
 -- -----------------------------------------------------------------------------------
 -- Scene event function listeners
 -- -----------------------------------------------------------------------------------
-scene:addEventListener("create", scene)
-scene:addEventListener("show", scene)
-scene:addEventListener("hide", scene)
-scene:addEventListener("destroy", scene)
+game:addEventListener("create", game)
+game:addEventListener("show", game)
+game:addEventListener("hide", game)
+game:addEventListener("destroy", game)
 -- -----------------------------------------------------------------------------------
 
-return scene
+return game

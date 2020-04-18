@@ -179,51 +179,68 @@ function userinterface.updateLevelDisp()
     end
 end
 
-function userinterface.deathscreen()
-        local timeSurvived = system.getTimer() - TimeLoaded
-        timer.cancel(TimeUI)
-        timer.cancel(ProgessTimer)
-        timer.cancel(EnemySpawner)
-        display.remove(ForegroundGroup)
-        local displayTime = timemImage.text .. " " .. timesImage.text .. "s"
-        display.remove(timemImage)
-        --timemImage.text = ""
-        display.remove(timesImage)
-        --timesImage.text = ""
-        display.remove(currentLevel)
-        --currentLevel.text = ""
-        display.remove(sImage)
-        display.remove(eggCounter)
-        Score = (timeSurvived/100 + 100*Health + 80*CoopsAlive) * DifficultyScore
-        local optionsD = {
-            text = "Time Survived: " .. displayTime .. ". +" .. (timeSurvived/100)*DifficultyScore .. " points\nHealth Remaining: " .. Health .. ". +".. (100*Health)*DifficultyScore .. " points\nRemaining Coops: " .. CoopsAlive .. ". +" .. (80*CoopsAlive)*DifficultyScore .. " points\nDifficulty Multiplier : x"..DifficultyScore.."\nFinal Score: " .. Score .. " points",
-            x = display.contentCenterX,
-            y = display.contentCenterY,
-            font = "assets/coolfont.fnt",
-            fontSize = 32,
-            align = "left"
-        }
-        Ponyfont.newText(optionsD)	
+function userinterface.deathscreen(timeSurvived, coopsAllDead)
+    timer.cancel(TimeUI)
+    timer.cancel(ProgessTimer)
+    timer.cancel(EnemySpawner)
+    display.remove(ForegroundGroup)
+    local displayTime = timemImage.text .. " " .. timesImage.text .. "s"
+    display.remove(timemImage)
+    --timemImage.text = ""
+    display.remove(timesImage)
+    --timesImage.text = ""
+    display.remove(currentLevel)
+    --currentLevel.text = ""
+    display.remove(sImage)
+    display.remove(eggCounter)
+    local originalScore = (math.floor(timeSurvived/100) + 80*CoopsAlive)
+    local symbol = "+"
+    Score = math.ceil(originalScore*DifficultyScore)
+    if(Score<originalScore) then
+        symbol = "-"
+    end
+    local deathText = {
+        text = "You Died!",
+        x = display.contentCenterX,
+        y = display.contentCenterY-200,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "center"
+    }
+    local optionsD = {
+        text = "Time Survived: \nRemaining Coops: \nDifficulty Multiplier : \nFinal Score:",
+        x = display.contentCenterX-500,
+        y = display.contentCenterY,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "left"
+    }
+    local optionsE = {
+        text = math.floor(timeSurvived/60000) .. "m"..(math.floor((timeSurvived/100)%600)/10).."s\n".. CoopsAlive .. "\n"..DifficultyScore.."\n" .. Score,
+        x = display.contentCenterX,
+        y = display.contentCenterY,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "center"
+    }
+    local optionsF = {
+        text = "+" .. math.floor(timeSurvived/100) .. " points\n+" .. (80*CoopsAlive) .. " points\n"..symbol..math.abs(Score-originalScore).."points\n".. Score .. " points",
+        x = display.contentCenterX+500,
+        y = display.contentCenterY,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "right"
+    }
+    if(coopsAllDead) then
+        deathText.text = "All Of Your Coops Were Destroyed!"
+    end
+    Ponyfont.newText(deathText)
+    Ponyfont.newText(optionsD)
+    Ponyfont.newText(optionsE)
+    Ponyfont.newText(optionsF)
 end
 
---[[ 
-function goToPause(event)
-	composer.gotoScene("menus.pause-menu", {effect = "crossFade", time = 500})
-	end 
 
-	 local pause = 
-		 widget.newButton(
-         {
-         width = 40,
-         height = 40,
-         left = 25,
-         top = 960,
-         id = "pause",
-         overFile = "main-menu/Images/pause.png",
-         onEvent = goToPause
-         }
-       ) 
-       --]]
 
 function userinterface.updatecoopscreen(cooptoflash)
     counter = 2
@@ -242,119 +259,64 @@ function userinterface.coopfadeOut(flashme)
         timer.performWithDelay(1000, function() flashme.beingdamaged = false flashme.alpha = 0.7 end,1)
     end
 end
---[[   
-function userinterface.pauseButton()
-	    local pause = {
-	    display.newImageRect(ForegroundGroup, "main-menu/Images/pause.png", 70, 70)
-        x = display.contentCenterX 
-        y = 1000
-        alpha = 1 
-        onEvent = pauseGame
+
+function userinterface.pauseButtonMenuButtons()
+		
+        local newGame1 = {
+        text = "New Game",
+        x = display.contentCenterX,
+        y = display.contentCenterY - 75,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        alpha = 0,
+        align = "centre"
         }
-     end
         
-        pauseMenuBackground = display.newImageRect(uiPause, "main-menu/Images/Title_Screen.png", 1280, 720)
-        pauseMenuBackground.x = display.contentCenterX
-        pauseMenuBackground.y = display.contentCenterY
-        pauseMenuBackground.alpha = 0 
-
-        newGame = display.newImageRect(uiPause, "main-menu/Images/new_game.png", 289, 40)
-        newGame.x = display.contentCenterX
-        newGame.y = 630
-        newGame.alpha = 0
- 
-        resume = display.newImageRect(uiPause, "main-menu/Images/resume_Game.png", 289, 40)
-        resume.x = display.contentCenterX
-        resume.y = 670
-        resume.alpha = 0
-
-        options = display.newImageRect(uiPause, "main-menu/Images/options.png", 289, 40)
-        options.x = display.contentCenterX
-        options.y = 710
-        options.alpha = 0
-       
-        quit = display.newImageRect(uiPause, "main-menu/Images/quit.png", 289, 40)
-        quit.x = display.contentCenterX
-        quit.y = 750
-        quit.alpha = 0
-end
-
-local function closeGame()
-           native.requestExit()
-        end
-
-local function goToGame()
-           composer.gotoScene("game")
-        end
- 
-local function goToOptions()
-           composer.gotoScene("main-menu.optionsMenu")
-        end
-
-local function resumeGame()
-  physics.start()
-  audio.start()
-  transition.start()
-  timer.start(TimeUI)
-  timer.start(ProgressTimer)
-  timer.start(EnemySpawner)
-  display.remove(uiPause)
-  display.add(ForegroundGroup
-  display.add(timemImage)
-  display.add(timesImage)
-  display.add(currentLevel)
-  display.add(sImage)
-  display.add(eggCounter)
-  
-  pauseMenuBackground.alpha = 0
-  pause.alpha = 1
-  newGame:removeEventListener("tap", gotoGame)
-  newGame.alpha = 0
-  resume:removeEventListener("tap", resumeGame)
-  resume.alpha = 0
-  options:removeEventListener("tap", gotoOptions)
-  options.alpha = 0
-  quit:removeEventListener("tap", closeGame)
-  quit.alpha = 0
-  
-end
-
-local function pauseGame(event)
-  physics.pause()
-  audio.pause()
-  transition.pause()
-  timer.cancel(TimeUI)
-  timer.cancel(ProgressTimer)
-  timer.cancel(EnemySpawner)
-  display.add(uiPause)
-  display.remove(ForegroundGroup)
-  display.remove(timemImage)
-  display.remove(timesImage)
-  display.remove(currentLevel)
-  display.remove(sImage)
-  display.remove(eggCounter)
-  
-  pauseMenuBackground.alpha = 1
-  pause.alpha = 0
-  newGame:addEventListener("tap", gotoGame)
-  newGame.alpha = 1
-  resume:addEventListener("tap", resumeGame)
-  resume.alpha = 1
-  options:addEventListener("tap", gotoOptions)
-  options.alpha = 1
-  quit:addEventListener("tap", closeGame)
-  quit.alpha = 1
-  
-end
---]]
-
---[[function userinterface.updatecoophealth()
-    if gain then
-
-
-    else
-        local lifex = life[]
-
-end --]]
+        local resume1 = {
+        text = "Resume",
+        x = display.contentCenterX,
+        y = display.contentCenterY - 150,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        alpha = 0,
+        align = "centre"
+        }
+        
+        local options1 = {
+        text = "Options",
+        x = display.contentCenterX,
+        y = display.contentCenterY - 225,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        alpha = 0,
+        align = "centre"
+        }
+        
+        local newGame1 = {
+        text = "New Game",
+        x = display.contentCenterX,
+        y = display.contentCenterY - 300,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        alpha = 0,
+        align = "centre"
+        }
+        
+        local quit1 = {
+        text = "Quit",
+        x = display.contentCenterX,
+        y = display.contentCenterY - 375,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        alpha = 0,
+        align = "centre"
+        }
+        
+        newGameImage = Ponyfont.newText(newGame1)
+        resumeGameImage = Ponyfont.newText(resumeGame1)
+        optionsImage = Ponyfont.newText(options1)
+        quitImage = Ponyfont.newText(quit1)
+        
+    end
 
 return userinterface
