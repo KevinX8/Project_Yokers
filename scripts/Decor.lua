@@ -116,7 +116,7 @@ function Decor.level4()
         lavaLake.collision = Decor.collisionEvent
         lavaLake:addEventListener("collision")
     until i >= lavaLimit
-    local layerSpacer = display.newImageRect(BackgroundGroup, "assets/lava.png", 1, 1)
+    local layerSpacer = display.newImageRect(BackgroundGroup, "assets/blank.png", 1, 1)
     BackgroundGroup:insert(21+iceLimit+lavaLimit, layerSpacer)
 end
 
