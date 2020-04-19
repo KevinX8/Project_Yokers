@@ -21,7 +21,6 @@ local dropHeart = false
 local dropHeartx = 0
 local dropHearty = 0
 local iceChickenAcceleratedSpeed = 600
-local fireballSpeed = 1000
 local fireballLifetime = 5
 local timeBetweenFireballs = 1
 local fireballDamage = 1
@@ -422,7 +421,7 @@ function enemy:fireProjectile()
     newProjectile.y = self.enemyImage.y
     newProjectile.rotation = self.enemyImage.rotation
     local angle = math.rad(newProjectile.rotation - 90) -- use the projectile's direction to see which way it should go
-    newProjectile:setLinearVelocity(math.cos(angle) * fireballSpeed, math.sin(angle) * fireballSpeed)
+    newProjectile:setLinearVelocity(math.cos(angle) * FireBallSpeed, math.sin(angle) * FireBallSpeed)
     newProjectile.despawnTimer = timer.performWithDelay(fireballLifetime * 1000, function() newProjectile:removeSelf() end, 1)
     self.readyToFire = false
     self.projectileReadyTimer = timer.performWithDelay(timeBetweenFireballs * 1000, function() self.readyToFire = true end)

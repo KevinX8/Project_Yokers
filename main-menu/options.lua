@@ -22,6 +22,7 @@ function options.SetDifficulty()
         BossHealth = 50
         InitialCoopHealth = 1000
         DifficultyScore = 1
+        FireBallSpeed = 1000
     elseif(Difficulty == "Easy") then
         EnemyLimit = 30
         TimeDifficulty = 120000
@@ -42,6 +43,7 @@ function options.SetDifficulty()
         BossHealth = 30
         InitialCoopHealth = 1500
         DifficultyScore = 0.5
+        FireBallSpeed = 800
     elseif(Difficulty == "Normal") then
         EnemyLimit = 50
         TimeDifficulty = 120000
@@ -62,6 +64,7 @@ function options.SetDifficulty()
         BossHealth = 50
         InitialCoopHealth = 1000
         DifficultyScore = 1
+        FireBallSpeed = 1000
     elseif Difficulty == "Hard" then
         EnemyLimit = 60
         TimeDifficulty = 120000
@@ -82,6 +85,7 @@ function options.SetDifficulty()
         BossHealth = 80
         InitialCoopHealth = 750
         DifficultyScore = 1.5
+        FireballSpeed = 1200
     end
 end
 

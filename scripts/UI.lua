@@ -5,9 +5,6 @@ Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfo
 local damageSound = audio.loadSound("audio/Damage Sound.wav")
 local oneHeart = audio.loadSound("audio/OneHeart.mp3")
 
-local livesText
-local scoreText
-
 local timemImage
 local timesImage
 local sImage
@@ -224,7 +221,7 @@ function userinterface.deathscreen(timeSurvived, coopsAllDead)
         align = "center"
     }
     local optionsF = {
-        text = "+" .. math.floor(timeSurvived/100) .. " points\n+" .. (80*CoopsAlive) .. " points\n"..symbol..math.abs(Score-originalScore).."points\n".. Score .. " points",
+        text = "+" .. math.floor(timeSurvived/100) .. " points\n+" .. (80*CoopsAlive) .. " points\n"..symbol..math.abs(Score-originalScore).." points\n".. Score .. " points",
         x = display.contentCenterX+500,
         y = display.contentCenterY,
         font = "assets/coolfont.fnt",

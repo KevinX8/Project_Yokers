@@ -1,5 +1,4 @@
 local Decor = {}
-local fireEggSpeed = 800
 local fireEggLifeTime = 3
 local fireEggAudio = audio.loadSound("audio/Ignition.wav")
 local channelSelect = 0
