@@ -151,10 +151,10 @@ function optionsMenu:hide(event)
 	volumeText.text = ""
     backText.text = ""
 	hidden = true
-	muteSoundButton:removeEventListener()
-	volUp:removeEventListener()
-	volDown:removeEventListener()
-	back:removeEventListener()
+	muteSoundButton:removeEventListener("tap", muteSound)
+	volUp:removeEventListener("tap", volumeUp)
+	volDown:removeEventListener("tap", volumeDown)
+	back:removeEventListener("tap", goToMenu)
 end
 
 function optionsMenu:destroy(event)
@@ -164,10 +164,10 @@ function optionsMenu:destroy(event)
 	volDownText.text = ""
 	volumeText.text = ""
 	backText.text = ""
-	muteSoundButton:removeEventListener()
-	volUp:removeEventListener()
-	volDown:removeEventListener()
-	back:removeEventListener()
+	muteSoundButton:removeEventListener("tap", muteSound)
+	volUp:removeEventListener("tap", volumeUp)
+	volDown:removeEventListener("tap", volumeDown)
+	back:removeEventListener("tap", goToMenu)
 end
 
 -- -----------------------------------------------------------------------------------
