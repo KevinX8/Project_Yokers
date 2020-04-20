@@ -105,7 +105,7 @@ else
         self.bossHealthPhase = 4
         SpawnBoss = false
 end
-    BackgroundGroup:insert(22+iceLimit+lavaLimit+BrokenCoops,self.enemyImage)
+    BackgroundGroup:insert(22+IceLimit+LavaLimit+BrokenCoops,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
     self.enemyImage.myName = "enemy"
@@ -413,7 +413,7 @@ end
 
 function enemy:fireProjectile()
     local newProjectile = display.newImageRect(BackgroundGroup, "assets/fireBall.png", 300 / 8, 380 / 8)
-    BackgroundGroup:insert(22+iceLimit+lavaLimit+BrokenCoops,newProjectile)
+    BackgroundGroup:insert(22+IceLimit+LavaLimit+BrokenCoops,newProjectile)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
     newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)
     newProjectile.myName = "enemyProjectile" -- also used for collision detection

@@ -55,8 +55,8 @@ function player.start()
     Cursor = display.newImageRect(ForegroundGroup, "assets/cursor.png", 100, 100)
     Cursor.alpha = 0.65
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
-    BackgroundGroup:insert(22+lavaLimit+iceLimit,playerImage)
-    print(BackgroundGroup.numChildren-12-iceLimit-lavaLimit)
+    BackgroundGroup:insert(22+LavaLimit+IceLimit,playerImage)
+    print(BackgroundGroup.numChildren-12-IceLimit-LavaLimit)
     Physics.addBody(playerImage, "dynamic", {radius = 85})
     playerImage.myName = "player"
     playerImage.x = display.contentCenterX
@@ -70,8 +70,10 @@ end
 function player.collisionEvent(self, event)
     if event.other.myName == "coop" then
         if event.phase == "began" then
-            updateAmmo = true
-            ammoCoop = event.other
+            if(event.other.isActive) then
+                updateAmmo = true
+                ammoCoop = event.other
+            end
         elseif(event.phase == "ended") then
             updateAmmo = false
         end
@@ -90,7 +92,7 @@ function player.throwProjectile()
         audioChannelSelect = audioChannelSelect + 1
     end
     local newProjectile = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
-    BackgroundGroup:insert(22+iceLimit+lavaLimit+BrokenCoops,newProjectile)
+    BackgroundGroup:insert(22+IceLimit+LavaLimit+BrokenCoops,newProjectile)
     Physics.addBody(newProjectile, "dynamic", {isSensor=true})
     newProjectile.isBullet = true -- makes collision detection "continuous" (more accurate)
     newProjectile.myName = "playerProjectile" -- also used for collision detection

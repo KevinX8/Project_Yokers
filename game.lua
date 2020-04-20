@@ -84,7 +84,7 @@ function CalculateDistance(object1x, object1y, object2x, object2y) -- Calculates
     return math.sqrt(((object1x - object2x) ^ 2) + ((object1y - object2y) ^ 2))
 end
 
-function addCoopHealth(coop)
+local function addCoopHealth(coop)
     coop.health = InitialCoopHealth
     coop.healthBorder = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 158 ,58, 10)
     coop.healthGray = display.newRoundedRect(BackgroundGroup, coop.x, coop.y-40, 150 ,50, 10)
@@ -139,6 +139,7 @@ local function removeCoopFromGame(coop)
     if CoopsAlive > 0 then
         for i =1, CoopsAlive do
             if coop.x == Coops[i].x and coop.y == Coops[i].y then
+                Coops[i].isActive = false
                 Coops[i]:removeSelf()
                 Coops[i].healthBorder:removeSelf()
                 Coops[i].healthGray:removeSelf()
@@ -147,7 +148,7 @@ local function removeCoopFromGame(coop)
                     Coops[i].eggImage:removeSelf()
                 end
                 local brokenCoop = display.newImageRect(BackgroundGroup, "assets/brokenCoop.png", 512, 512)
-                BackgroundGroup:insert(21+iceLimit+lavaLimit,brokenCoop)
+                BackgroundGroup:insert(21+IceLimit+LavaLimit,brokenCoop)
                 brokenCoop.x = coop.x
                 brokenCoop.y = coop.y
                 BrokenCoops = BrokenCoops + 1

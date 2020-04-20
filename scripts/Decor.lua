@@ -45,7 +45,7 @@ end
 
 function Decor.level3()
     local i = 0
-    iceLimit = math.random(4,7)
+    IceLimit = math.random(4,7)
     repeat
         local size = math.random(512, 768)
         local iceLake = display.newImageRect(BackgroundGroup, "assets/ice lake.png", size, size)
@@ -77,12 +77,12 @@ function Decor.level3()
         i = i + 1
         iceLake.collision = Decor.collisionEvent
         iceLake:addEventListener("collision")
-    until i >= iceLimit
+    until i >= IceLimit
 end
 
 function Decor.level4()
     local i = 0
-    lavaLimit = math.random(4,7)
+    LavaLimit = math.random(4,7)
     repeat
         local size = math.random(512, 768)
         local lavaLake = display.newImageRect(BackgroundGroup, "assets/lava.png", size, size)
@@ -115,9 +115,9 @@ function Decor.level4()
         i = i + 1
         lavaLake.collision = Decor.collisionEvent
         lavaLake:addEventListener("collision")
-    until i >= lavaLimit
+    until i >= LavaLimit
     local layerSpacer = display.newImageRect(BackgroundGroup, "assets/blank.png", 1, 1)
-    BackgroundGroup:insert(21+iceLimit+lavaLimit, layerSpacer)
+    BackgroundGroup:insert(21+IceLimit+LavaLimit, layerSpacer)
 end
 
 function Decor.collisionEvent(self, event)
@@ -205,7 +205,7 @@ end
 function SpawnFireEggImage(egg)
     local fireEggImage = display.newImageRect(BackgroundGroup, "assets/fireegg.png", 380 / 8, 380 / 4)
     audio.play(fireEggAudio,{channel = 10+channelSelect, loops = 0, duration = 900})
-    BackgroundGroup:insert(21+iceLimit+lavaLimit+BrokenCoops,fireEggImage)
+    BackgroundGroup:insert(22+IceLimit+LavaLimit+BrokenCoops,fireEggImage)
     fireEggImage.rotation = egg.rotation + 180
     egg.fireEggImage = fireEggImage
     egg.alpha = 0.0
