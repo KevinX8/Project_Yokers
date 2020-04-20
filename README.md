@@ -1,7 +1,7 @@
 ASSETS
 
 
-All artwork, music, and sound effects in the game are original.
+All artwork, music, and sound effects in the game are original, with the exception of one sound effect.
 
 The artwork was made using Krita. All artwork is credited to Thomas Greaney and Paulis Gributs.
 
