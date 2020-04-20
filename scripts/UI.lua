@@ -260,14 +260,14 @@ end
 
 function userinterface.pauseButtonMenuButtons()
         
-        local newGame1 = {
+       --[[ local newGame1 = {
         text = "New Game",
         x = display.contentCenterX,
         y = display.contentCenterY - 150,
         font = "assets/coolfont.fnt",
         fontSize = 32,
         align = "centre"
-        }
+        } ]]--
         
         local resume1 = {
         text = "Resume",
@@ -296,7 +296,7 @@ function userinterface.pauseButtonMenuButtons()
         align = "centre"
         }
         
-        NewGameImage = Ponyfont.newText(newGame1)
+        --NewGameImage = Ponyfont.newText(newGame1)
         ResumeGameImage = Ponyfont.newText(resume1)
         OptionsImage = Ponyfont.newText(options1)
         QuitImage = Ponyfont.newText(quit1)

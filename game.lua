@@ -1,84 +1,48 @@
 local composer = require("composer")
 local game = composer.newScene()
-
-local options = require("main-menu.options")
-options.SetDifficulty()
 Physics = require("physics")
 Player = require("scripts.player")
 local enemy = require("scripts.enemy")
 Decor = require("scripts.Decor")
 local UserInteface = require("scripts.UI")
-native.setProperty("windowMode", "fullscreen")
-BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
-ForegroundGroup = display.newGroup() -- Holds all UI
-LevelObjects = {} -- Holds level objects (coops, ice lakes, etc.) in the form {x, y, size}
-BrokenCoops = 0
+local options = require("main-menu.options")
+local newLevelSound
+local music
+local coop1
+local coop2
+local coop3
+local coop4
+local coop5
+local coop6
+local coop7
+local coop8
+local coop9
+local coop10
+local coop11
+local coop12
+local muteSoundEffects
+local mutedEffects
+local muteMusic
+local musicIsMuted
+local L2BgImage
+local L1BgImage
+local L3BgImage
+local L4BgImage
+local pauseKey
+local arrowTimer
+local arrowDespawnTimer
 
-LevelBoundTop = display.contentCenterY - 1536
-LevelBoundBottom = display.contentCenterY + 1536
-LevelBoundLeft = display.contentCenterX - 1536
-LevelBoundRight = display.contentCenterX + 1536
-Score = 0
-Level = 1
-EnemyAmount = 0
-EnemyLimit = 50
-
-local newLevelSound = audio.loadSound("audio/NewLevel.mp3")
-local music = audio.loadSound("audio/Music.mp3")--Original music composed, performed, and recorded by Thomas Greaney for the purpose of the game
-
-local muteSoundEffects = "m"
-local mutedEffects = false
-local muteMusic = "n"
-local musicIsMuted = false
-
-local pauseKey = "escape"
-
-Physics.start()
-Physics.setGravity(0, 0)
-
-math.randomseed(os.time())
-
-local L2BgImage = display.newImageRect(BackgroundGroup, "assets/SandBackground.png", 3072, 3072)
-BackgroundGroup:insert(1,L2BgImage)
-L2BgImage.x = display.contentCenterX + 3072
-L2BgImage.y = display.contentCenterY
-
-local L1BgImage = display.newImageRect(BackgroundGroup, "assets/farmBackground.png", 3072, 3072)
-BackgroundGroup:insert(1,L1BgImage)
-L1BgImage.x = display.contentCenterX
-L1BgImage.y = display.contentCenterY
-
-local L3BgImage = display.newImageRect(BackgroundGroup, "assets/full snow background.png", 6144, 3072)
-BackgroundGroup:insert(3,L3BgImage)
-L3BgImage.x = display.contentCenterX + 1536
-L3BgImage.y = display.contentCenterY - 3072
-
-local L4BgImage = display.newImageRect(BackgroundGroup, "assets/LavaBackground.png", 6144, 3072)
-BackgroundGroup:insert(4,L4BgImage)
-L4BgImage.x = display.contentCenterX + 1536
-L4BgImage.y = display.contentCenterY + 3072
-
-for i=1, 3 do
-    local seaSideImageLeft = display.newImageRect(BackgroundGroup, "assets/seaCropped.png", 1536, 3072)
-    BackgroundGroup:insert(5,seaSideImageLeft)
-    seaSideImageLeft.x = -1344
-    seaSideImageLeft.y = display.contentCenterY-3072+((i-1)*3072)
-    local seaSideImageRight = display.newImageRect(BackgroundGroup, "assets/seaCropped.png", 1536, 3072)
-    BackgroundGroup:insert(5,seaSideImageRight)
-    seaSideImageRight.x = 6336
-    seaSideImageRight.y = display.contentCenterY-3072+((i-1)*3072)
+local function keyEvent(event)
+    Player.handleMovement(event)
+    pauseGame(event)
 end
 
-for i =1, 2 do
-    local seaImageTop = display.newImageRect(BackgroundGroup, "assets/seaHorizontalCropped.png", 4608, 768)
-    BackgroundGroup:insert(5,seaImageTop)
-    seaImageTop.x = (i-1)*4608
-    seaImageTop.y = display.contentCenterY - 4992
-    local seaImageBottom = display.newImageRect(BackgroundGroup, "assets/seaHorizontalCropped.png", 4608, 768)
-    BackgroundGroup:insert(5,seaImageBottom)
-    seaImageBottom.x = (i-1)*4608
-    seaImageBottom.y = display.contentCenterY + 4992
+local function mouseEvent(event)
+    Player.handleMouse(event)
 end
+        
+Runtime:addEventListener("key", keyEvent)
+Runtime:addEventListener("mouse", mouseEvent)
 
 function CalculateDistance(object1x, object1y, object2x, object2y) -- Calculates the distance between 2 positions
     return math.sqrt(((object1x - object2x) ^ 2) + ((object1y - object2y) ^ 2))
@@ -109,24 +73,6 @@ local function addCoop(x, y, number)
     table.insert(LevelObjects, {x, y, 512})
     return coop
 end
-
-local coop1 = addCoop(0, 0, 5)
-local coop2 = addCoop(1000, 1300, 6)
-local coop3 = addCoop(3800, 300, 7)
-local coop4 = addCoop(4850, 1400, 8)
-local coop5 = addCoop(0, -3072, 1)
-local coop6 = addCoop(1000, -1772, 2)
-local coop7 = addCoop(3800, -2772, 3)
-local coop8 = addCoop(4850, -1672, 4)
-local coop9 = addCoop(0, 3072, 9)
-local coop10 = addCoop(3072, 2772, 10)
-local coop11 = addCoop(3072,4372, 11)
-local coop12 = addCoop(5072, 3072, 12)
-
-Coops = {coop1, coop2}
-CoopsAlive = 2
-coop1.isActive = true
-coop2.isActive = true
 
 local function addCoopToGame(coop)
     CoopsAlive = CoopsAlive + 1
@@ -176,40 +122,6 @@ function CoopDamage(coop, damageAmount)
     end
 end
 
-SandwallTop = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 102, 3072)
-SandwallTop.x = display.contentCenterX + 1585
-SandwallTop.y = display.contentCenterY - 1536
-SandwallBottom = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 102, 3072)
-SandwallBottom.x = display.contentCenterX + 1585
-SandwallBottom.y = display.contentCenterY + 1536
-SandwallBottom.rotation = SandwallBottom.rotation+180
-IceWallRight = display.newImageRect(BackgroundGroup, "assets/icewall.png", 6144, 102)
-IceWallRight.x = display.contentCenterX +4608
-IceWallRight.y = display.contentCenterY - 1587
-IceWallLeft = display.newImageRect(BackgroundGroup, "assets/icewall.png", 6144, 102)
-IceWallLeft.x = display.contentCenterX - 1534
-IceWallLeft.y = display.contentCenterY - 1587
-IceWallLeft.rotation = IceWallLeft.rotation+180
-LavaWallRight = display.newImageRect(BackgroundGroup, "assets/lavawall.png", 6144, 102)
-LavaWallRight.x = display.contentCenterX +4608
-LavaWallRight.y = display.contentCenterY + 1587
-LavaWallLeft = display.newImageRect(BackgroundGroup, "assets/lavawall.png", 6144, 102)
-LavaWallLeft.x = display.contentCenterX - 1534
-LavaWallLeft.y = display.contentCenterY + 1587
-LavaWallLeft.rotation = LavaWallLeft.rotation+180
-BackgroundGroup:insert(15, SandwallTop)
-BackgroundGroup:insert(15, SandwallBottom)
-BackgroundGroup:insert(15, IceWallRight)
-BackgroundGroup:insert(15, IceWallLeft)
-BackgroundGroup:insert(15, LavaWallRight)
-BackgroundGroup:insert(15, LavaWallLeft)
-
-Decor.generateDecor()
-native.setProperty( "mouseCursorVisible", false )
-audio.play(music, {channel = 1, loops = -1, duration = 660000})
-UserInteface.InitialiseUI()
-TimeLoaded = system.getTimer()
-
 local function displayArrow()
     if PlayerActive then
         local arrow = display.newImageRect("assets/arrow.png", 500, 102)
@@ -222,7 +134,7 @@ local function displayArrow()
         elseif Level == 4 then
             arrow.rotation = arrow.rotation + 90
         end
-        arrow.despawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
+        arrowDespawnTimer = timer.performWithDelay(500, function() arrow:removeSelf() end, 1)
     end
 end
 
@@ -261,7 +173,160 @@ local function spawnEnemyWave()
     end
 end
 
-local function progressLevel()
+local function closeGame()
+           native.requestExit()
+        end
+
+local function goToGame()
+	       composer.removeScene("game", false)
+           composer.gotoScene("menu")
+        end
+ 
+local function goToOptions()
+           composer.gotoScene("main-menu.optionsMenu")
+        end
+
+local function keyEvent(event)
+    Player.handleMovement(event)
+    MuteSound(event)
+end
+
+function game:create()
+    options.SetDifficulty()
+    native.setProperty("windowMode", "fullscreen")
+    BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
+    ForegroundGroup = display.newGroup() -- Holds all UI
+    LevelObjects = {} -- Holds level objects (coops, ice lakes, etc.) in the form {x, y, size}
+    BrokenCoops = 0
+
+    LevelBoundTop = display.contentCenterY - 1536
+    LevelBoundBottom = display.contentCenterY + 1536
+    LevelBoundLeft = display.contentCenterX - 1536
+    LevelBoundRight = display.contentCenterX + 1536
+    Score = 0
+    Level = 1
+    EnemyAmount = 0
+    EnemyLimit = 50
+
+    newLevelSound = audio.loadSound("audio/NewLevel.mp3")
+    music = audio.loadSound("audio/Music.mp3")--Original music composed, performed, and recorded by Thomas Greaney for the purpose of the game
+
+    muteSoundEffects = "m"
+    mutedEffects = false
+    muteMusic = "n"
+    musicIsMuted = false
+
+    pauseKey = "escape"
+
+    Physics.start()
+    Physics.setGravity(0, 0)
+
+    math.randomseed(os.time())
+
+    L2BgImage = display.newImageRect(BackgroundGroup, "assets/SandBackground.png", 3072, 3072)
+    BackgroundGroup:insert(1,L2BgImage)
+    L2BgImage.x = display.contentCenterX + 3072
+    L2BgImage.y = display.contentCenterY
+
+    L1BgImage = display.newImageRect(BackgroundGroup, "assets/farmBackground.png", 3072, 3072)
+    BackgroundGroup:insert(1,L1BgImage)
+    L1BgImage.x = display.contentCenterX
+    L1BgImage.y = display.contentCenterY
+
+    L3BgImage = display.newImageRect(BackgroundGroup, "assets/full snow background.png", 6144, 3072)
+    BackgroundGroup:insert(3,L3BgImage)
+    L3BgImage.x = display.contentCenterX + 1536
+    L3BgImage.y = display.contentCenterY - 3072
+
+    L4BgImage = display.newImageRect(BackgroundGroup, "assets/LavaBackground.png", 6144, 3072)
+    BackgroundGroup:insert(4,L4BgImage)
+    L4BgImage.x = display.contentCenterX + 1536
+    L4BgImage.y = display.contentCenterY + 3072
+
+    for i=1, 3 do
+        local seaSideImageLeft = display.newImageRect(BackgroundGroup, "assets/seaCropped.png", 1536, 3072)
+        BackgroundGroup:insert(5,seaSideImageLeft)
+        seaSideImageLeft.x = -1344
+        seaSideImageLeft.y = display.contentCenterY-3072+((i-1)*3072)
+        local seaSideImageRight = display.newImageRect(BackgroundGroup, "assets/seaCropped.png", 1536, 3072)
+        BackgroundGroup:insert(5,seaSideImageRight)
+        seaSideImageRight.x = 6336
+        seaSideImageRight.y = display.contentCenterY-3072+((i-1)*3072)
+    end
+
+    for i =1, 2 do
+        local seaImageTop = display.newImageRect(BackgroundGroup, "assets/seaHorizontalCropped.png", 4608, 768)
+        BackgroundGroup:insert(5,seaImageTop)
+        seaImageTop.x = (i-1)*4608
+        seaImageTop.y = display.contentCenterY - 4992
+        local seaImageBottom = display.newImageRect(BackgroundGroup, "assets/seaHorizontalCropped.png", 4608, 768)
+        BackgroundGroup:insert(5,seaImageBottom)
+        seaImageBottom.x = (i-1)*4608
+        seaImageBottom.y = display.contentCenterY + 4992
+    end
+
+    coop1 = addCoop(0, 0, 5)
+    coop2 = addCoop(1000, 1300, 6)
+    coop3 = addCoop(3800, 300, 7)
+    coop4 = addCoop(4850, 1400, 8)
+    coop5 = addCoop(0, -3072, 1)
+    coop6 = addCoop(1000, -1772, 2)
+    coop7 = addCoop(3800, -2772, 3)
+    coop8 = addCoop(4850, -1672, 4)
+    coop9 = addCoop(0, 3072, 9)
+    coop10 = addCoop(3072, 2772, 10)
+    coop11 = addCoop(3072,4372, 11)
+    coop12 = addCoop(5072, 3072, 12)
+
+    Coops = {coop1, coop2}
+    CoopsAlive = 2
+    coop1.isActive = true
+    coop2.isActive = true
+
+    SandwallTop = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 102, 3072)
+    SandwallTop.x = display.contentCenterX + 1585
+    SandwallTop.y = display.contentCenterY - 1536
+    SandwallBottom = display.newImageRect(BackgroundGroup, "assets/sandwall.png", 102, 3072)
+    SandwallBottom.x = display.contentCenterX + 1585
+    SandwallBottom.y = display.contentCenterY + 1536
+    SandwallBottom.rotation = SandwallBottom.rotation+180
+    IceWallRight = display.newImageRect(BackgroundGroup, "assets/icewall.png", 6144, 102)
+    IceWallRight.x = display.contentCenterX +4608
+    IceWallRight.y = display.contentCenterY - 1587
+    IceWallLeft = display.newImageRect(BackgroundGroup, "assets/icewall.png", 6144, 102)
+    IceWallLeft.x = display.contentCenterX - 1534
+    IceWallLeft.y = display.contentCenterY - 1587
+    IceWallLeft.rotation = IceWallLeft.rotation+180
+    LavaWallRight = display.newImageRect(BackgroundGroup, "assets/lavawall.png", 6144, 102)
+    LavaWallRight.x = display.contentCenterX +4608
+    LavaWallRight.y = display.contentCenterY + 1587
+    LavaWallLeft = display.newImageRect(BackgroundGroup, "assets/lavawall.png", 6144, 102)
+    LavaWallLeft.x = display.contentCenterX - 1534
+    LavaWallLeft.y = display.contentCenterY + 1587
+    LavaWallLeft.rotation = LavaWallLeft.rotation+180
+    BackgroundGroup:insert(15, SandwallTop)
+    BackgroundGroup:insert(15, SandwallBottom)
+    BackgroundGroup:insert(15, IceWallRight)
+    BackgroundGroup:insert(15, IceWallLeft)
+    BackgroundGroup:insert(15, LavaWallRight)
+    BackgroundGroup:insert(15, LavaWallLeft)
+
+    Decor.generateDecor()
+    native.setProperty( "mouseCursorVisible", false )
+    audio.play(music, {channel = 1, loops = -1, duration = 660000})
+    UserInteface.InitialiseUI()
+    TimeLoaded = system.getTimer()
+
+    EnemySpawner = timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
+    ProgessTimer = timer.performWithDelay(TimeDifficulty, ProgressLevel, 1)
+    TimeUI = timer.performWithDelay(100, UserInteface.updatetime, 0)
+    BackgroundGroup.x = 0
+    BackgroundGroup.y = 0
+    Player.start()
+end
+
+
+function ProgressLevel()
     if Level == 1 then
         transition.to(SandwallTop, {time = 2000, rotation = SandwallTop.rotation-90, alpha = 0.2, onComplete = function() SandwallTop:removeSelf() end})
         transition.to(SandwallBottom, {time = 2000, rotation = SandwallBottom.rotation+90, alpha = 0.2, onComplete = function() SandwallBottom:removeSelf() end})
@@ -271,9 +336,9 @@ local function progressLevel()
         addCoopToGame(coop3)
         addCoopToGame(coop4)
         EnemyLimit = EnemyLimit+25
-        timer.performWithDelay(1000, displayArrow, 4)
+        arrowTimer = timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
-        ProgressTimer = timer.performWithDelay(TimeDifficulty, progressLevel, 1)
+        ProgressTimer = timer.performWithDelay(TimeDifficulty, ProgressLevel, 1)
         EggCapacity = EggCapacity*1.5
         UserInteface.updateEggs()
         MinPlayerAccuracy = MinPlayerAccuracy+0.05
@@ -288,9 +353,9 @@ local function progressLevel()
         addCoopToGame(coop7)
         addCoopToGame(coop8)
         EnemyLimit =  EnemyLimit+50
-        timer.performWithDelay(1000, displayArrow, 4)
+        arrowTimer = timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
-        ProgressTimer = timer.performWithDelay(TimeDifficulty, progressLevel, 1)
+        ProgressTimer = timer.performWithDelay(TimeDifficulty, ProgressLevel, 1)
         MaxEggsPerEnemy = 3
         EggCapacity = EggCapacity+EggCapacity/3
         UserInteface.updateEggs()
@@ -302,7 +367,7 @@ local function progressLevel()
         Level = 4
         TimeDifficulty = TimeDifficulty + TimeIncrease
         EnemyLimit = EnemyLimit + 50
-        timer.performWithDelay(1000, displayArrow, 4)
+        arrowTimer = timer.performWithDelay(1000, displayArrow, 4)
         UserInteface.updateLevelDisp()
         addCoopToGame(coop9)
         addCoopToGame(coop10)
@@ -315,20 +380,47 @@ local function progressLevel()
     end
 end
 
-EnemySpawner = timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
-ProgessTimer = timer.performWithDelay(TimeDifficulty, progressLevel, 1)
-TimeUI = timer.performWithDelay(100, UserInteface.updatetime, 0)
-BackgroundGroup.x = 0
-BackgroundGroup.y = 0
-Player.start()
-
-local function keyEvent(event)
-    Player.handleMovement(event)
-    MuteSound(event)
+function pauseGame(event)
+ local phase = event.phase
+    local name = event.keyName
+    local keyState = false
+    if phase == "down" then keyState = true end
+    if name == pauseKey and keyState then
+		Physics.pause()
+		audio.pause()
+        transition.pause()
+        native.setProperty( "mouseCursorVisible", true )
+        timer.pause(TimeUI)
+        if not ProgessTimer == nil then
+        timer.pause(ProgressTimer)
+        end
+        timer.pause(EnemySpawner)
+        PlayerActive = false
+        UserInteface.pauseButtonMenuButtons()
+  
+		--NewGameImage:addEventListener("tap", goToGame)
+		ResumeGameImage:addEventListener("tap", resumeGame)
+		OptionsImage:addEventListener("tap", goToOptions)
+		QuitImage:addEventListener("tap", closeGame)
+		
+   end
 end
 
-local function mouseEvent(event)
-    Player.handleMouse(event)
+function resumeGame(event)
+  Physics.start()
+  audio.resume()
+  transition.resume()
+  native.setProperty( "mouseCursorVisible", false )
+  PlayerActive = true
+  timer.resume(TimeUI)
+  if not ProgessTimer == nil then
+  timer.resume(ProgressTimer)
+  end
+  timer.resume(EnemySpawner)
+  --display.remove(NewGameImage)
+  display.remove(ResumeGameImage)
+  display.remove(OptionsImage)
+  display.remove(QuitImage)
 end
 
 function MuteSound(event)
@@ -358,74 +450,6 @@ function MuteSound(event)
     end
 end
 
-Runtime:addEventListener("key", keyEvent)
-Runtime:addEventListener("mouse", mouseEvent)
-
-
-local function keyEvent(event)
-    Player.handleMovement(event)
-    pauseGame(event)
-end
-
-local function closeGame()
-           native.requestExit()
-        end
-
-local function goToGame()
-	       composer.removeScene("game", false)
-           composer.gotoScene("menu")
-        end
- 
-local function goToOptions()
-           composer.gotoScene("main-menu.optionsMenu")
-        end
-
-function pauseGame(event)
- local phase = event.phase
-    local name = event.keyName
-    local keyState = false
-    if phase == "down" then keyState = true end
-    if name == pauseKey and keyState then
-		Physics.pause()
-		audio.pause()
-        transition.pause()
-        native.setProperty( "mouseCursorVisible", true )
-        timer.pause(TimeUI)
-        if not ProgessTimer == nil then
-        timer.pause(ProgressTimer)
-        end
-        timer.pause(EnemySpawner)
-        PlayerActive = false
-        UserInteface.pauseButtonMenuButtons()
-  
-		NewGameImage:addEventListener("tap", goToGame)
-		ResumeGameImage:addEventListener("tap", resumeGame)
-		OptionsImage:addEventListener("tap", goToOptions)
-		QuitImage:addEventListener("tap", closeGame)
-		
-   end
-end
-
-Runtime:addEventListener("key", keyEvent)
-Runtime:addEventListener("mouse", mouseEvent)
-
-function resumeGame(event)
-  Physics.start()
-  audio.resume()
-  transition.resume()
-  native.setProperty( "mouseCursorVisible", false )
-  PlayerActive = true
-  timer.resume(TimeUI)
-  if not ProgessTimer == nil then
-  timer.resume(ProgressTimer)
-  end
-  timer.resume(EnemySpawner)
-  display.remove(NewGameImage)
-  display.remove(ResumeGameImage)
-  display.remove(OptionsImage)
-  display.remove(QuitImage)
-end
-
 function game:show(event)
     local sceneGroup = self.view
     local phase = event.phase
@@ -436,7 +460,7 @@ function game:show(event)
     end
 end
 
-function game:hide(event)
+--[[ function game:hide(event)
     local sceneGroup = self.view
     local phase = event.phase
 
@@ -454,11 +478,23 @@ function game:hide(event)
     elseif (phase == "did") then
    
     end
-end
+end]]
 
 function game:destroy(event)
-    local sceneGroup = self.view
-   
+    display.remove()
+    BackgroundGroup:removeSelf()
+    timer.cancel(arrowDespawnTimer)
+    timer.cancel(arrowTimer)
+    timer.cancel(EnemySpawner)
+    
+    timer.cancel(ProgessTimer)
+    timer.cancel(TimeUI)
+    timer.cancel()
+    timer.cancel()
+    timer.cancel()
+    timer.cancel()
+    timer.cancel()
+    timer.cancel()
 end
 
 -- -----------------------------------------------------------------------------------
