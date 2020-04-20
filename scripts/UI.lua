@@ -297,9 +297,15 @@ function userinterface.pauseButtonMenuButtons()
         }
         
         --NewGameImage = Ponyfont.newText(newGame1)
+        if ResumeGameImage == nil then
         ResumeGameImage = Ponyfont.newText(resume1)
         OptionsImage = Ponyfont.newText(options1)
         QuitImage = Ponyfont.newText(quit1)
+        else
+            ResumeGameImage.text = "Resume"
+            OptionsImage.text = "Options"
+            QuitImage.text = "Quit"
+        end
     end
 
 return userinterface

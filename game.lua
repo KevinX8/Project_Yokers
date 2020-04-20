@@ -407,6 +407,9 @@ function pauseGame(event)
 end
 
 function resumeGame(event)
+    ResumeGameImage.text = ""
+    OptionsImage.text = ""
+    QuitImage.text = ""
   Physics.start()
   audio.resume()
   transition.resume()
@@ -418,9 +421,6 @@ function resumeGame(event)
   end
   timer.resume(EnemySpawner)
   --display.remove(NewGameImage)
-  display.remove(ResumeGameImage)
-  display.remove(OptionsImage)
-  display.remove(QuitImage)
 end
 
 function MuteSound(event)
