@@ -190,6 +190,7 @@ function userinterface.deathscreen(timeSurvived, coopsAllDead)
     --currentLevel.text = ""
     display.remove(sImage)
     display.remove(eggCounter)
+    native.setProperty( "mouseCursorVisible", true )
     local originalScore = (math.floor(timeSurvived/100) + 80*CoopsAlive)
     local symbol = "+"
     Score = math.ceil(originalScore*DifficultyScore)

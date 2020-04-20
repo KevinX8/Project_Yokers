@@ -372,7 +372,7 @@ local function closeGame()
         end
 
 local function goToGame()
-	   composer.removeScene("game")
+	       composer.removeScene("game", false)
            composer.gotoScene("menu")
         end
  
@@ -388,7 +388,8 @@ function pauseGame(event)
     if name == pauseKey and keyState then
 		Physics.pause()
 		audio.pause()
-		transition.pause()
+        transition.pause()
+        native.setProperty( "mouseCursorVisible", true )
         timer.pause(TimeUI)
         if not ProgessTimer == nil then
         timer.pause(ProgressTimer)
@@ -412,6 +413,7 @@ function resumeGame(event)
   Physics.start()
   audio.resume()
   transition.resume()
+  native.setProperty( "mouseCursorVisible", false )
   PlayerActive = true
   timer.resume(TimeUI)
   if not ProgessTimer == nil then
