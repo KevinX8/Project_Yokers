@@ -20,6 +20,10 @@ local heart = {}
 local coopicon = {}
 Timeloaded = 0
 
+local function gameClose(event)
+		native.requestExit()
+	end 
+
 function userinterface.InitialiseUI()
     i = 1
     repeat
@@ -229,13 +233,25 @@ function userinterface.deathscreen(timeSurvived, coopsAllDead)
         fontSize = 32,
         align = "right"
     }
+    local quit2 = {
+        text = "Back",
+        x = display.contentCenterX,
+        y = display.contentCenterY - 750,
+        font = "assets/coolfont.fnt",
+        fontSize = 32,
+        align = "center"
+    }
+       
     if(coopsAllDead) then
         deathText.text = "All Of Your Coops Were Destroyed!"
     end
+    quit2:addEventListener("tap", gameClose)
+    
     Ponyfont.newText(deathText)
     Ponyfont.newText(optionsD)
     Ponyfont.newText(optionsE)
     Ponyfont.newText(optionsF)
+    Ponyfont.newText(quit2)
 end
 
 
