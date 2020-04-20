@@ -385,7 +385,7 @@ function pauseGame(event)
     local name = event.keyName
     local keyState = false
     if phase == "down" then keyState = true end
-    if name == pauseKey and keyState then
+    if name == pauseKey and keyState and PlayerActive then
 		Physics.pause()
 		audio.pause()
         transition.pause()
