@@ -410,6 +410,9 @@ function resumeGame(event)
     ResumeGameImage.text = ""
     OptionsImage.text = ""
     QuitImage.text = ""
+    ResumeGameImage:removeEventListener()
+    OptionsImage:removeEventListener()
+    QuitImage:removeEventListener()
   Physics.start()
   audio.resume()
   transition.resume()

@@ -7,6 +7,11 @@ local quitText
 local newGameText
 local difficultyText
 local hidden = false
+local background
+local newGame
+local options
+local optionsMenu
+local quit
 
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
 
@@ -47,11 +52,11 @@ function menu:create(event)
     
     sceneGroup = self.view
 
-	local background = display.newImageRect(sceneGroup, "assets/Title Screen.png", 1920, 1080)
+	background = display.newImageRect(sceneGroup, "assets/Title Screen.png", 1920, 1080)
 	background.x = display.contentCenterX
 	background.y = display.contentCenterY
 
-	local newGame = display.newImageRect(sceneGroup, "assets/blank.png", 500, 75)
+	newGame = display.newImageRect(sceneGroup, "assets/blank.png", 500, 75)
 	newGame.x = display.contentCenterX
 	newGame.y = 605
 	newGameText = Ponyfont.newText({
@@ -63,7 +68,7 @@ function menu:create(event)
 	align = "centre"
 	})
 		
-	local options = display.newImageRect(sceneGroup, "assets/blank.png",  500, 75)
+	options = display.newImageRect(sceneGroup, "assets/blank.png",  500, 75)
 	options.x = display.contentCenterX
 	options.y = 705
 	difficultyText = Ponyfont.newText({
@@ -75,7 +80,7 @@ function menu:create(event)
 	align = "centre"
 	})
 	
-	local optionsMenu = display.newImageRect(sceneGroup, "assets/blank.png",  500, 75)
+	optionsMenu = display.newImageRect(sceneGroup, "assets/blank.png",  500, 75)
 	optionsMenu.x = display.contentCenterX
 	optionsMenu.y = 805
 	optionsText = Ponyfont.newText({
@@ -87,7 +92,7 @@ function menu:create(event)
 	align = "centre"
 	})
 
-	local quit = display.newImageRect(sceneGroup, "assets/blank.png",  500, 75)
+	quit = display.newImageRect(sceneGroup, "assets/blank.png",  500, 75)
 	quit.x = display.contentCenterX
 	quit.y = 905
 	quitText = Ponyfont.newText({
@@ -120,6 +125,10 @@ function menu:hide(event)
 	optionsText.text = ""
 	quitText.text = ""
 	hidden = true
+	newGame:removeEventListener()
+	options:removeEventListener()
+	optionsMenu:removeEventListener()
+	quit:removeEventListener()
 end
 
 function menu:destroy(event)
@@ -128,6 +137,10 @@ function menu:destroy(event)
 	difficultyText.text = ""
 	optionsText.text = ""
 	quitText.text = ""
+	newGame:removeEventListener()
+	options:removeEventListener()
+	optionsMenu:removeEventListener()
+	quit:removeEventListener()
 end
 
 -- -----------------------------------------------------------------------------------

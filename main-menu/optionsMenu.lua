@@ -9,6 +9,10 @@ local hidden = false
 local muted = false
 local volumeText
 local muteSoundButton
+local volUp
+local volDown
+local back
+
 local lastVolume = 1
 
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
@@ -79,7 +83,7 @@ function optionsMenu:create(event)
 	align = "centre"
 	})
 
-	local volUp = display.newImageRect(sceneGroup, "assets/blank.png", 500, 50)
+	volUp = display.newImageRect(sceneGroup, "assets/blank.png", 500, 50)
 	volUp.x = display.contentCenterX
 	volUp.y = 685
 	volUpText = Ponyfont.newText({
@@ -91,7 +95,7 @@ function optionsMenu:create(event)
 	align = "centre"
 	})
 			
-	local volDown = display.newImageRect(sceneGroup, "assets/blank.png",  500, 50)
+	volDown = display.newImageRect(sceneGroup, "assets/blank.png",  500, 50)
 	volDown.x = display.contentCenterX
 	volDown.y = 755
 	volDownText = Ponyfont.newText({
@@ -112,7 +116,7 @@ function optionsMenu:create(event)
 		align = "centre"
 	})
 
-	local back = display.newImageRect(sceneGroup, "assets/blank.png",  500, 50)
+	back = display.newImageRect(sceneGroup, "assets/blank.png",  500, 50)
 	back.x = display.contentCenterX
 	back.y = 905
 	backText = Ponyfont.newText({
@@ -146,7 +150,11 @@ function optionsMenu:hide(event)
 	volDownText.text = ""
 	volumeText.text = ""
     backText.text = ""
-    hidden = true
+	hidden = true
+	muteSoundButton:removeEventListener()
+	volUp:removeEventListener()
+	volDown:removeEventListener()
+	back:removeEventListener()
 end
 
 function optionsMenu:destroy(event)
@@ -156,6 +164,10 @@ function optionsMenu:destroy(event)
 	volDownText.text = ""
 	volumeText.text = ""
 	backText.text = ""
+	muteSoundButton:removeEventListener()
+	volUp:removeEventListener()
+	volDown:removeEventListener()
+	back:removeEventListener()
 end
 
 -- -----------------------------------------------------------------------------------
