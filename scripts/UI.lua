@@ -234,9 +234,9 @@ function userinterface.deathscreen(timeSurvived, coopsAllDead)
         align = "right"
     }
     local quit2 = {
-        text = "Back",
-        x = display.contentCenterX,
-        y = display.contentCenterY - 750,
+        text = "Quit",
+        x = display.contentCenterX-60,
+        y = display.contentCenterY + 240,
         font = "assets/coolfont.fnt",
         fontSize = 32,
         align = "center"
@@ -245,13 +245,13 @@ function userinterface.deathscreen(timeSurvived, coopsAllDead)
     if(coopsAllDead) then
         deathText.text = "All Of Your Coops Were Destroyed!"
     end
-    quit2:addEventListener("tap", gameClose)
     
     Ponyfont.newText(deathText)
     Ponyfont.newText(optionsD)
     Ponyfont.newText(optionsE)
     Ponyfont.newText(optionsF)
-    Ponyfont.newText(quit2)
+    local quit2Text = Ponyfont.newText(quit2)
+    quit2Text:addEventListener("tap", gameClose)
 end
 
 
