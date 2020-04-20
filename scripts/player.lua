@@ -5,8 +5,8 @@ local eggThrowSound = audio.loadSound("audio/EggThrowSound.wav")
 local audioChannelSelect = 1
 
 local UserInteface = require("scripts.UI")
-PlayerSpeed = 10
-local playerProjectileSpeed = 800--change fireEggSpeed in Decor.lua, global variable won't work so two variable needed
+PlayerSpeed = 13
+local playerProjectileSpeed = 1100
 local invincibilityTime = 3 -- Time in seconds the player should be invincible after being hit
 local blinkSpeed = 2 --Speed at which player blinks when taken damage
 local counter = invincibilityTime * blinkSpeed -- used in invincibility animation
