@@ -55,7 +55,6 @@ function player.start()
     Cursor.alpha = 0.65
     playerImage = display.newImageRect(BackgroundGroup, "assets/player.png", 150, 150)
     BackgroundGroup:insert(22+LavaLimit+IceLimit,playerImage)
-    print(BackgroundGroup.numChildren-12-IceLimit-LavaLimit)
     Physics.addBody(playerImage, "dynamic", {radius = 85})
     playerImage.myName = "player"
     playerImage.x = display.contentCenterX
@@ -248,10 +247,6 @@ function player.damage(damageAmount)
         while not (Health == 0) and not (hurt == Health) do
         Health = Health - 1
         UserInteface.updatehearts(false)
-        end
-        if Health <= 0 then
-            print("you are dead") -- need to add death
-            return
         end
         isInvincible = true
         player.fadeOut()

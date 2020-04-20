@@ -31,6 +31,7 @@ local L4BgImage
 local pauseKey
 local arrowTimer
 local arrowDespawnTimer
+TimePauseD = 0
 
 local function keyEvent(event)
     Player.handleMovement(event)
@@ -106,7 +107,7 @@ local function removeCoopFromGame(coop)
                     transition.pause()
                     Physics.pause() --stops crashing lol
                     PlayerActive = false
-                    UserInteface.deathscreen(system.getTimer() - TimeLoaded, true)
+                    UserInteface.deathscreen(system.getTimer() - TimeLoaded - TimePauseD, true)
                 end
             end
         end
@@ -389,6 +390,7 @@ function pauseGame(event)
 		Physics.pause()
 		audio.pause()
         transition.pause()
+        TimePauseD = TimePauseD - system.getTimer()
         native.setProperty( "mouseCursorVisible", true )
         timer.pause(TimeUI)
         if not ProgessTimer == nil then
@@ -407,6 +409,7 @@ function pauseGame(event)
 end
 
 function resumeGame(event)
+    TimePauseD = TimePauseD + system.getTimer()
     ResumeGameImage.text = ""
     OptionsImage.text = ""
     QuitImage.text = ""

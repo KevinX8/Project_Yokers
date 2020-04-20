@@ -162,8 +162,8 @@ function BlinkHealth()
 end
 
 function userinterface.updatetime()
-    local timem = math.floor(((system.getTimer() - TimeLoaded) / 60000)) .. "m"
-    local times = math.floor((((system.getTimer() - TimeLoaded) % 60000) /1000) *10) * 0.1
+    local timem = math.floor(((system.getTimer() - TimeLoaded - TimePauseD) / 60000)) .. "m"
+    local times = math.floor((((system.getTimer() - TimeLoaded - TimePauseD) % 60000) /1000) *10) * 0.1
     timemImage.text = timem
     timesImage.text = times
 end
