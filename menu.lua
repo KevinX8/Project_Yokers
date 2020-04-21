@@ -12,7 +12,7 @@ local newGame
 local options
 local optionsMenu
 local quit
-local newGameListener
+MenuMusic = audio.loadSound("audio/MenuMusic-1.mp3")
 
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
 
@@ -24,6 +24,7 @@ end
 
 local function goToGame(event)
 	if(not hidden) then
+		audio.setVolume(0,{channel = 16})
 		composer.gotoScene("game")
 	end
 end
@@ -106,6 +107,7 @@ function menu:create(event)
 end
 
 function menu:show(event)
+	audio.play(MenuMusic,{channel = 15, loops = 10, duration = 600000})
 	if event.phase == "will" then
 	newGameText.text = "New Game"
 	difficultyText.text = "Difficulty: "..Difficulty

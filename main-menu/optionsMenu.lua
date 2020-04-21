@@ -6,7 +6,7 @@ local volUpText
 local volDownText
 local backText
 local hidden = false
-local muted = false
+Muted = false
 local volumeText
 local muteSoundButton
 local volUp
@@ -26,7 +26,7 @@ local function goToMenu(event)
 end
        
 local function volumeUp(event)
-	if(not hidden and not muted) then
+	if(not hidden and not Muted) then
 		lastVolume = (math.ceil(lastVolume *10) + 1)/10
 		audio.setVolume(lastVolume)
 		if (audio.getVolume() < 0.91) then
@@ -40,7 +40,7 @@ local function volumeUp(event)
 end
 
 local function volumeDown(event)
-	if(not hidden and not muted) then
+	if(not hidden and not Muted) then
 		lastVolume = (math.ceil(lastVolume *10) - 1)/10
 		audio.setVolume(lastVolume)
 		if(lastVolume > 0.09) then
@@ -54,14 +54,14 @@ local function volumeDown(event)
 end
 
 local function muteSound(event)
-	if(muted) then
+	if(Muted) then
 		audio.setVolume(math.ceil(lastVolume*10)/10)
 		muteSoundText.text = "Mute Sound: Unmuted"
 	else
 		audio.setVolume(0.0)
 		muteSoundText.text = "Mute Sound: Muted"
 	end
-	muted = not muted
+	Muted = not Muted
 end
 
 function optionsMenu:create(event)
@@ -132,7 +132,7 @@ end
 
 function optionsMenu:show(event)
 	if event.phase == "will" then
-		if(not muted) then
+		if(not Muted) then
 			muteSoundText.text = "Mute Sound: Unmuted"
 		else
 			muteSoundText.text = "Mute Sound: Muted"

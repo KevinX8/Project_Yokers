@@ -31,6 +31,8 @@ local L4BgImage
 local pauseKey
 local arrowTimer
 local arrowDespawnTimer
+local mainMusic
+local menuMusic
 TimePauseD = 0
 
 local function keyEvent(event)
@@ -184,6 +186,8 @@ local function goToOptions()
         end
 
 function game:create()
+    menuMusic = audio.play(MenuMusic,{channel = 15, loops = -1, duration = 600000})
+    audio.pause(menuMusic)
     options.SetDifficulty()
     native.setProperty("windowMode", "fullscreen")
     BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
@@ -300,7 +304,7 @@ function game:create()
 
     Decor.generateDecor()
     native.setProperty( "mouseCursorVisible", false )
-    audio.play(music, {channel = 1, loops = -1, duration = 660000})
+    mainMusic = audio.play(music, {channel = 1, loops = -1, duration = 1320000})
     UserInteface.InitialiseUI()
     TimeLoaded = system.getTimer()
 
@@ -374,7 +378,6 @@ function pauseGame(event)
     if phase == "down" then keyState = true end
     if name == pauseKey and keyState and PlayerActive then
 		Physics.pause()
-		audio.pause()
         transition.pause()
         TimePauseD = TimePauseD - system.getTimer()
         native.setProperty( "mouseCursorVisible", true )
@@ -385,7 +388,9 @@ function pauseGame(event)
         timer.pause(EnemySpawner)
         PlayerActive = false
         UserInteface.pauseButtonMenuButtons()
-  
+        audio.resume(menuMusic)
+        audio.pause(mainMusic)
+
 		--NewGameImage:addEventListener("tap", goToGame)
 		ResumeGameImage:addEventListener("tap", resumeGame)
 		OptionsImage:addEventListener("tap", goToOptions)
@@ -399,11 +404,12 @@ function resumeGame(event)
     ResumeGameImage.text = ""
     OptionsImage.text = ""
     QuitImage.text = ""
+    audio.pause(menuMusic)
     ResumeGameImage:removeEventListener("tap", resumeGame)
     OptionsImage:removeEventListener("tap", goToOptions)
     QuitImage:removeEventListener("tap", closeGame)
   Physics.start()
-  audio.resume()
+  audio.resume(mainMusic)
   transition.resume()
   native.setProperty( "mouseCursorVisible", false )
   PlayerActive = true
@@ -421,7 +427,7 @@ function MuteSound(event)
     local keyState = false
     if phase == "down" then keyState = true end
     if name == muteSoundEffects and keyState then
-        if(mutedEffects) then
+        if(mutedEffects and (not(Muted))) then
             audio.setVolume(1.0,{})
         else
             audio.setVolume(0.0,{})
