@@ -178,14 +178,9 @@ end
 local function closeGame()
            native.requestExit()
         end
-
-local function goToGame()
-	       composer.removeScene("game", false)
-           composer.gotoScene("menu")
-        end
- 
+        
 local function goToOptions()
-           composer.gotoScene("main-menu.optionsMenu")
+           composer.showOverlay("main-menu.optionsMenu")
         end
 
 function game:create()
