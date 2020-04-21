@@ -1,12 +1,12 @@
 local options = {}
-IsDebug = false
+IsDebug = true
 
 function options.SetDifficulty()
     if IsDebug then 
-        EnemyLimit = 100
+        EnemyLimit = 1
         TimeDifficulty = 5000
         TimeIncrease = 1000
-        EnemiesPerWave = 15
+        EnemiesPerWave = 1
         MinTimeBetweenWaves = 1000
         MaxTimeBetweenWaves = 4000
         EggCapacity = 1000
