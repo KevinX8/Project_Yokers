@@ -20,10 +20,10 @@ local coop9
 local coop10
 local coop11
 local coop12
-local muteSoundEffects
-local mutedEffects
-local muteMusic
-local musicIsMuted
+local muteSoundEffects = "m"
+local mutedEffects = false
+local muteMusic = "n"
+local musicIsMuted = false
 local L2BgImage
 local L1BgImage
 local L3BgImage
@@ -36,6 +36,7 @@ TimePauseD = 0
 local function keyEvent(event)
     Player.handleMovement(event)
     pauseGame(event)
+    MuteSound(event)
 end
 
 local function mouseEvent(event)
@@ -187,11 +188,6 @@ local function goToOptions()
            composer.gotoScene("main-menu.optionsMenu")
         end
 
-local function keyEvent(event)
-    Player.handleMovement(event)
-    MuteSound(event)
-end
-
 function game:create()
     options.SetDifficulty()
     native.setProperty("windowMode", "fullscreen")
@@ -211,11 +207,6 @@ function game:create()
 
     newLevelSound = audio.loadSound("audio/NewLevel.mp3")
     music = audio.loadSound("audio/Music.mp3")--Original music composed, performed, and recorded by Thomas Greaney for the purpose of the game
-
-    muteSoundEffects = "m"
-    mutedEffects = false
-    muteMusic = "n"
-    musicIsMuted = false
 
     pauseKey = "escape"
 

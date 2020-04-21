@@ -167,13 +167,17 @@ function Decor.collisionEvent(self, event)
 end
 
  function Decor.enterFrame()
+    
     if(PlayerActive) then
         if (select(2,Player.getPosition()) < -1*(display.contentHeight/2+500)) then
             SpawnSnowFlake()
+            PlayerSpeed = 11
         elseif(select(2,Player.getPosition()) > (display.contentHeight/2+1500)) then
             if(math.random() < .5) then
                 SpawnSpark()
             end
+        else
+            PlayerSpeed = BasePlayerSpeed
         end
     end
 end

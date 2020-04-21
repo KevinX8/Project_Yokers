@@ -5,7 +5,8 @@ local eggThrowSound = audio.loadSound("audio/EggThrowSound.wav")
 local audioChannelSelect = 1
 
 local UserInteface = require("scripts.UI")
-PlayerSpeed = 13
+BasePlayerSpeed = 13
+PlayerSpeed = BasePlayerSpeed
 local playerProjectileSpeed = 1100
 local invincibilityTime = 3 -- Time in seconds the player should be invincible after being hit
 local blinkSpeed = 2 --Speed at which player blinks when taken damage
@@ -178,7 +179,7 @@ end
         BackgroundGroup.y = BackgroundGroup.y + (slideSpeed * pushY)
         if math.sqrt(math.pow(slideInitialX - playerImage.x,2) + math.pow(slideInitialY - playerImage.y,2)) - 150 > lakeWidth or playerImage.x <= LevelBoundLeft or playerImage.x >= LevelBoundRight or playerImage.y <= LevelBoundTop or playerImage.y >= LevelBoundBottom then
             slideActive = false
-            PlayerSpeed = 10
+            PlayerSpeed = BasePlayerSpeed
         end
     end
     if pushActive and pushFrame < 30 then
@@ -192,7 +193,7 @@ end
     elseif pushFrame >= 30 and pushActive then
         pushFrame = 0
         pushActive = false
-        PlayerSpeed = 10
+        PlayerSpeed = BasePlayerSpeed
     end
     -- Force the player to be in the middle of the screen at all times
     playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
