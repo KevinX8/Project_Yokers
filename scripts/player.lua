@@ -192,7 +192,7 @@ end
     elseif pushFrame >= 30 and pushActive then
         pushFrame = 0
         pushActive = false
-        PlayerSpeed = 10
+        PlayerSpeed = 13
     end
     -- Force the player to be in the middle of the screen at all times
     playerImage.x, playerImage.y = BackgroundGroup:contentToLocal(display.contentCenterX, display.contentCenterY)
