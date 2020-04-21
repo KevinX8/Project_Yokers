@@ -177,7 +177,7 @@ end
                 SpawnSpark()
             end
         else
-            PlayerSpeed = 13
+            PlayerSpeed = BasePlayerSpeed
         end
     end
 end
