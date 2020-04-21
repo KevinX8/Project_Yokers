@@ -170,13 +170,13 @@ end
     if(PlayerActive) then
         if (select(2,Player.getPosition()) < -1*(display.contentHeight/2+500)) then
             SpawnSnowFlake()
-            PlayerSpeed = 11
+            PlayerSpeed = PlayerSpeed * (11/13)
         elseif(select(2,Player.getPosition()) > (display.contentHeight/2+1500)) then
             if(math.random() < .5) then
                 SpawnSpark()
             end
         else
-            PlayerSpeed = 13
+            PlayerSpeed = PlayerSpeed * (13/11)
         end
     end
 end
