@@ -112,7 +112,7 @@ function menu:show(event)
 	optionsText.text = "Options"
 	quitText.text = "Quit Game"
 	hidden = false
-	newGame:addEventListener("tap", function() if(not hidden) then newGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end end)
+	newGame:addEventListener("tap", function() if(not hidden) then newGameText.text = "Loading..." timer.performWithDelay(50,goToGame,1) end end)
 	options:addEventListener("tap", changeDifficulty)
 	optionsMenu:addEventListener("tap", goToOptions)
 	quit:addEventListener("tap", closeGame)
@@ -126,7 +126,7 @@ function menu:hide(event)
 	optionsText.text = ""
 	quitText.text = ""
 	hidden = true
-	newGame:removeEventListener("tap", function() if(not hidden) then newGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end end)
+	newGame:removeEventListener("tap", function() if(not hidden) then newGameText.text = "Loading..." timer.performWithDelay(50,goToGame,1) end end)
 	options:removeEventListener("tap", changeDifficulty)
 	optionsMenu:removeEventListener("tap", goToOptions)
 	quit:removeEventListener("tap", closeGame)
@@ -138,7 +138,7 @@ function menu:destroy(event)
 	difficultyText.text = ""
 	optionsText.text = ""
 	quitText.text = ""
-	newGame:removeEventListener("tap", function() if(not hidden) then newGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end end)
+	newGame:removeEventListener("tap", function() if(not hidden) then newGameText.text = "Loading..." timer.performWithDelay(50,goToGame,1) end end)
 	options:removeEventListener("tap", changeDifficulty)
 	optionsMenu:removeEventListener("tap", goToOptions)
 	quit:removeEventListener("tap", closeGame)
