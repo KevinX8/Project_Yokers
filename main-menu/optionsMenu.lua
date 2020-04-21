@@ -13,6 +13,7 @@ local volUp
 local volDown
 local back
 
+
 local lastVolume = 1
 
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
@@ -127,20 +128,21 @@ function optionsMenu:create(event)
 	fontSize = 32,
 	align = "centre"
 	})
-			
-	muteSoundButton:addEventListener("tap", muteSound)
-	volUp:addEventListener("tap", volumeUp)
-	volDown:addEventListener("tap", volumeDown)
-	back:addEventListener("tap", goToMenu)
 end
 
 function optionsMenu:show(event)
+	if event.phase == "will" then
     muteSoundText.text = "Mute Sound"
     volUpText.text = "Volume Up"
 	volDownText.text = "Volume Down"
 	volumeText.text = "Volume: "..(lastVolume*100)
     backText.text = "Back"
-    hidden = false
+	hidden = false
+    muteSoundButton:addEventListener("tap", muteSound)
+	volUp:addEventListener("tap", volumeUp)
+	volDown:addEventListener("tap", volumeDown)
+	back:addEventListener("tap", goToMenu)
+	end
 end
 
 

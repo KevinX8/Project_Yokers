@@ -12,6 +12,7 @@ local newGame
 local options
 local optionsMenu
 local quit
+local newGameListener
 
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
 
@@ -49,7 +50,6 @@ local function changeDifficulty(event)
 end
 
 function menu:create(event)
-    
     sceneGroup = self.view
 
 	background = display.newImageRect(sceneGroup, "assets/Title Screen.png", 1920, 1080)
@@ -103,19 +103,20 @@ function menu:create(event)
 	fontSize = 32,
 	align = "centre"
 	})
-		
-	newGame:addEventListener("tap", function() if(not hidden) then newGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end end)
-	options:addEventListener("tap", changeDifficulty)
-	optionsMenu:addEventListener("tap", goToOptions)
-	quit:addEventListener("tap", closeGame)
 end
 
 function menu:show(event)
+	if event.phase == "will" then
 	newGameText.text = "New Game"
 	difficultyText.text = "Difficulty: "..Difficulty
 	optionsText.text = "Options"
 	quitText.text = "Quit Game"
 	hidden = false
+	newGame:addEventListener("tap", function() if(not hidden) then newGameText.text = "Loading..." timer.performWithDelay(10,goToGame,1) end end)
+	options:addEventListener("tap", changeDifficulty)
+	optionsMenu:addEventListener("tap", goToOptions)
+	quit:addEventListener("tap", closeGame)
+	end
  end
 
 
