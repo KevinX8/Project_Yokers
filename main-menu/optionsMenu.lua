@@ -132,7 +132,11 @@ end
 
 function optionsMenu:show(event)
 	if event.phase == "will" then
-    muteSoundText.text = "Mute Sound"
+		if(not muted) then
+			muteSoundText.text = "Mute Sound: Unmuted"
+		else
+			muteSoundText.text = "Mute Sound: Muted"
+		end
     volUpText.text = "Volume Up"
 	volDownText.text = "Volume Down"
 	volumeText.text = "Volume: "..(lastVolume*100)
