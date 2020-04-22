@@ -264,7 +264,7 @@ end
                 EgginInv = EgginInv + ammoCoop.ammo
                 UserInteface.updateEggs()
                 ammoCoop.ammo = 0
-                ammoCoop.eggImage:removeSelf()
+                display.remove(ammoCoop.eggImage)
             end
         end
     end

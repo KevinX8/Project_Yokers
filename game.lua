@@ -37,7 +37,7 @@ TimePauseD = 0
 
 local function keyEvent(event)
     Player.handleMovement(event)
-    pauseGame(event)
+    PauseGame(event)
     MuteSound(event)
 end
 
@@ -95,7 +95,7 @@ local function removeCoopFromGame(coop)
                 Coops[i].healthGray:removeSelf()
                 Coops[i].healthImage:removeSelf()
                 if Coops[i].ammo > 0 then
-                    Coops[i].eggImage:removeSelf()
+                    display.remove(Coops[i].eggImage)
                 end
                 local brokenCoop = display.newImageRect(BackgroundGroup, "assets/brokenCoop.png", 512, 512)
                 BackgroundGroup:insert(21+IceLimit+LavaLimit,brokenCoop)
@@ -386,7 +386,7 @@ function ProgressLevel()
     end
 end
 
-function pauseGame(event)
+function PauseGame(event)
  local phase = event.phase
     local name = event.keyName
     local keyState = false
@@ -407,13 +407,13 @@ function pauseGame(event)
         audio.pause(mainMusic)
 
 		RetMenuImage:addEventListener("tap", goToMenu)
-		ResumeGameImage:addEventListener("tap", resumeGame)
+		ResumeGameImage:addEventListener("tap", ResumeGame)
 		OptionsImage:addEventListener("tap", goToOptions)
 		QuitImage:addEventListener("tap", closeGame)
    end
 end
 
-function resumeGame(event)
+function ResumeGame(event)
     TimePauseD = TimePauseD + system.getTimer()
     ResumeGameImage.text = ""
     OptionsImage.text = ""
@@ -421,19 +421,19 @@ function resumeGame(event)
     RetMenuImage.text = ""
     audio.pause(menuMusic)
     RetMenuImage:removeEventListener("tap", goToMenu)
-    ResumeGameImage:removeEventListener("tap", resumeGame)
+    ResumeGameImage:removeEventListener("tap", ResumeGame)
     OptionsImage:removeEventListener("tap", goToOptions)
     QuitImage:removeEventListener("tap", closeGame)
-  Physics.start()
-  audio.resume(mainMusic)
-  transition.resume()
-  native.setProperty( "mouseCursorVisible", false )
-  PlayerActive = true
-  timer.resume(TimeUI)
-  if not ProgessTimer == nil then
-  timer.resume(ProgressTimer)
-  end
-  timer.resume(EnemySpawner)
+    Physics.start()
+    audio.resume(mainMusic)
+    transition.resume()
+    native.setProperty( "mouseCursorVisible", false )
+    PlayerActive = true
+    timer.resume(TimeUI)
+    if not ProgessTimer == nil then
+    timer.resume(ProgressTimer)
+    end
+    timer.resume(EnemySpawner)
   --display.remove(NewGameImage)
 end
 
