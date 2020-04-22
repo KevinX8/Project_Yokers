@@ -73,7 +73,7 @@ function userinterface.InitialiseUI()
     local optionse = {
         text = EgginInv.." / "..EggCapacity,
         x = display.contentCenterX - 790,
-        y = display.contentCenterY + 390,
+        y = display.contentCenterY + 465,
         font = "assets/coolfont.fnt",
         fontSize = 32,
         align = "centre"
@@ -92,12 +92,12 @@ function userinterface.InitialiseUI()
     sImage = Ponyfont.newText(optionssi)
     eggImage = display.newImageRect(ForegroundGroup, "assets/egg.png", 37.5, 47.5)
     eggImage.x = display.contentCenterX - 920
-    eggImage.y = display.contentCenterY + 400
+    eggImage.y = display.contentCenterY + 475
     eggCounter = Ponyfont.newText(optionse)
     local coopUImap = display.newImageRect(ForegroundGroup, "assets/map.png", 300, 350)
     coopUImap.alpha = 0.4
     coopUImap.x = display.contentCenterX + 800
-    coopUImap.y = display.contentCenterY + 280
+    coopUImap.y = display.contentCenterY + 355
     local i = 1
     local startx = coopUImap.x - 120
     local starty = coopUImap.y - 130
