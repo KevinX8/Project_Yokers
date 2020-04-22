@@ -253,18 +253,16 @@ end
             explosion.timer = timer.performWithDelay(400, function() explosion:removeSelf() end, 1)
         end
     end    
-    if(updateAmmo) then
-        if(ammoCoop.ammo > 0)then
-            if EggCapacity-EgginInv < ammoCoop.ammo then
-                ammoCoop.ammo = ammoCoop.ammo - EggCapacity+EgginInv
-                EgginInv = EggCapacity
-                UserInteface.updateEggs()
-            else
-                EgginInv = EgginInv + ammoCoop.ammo
-                UserInteface.updateEggs()
-                ammoCoop.ammo = 0
-                display.remove(ammoCoop.eggImage)
-            end
+    if(updateAmmo and ammoCoop.ammo> 0) then
+        if EggCapacity-EgginInv < ammoCoop.ammo then
+            ammoCoop.ammo = ammoCoop.ammo - EggCapacity+EgginInv
+            EgginInv = EggCapacity
+            UserInteface.updateEggs()
+        else
+            EgginInv = EgginInv + ammoCoop.ammo
+            UserInteface.updateEggs()
+            ammoCoop.ammo = 0
+            display.remove(ammoCoop.eggImage)
         end
     end
 end

@@ -60,6 +60,20 @@ function enemy.start()
     fireballDamage = 1
 end
 
+local function spawnBossAmmo()
+    local ammoCoop
+    ammoCoop = Coops[1]
+    for i=1, CoopsAlive do
+        if Coops[i].health > ammoCoop.health then
+            ammoCoop = Coops[i]
+        end
+    end
+    ammoCoop.ammo = ammoCoop.ammo + math.ceil((1/MinPlayerAccuracy*BossHealth)/5) 
+    ammoCoop.eggImage = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
+    ammoCoop.eggImage.x = ammoCoop.x
+    ammoCoop.eggImage.y = ammoCoop.y-100    
+end
+
 function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
     local pickred = math.random(RedChance) + Level - 1
@@ -68,43 +82,43 @@ function enemy.new(startX, startY)
     if IsDebug then
         SpawnBoss = true
     end
-if not SpawnBoss then
-    if pickred > RedChance then
-        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
-        self.type = 1
-        self.health = 1
-        self.playerForgetDistance = 900
-        self.playerAttackDistance = 600
-        self.coopDamagePerHit = 12
-        self.currentMovementSpeed = movementSpeed
-    elseif pickblue > BlueChance then
-        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blueenemy.png", 93, 120)
-        self.type = 2
-        self.health = 3
-        self.playerForgetDistance = 900
-        self.playerAttackDistance = 600
-        self.coopDamagePerHit = 12
-        self.currentMovementSpeed = movementSpeed
-    elseif pickblack > BlackChance then
-        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blackenemy.png", 93, 120)
-        self.type = 3
-        self.health = 3
-        self.playerForgetDistance = 1200
-        self.playerAttackDistance = 900
-        self.playerRetreatDistance = 500 -- If the player gets closer than this, chicken will retreat.
-        self.playerAcceptableDistance = 800 -- The distance the chicken will go when retreating.
-        self.coopDamagePerHit = 12
-        self.currentMovementSpeed = movementSpeed
+    if not SpawnBoss then
+        if pickred > RedChance then
+            self.enemyImage = display.newImageRect(BackgroundGroup, "assets/redenemy.png", 93, 120)
+            self.type = 1
+            self.health = 1
+            self.playerForgetDistance = 900
+            self.playerAttackDistance = 600
+            self.coopDamagePerHit = 12
+            self.currentMovementSpeed = movementSpeed
+        elseif pickblue > BlueChance then
+            self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blueenemy.png", 93, 120)
+            self.type = 2
+            self.health = 3
+            self.playerForgetDistance = 900
+            self.playerAttackDistance = 600
+            self.coopDamagePerHit = 12
+            self.currentMovementSpeed = movementSpeed
+        elseif pickblack > BlackChance then
+            self.enemyImage = display.newImageRect(BackgroundGroup, "assets/blackenemy.png", 93, 120)
+            self.type = 3
+            self.health = 3
+            self.playerForgetDistance = 1200
+            self.playerAttackDistance = 900
+            self.playerRetreatDistance = 500 -- If the player gets closer than this, chicken will retreat.
+            self.playerAcceptableDistance = 800 -- The distance the chicken will go when retreating.
+            self.coopDamagePerHit = 12
+            self.currentMovementSpeed = movementSpeed
+        else
+            self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
+            self.type = 0
+            self.health = 1
+            self.playerForgetDistance = 900
+            self.playerAttackDistance = 600
+            self.coopDamagePerHit = 12
+            self.currentMovementSpeed = movementSpeed
+        end
     else
-        self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 93, 120)
-        self.type = 0
-        self.health = 1
-        self.playerForgetDistance = 900
-        self.playerAttackDistance = 600
-        self.coopDamagePerHit = 12
-        self.currentMovementSpeed = movementSpeed
-    end
-else
         self.enemyImage = display.newImageRect(BackgroundGroup, "assets/enemy.png", 197, 256)
         self.type = 4
         self.health = BossHealth
@@ -119,7 +133,7 @@ else
         self.currentMovementSpeed = 100
         self.bossHealthPhase = 4
         SpawnBoss = false
-end
+    end
     BackgroundGroup:insert(22+IceLimit+LavaLimit+BrokenCoops,self.enemyImage)
     self.enemyImage.instance = self -- give the image a reference to this script instance for collisionEvent
     Physics.addBody(self.enemyImage, "dynamic")
@@ -149,19 +163,8 @@ end
         else
             ammoCoop.ammo = ammoCoop.ammo + math.random(1,MaxEggsPerEnemy+math.floor(self.type/2))
         end
-    end
-
-    if(PlayerActive) and self.type == 4 then
-        ammoCoop = Coops[1]
-        for i=1, CoopsAlive do
-            if Coops[i].health > ammoCoop.health then
-                ammoCoop = Coops[i]
-            end
-        end
-        ammoCoop.ammo = ammoCoop.ammo + math.ceil((1/MinPlayerAccuracy*BossHealth)/5)
-        ammoCoop.eggImage = display.newImageRect(BackgroundGroup, "assets/egg.png", 300 / 8, 380 / 8)
-        ammoCoop.eggImage.x = ammoCoop.x
-        ammoCoop.eggImage.y = ammoCoop.y-100       
+    elseif(PlayerActive) then
+        spawnBossAmmo()      
     end
     return self
 end
@@ -174,17 +177,6 @@ function enemy.nukeEnemies()
     nuke.myName= "nuke"
     nuke.collision = enemy.collisionEvent
     nuke:addEventListener("collision")
-end
-
-function spawnBossAmmo()
-    local ammoCoop
-    ammoCoop = Coops[1]
-    for i=1, CoopsAlive do
-        if Coops[i].health > ammoCoop.health then
-            ammoCoop = Coops[i]
-        end
-    end
-    ammoCoop.ammo = ammoCoop.ammo + math.ceil((1/MinPlayerAccuracy*BossHealth)/5) 
 end
 
 function enemy.collisionEvent(self, event)

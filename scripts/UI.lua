@@ -27,9 +27,9 @@ local coopicon = {}
 Timeloaded = 0
 
 local function gameClose(event)
-        composer.removeScene("game")
-		composer.gotoScene("menu")
-	end 
+    composer.removeScene("game")
+    composer.gotoScene("menu")
+end 
 
 function userinterface.InitialiseUI()
     if(not Blink == nil) then
@@ -127,7 +127,6 @@ function userinterface.updatehearts(added)
             heart[1].y = display.contentCenterY - 440
             heart[1].x = display.contentCenterX - 890
             heart[1].alpha = 0.7
-
         end
         heart[Health]:removeSelf()
         heart[Health] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
@@ -291,53 +290,53 @@ end
 
 function userinterface.pauseButtonMenuButtons()
         
-       local Menu1 = {
-        text = "Main Menu",
-        x = display.contentCenterX,
-        y = display.contentCenterY - 150,
-        font = "assets/coolfont.fnt",
-        fontSize = 32,
-        align = "centre"
-        }
-        
-        local resume1 = {
-        text = "Resume",
-        x = display.contentCenterX,
-        y = display.contentCenterY - 225,
-        font = "assets/coolfont.fnt",
-        fontSize = 32,
-        align = "centre"
-        }
-        
-        local options1 = {
-        text = "Options",
-        x = display.contentCenterX,
-        y = display.contentCenterY - 300,
-        font = "assets/coolfont.fnt",
-        fontSize = 32,
-        align = "centre"
-        }
-        
-        local quit1 = {
-        text = "Quit",
-        x = display.contentCenterX,
-        y = display.contentCenterY - 375,
-        font = "assets/coolfont.fnt",
-        fontSize = 32,
-        align = "centre"
-        }
-        
-        if ResumeGameImage == nil then
-        ResumeGameImage = Ponyfont.newText(resume1)
-        OptionsImage = Ponyfont.newText(options1)
-        QuitImage = Ponyfont.newText(quit1)
-        RetMenuImage =Ponyfont.newText(Menu1)
-        else
-            ResumeGameImage.text = "Resume"
-            OptionsImage.text = "Options"
-            QuitImage.text = "Quit"
-            RetMenuImage.text = "Main Menu"
-        end
+    local Menu1 = {
+    text = "Main Menu",
+    x = display.contentCenterX,
+    y = display.contentCenterY - 150,
+    font = "assets/coolfont.fnt",
+    fontSize = 32,
+    align = "centre"
+    }
+    
+    local resume1 = {
+    text = "Resume",
+    x = display.contentCenterX,
+    y = display.contentCenterY - 225,
+    font = "assets/coolfont.fnt",
+    fontSize = 32,
+    align = "centre"
+    }
+    
+    local options1 = {
+    text = "Options",
+    x = display.contentCenterX,
+    y = display.contentCenterY - 300,
+    font = "assets/coolfont.fnt",
+    fontSize = 32,
+    align = "centre"
+    }
+    
+    local quit1 = {
+    text = "Quit",
+    x = display.contentCenterX,
+    y = display.contentCenterY - 375,
+    font = "assets/coolfont.fnt",
+    fontSize = 32,
+    align = "centre"
+    }
+    
+    if ResumeGameImage == nil then
+    ResumeGameImage = Ponyfont.newText(resume1)
+    OptionsImage = Ponyfont.newText(options1)
+    QuitImage = Ponyfont.newText(quit1)
+    RetMenuImage =Ponyfont.newText(Menu1)
+    else
+        ResumeGameImage.text = "Resume"
+        OptionsImage.text = "Options"
+        QuitImage.text = "Quit"
+        RetMenuImage.text = "Main Menu"
     end
+end
 
 return userinterface
