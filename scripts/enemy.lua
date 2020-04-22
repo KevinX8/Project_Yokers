@@ -31,7 +31,6 @@ local bossInvincibilityTimer
 --local flashFactor = 0.04
 --local playerAttackDistance = 600 -- If the player comes closer than this distance, the enemy attacks
 --local playerForgetDistance = 900 -- If the player gets this far away, the enemy will forget about them and go back to the coops
-SpawnBoss = false
 
 local explosionSound = audio.loadSound("audio/Explosion.wav")
 local chickenHurt = audio.loadSound("audio/ChickenHurt.wav")
@@ -49,6 +48,7 @@ local enemyDamageTime = 1000
 -- retreating will become attackPlayer once the enemy gets far enough away
 
 function enemy.start()
+    SpawnBoss = false
     enemyDamageTime = 1000
     movementSpeed = 250
     dropHeart = false
