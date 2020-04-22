@@ -31,7 +31,8 @@ end
 
 local function goToOptions(event)
 	if(not hidden) then
-		composer.gotoScene("main-menu.optionsMenu")
+		menu:hide()
+		composer.showOverlay("main-menu.optionsMenu")
 	end
 end
 
@@ -107,6 +108,7 @@ function menu:create(event)
 end
 
 function menu:show(event)
+	InGame = false
 	audio.play(MenuMusic,{channel = 15, loops = 10, duration = 600000})
 	audio.resume(MenuMusic)
 	if event.phase == "will" then

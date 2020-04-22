@@ -20,9 +20,15 @@ Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfo
 audio.setVolume(1)
 
 local function goToMenu(event)
-	if(not hidden) then
-		composer.gotoScene("menu")
-    end
+	if	not (InGame) then
+		if(not hidden) then
+			composer.gotoScene("menu")
+		end
+	else
+		if(not hidden) then
+			composer.hideOverlay()
+		end
+	end
 end
        
 local function volumeUp(event)
@@ -130,22 +136,22 @@ function optionsMenu:create(event)
 	})
 end
 
-function optionsMenu:show(event)
+function optionsMenu:show(event, InGame)
 	if event.phase == "will" then
 		if(not Muted) then
 			muteSoundText.text = "Mute Sound: Unmuted"
 		else
 			muteSoundText.text = "Mute Sound: Muted"
 		end
-    volUpText.text = "Volume Up"
-	volDownText.text = "Volume Down"
-	volumeText.text = "Volume: "..(lastVolume*100)
-    backText.text = "Back"
-	hidden = false
-    muteSoundButton:addEventListener("tap", muteSound)
-	volUp:addEventListener("tap", volumeUp)
-	volDown:addEventListener("tap", volumeDown)
-	back:addEventListener("tap", goToMenu)
+		volUpText.text = "Volume Up"
+		volDownText.text = "Volume Down"
+		volumeText.text = "Volume: "..(lastVolume*100)
+		backText.text = "Back"
+		hidden = false
+		muteSoundButton:addEventListener("tap", muteSound)
+		volUp:addEventListener("tap", volumeUp)
+		volDown:addEventListener("tap", volumeDown)
+		back:addEventListener("tap", goToMenu)
 	end
 end
 
@@ -160,11 +166,10 @@ function optionsMenu:hide(event)
 	muteSoundButton:removeEventListener("tap", muteSound)
 	volUp:removeEventListener("tap", volumeUp)
 	volDown:removeEventListener("tap", volumeDown)
-	back:removeEventListener("tap", goToMenu)
+	back:addEventListener("tap", goToMenu)
 end
 
 function optionsMenu:destroy(event)
-	sceneGroup:removeSelf()
 	muteSoundText.text = ""
 	volUpText.text = ""
 	volDownText.text = ""

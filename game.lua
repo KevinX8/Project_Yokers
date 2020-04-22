@@ -192,6 +192,7 @@ local function goToMenu()
 end
 
 function game:create()
+    InGame = true
     mutedEffects = false
     musicIsMuted = false
     composer.removeScene("menu")
