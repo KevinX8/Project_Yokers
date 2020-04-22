@@ -192,6 +192,7 @@ local function goToMenu()
 end
 
 function game:create()
+    InGame = true
     mutedEffects = false
     musicIsMuted = false
     composer.removeScene("menu")
@@ -505,6 +506,10 @@ function game:destroy(event)
     UserInteface.removeDeathScreen()
     timer.performWithDelay(100, function() display.remove(BackgroundGroup) end, 1)
     audio.stop(mainMusic)
+    display.remove(ResumeGameImage)
+    ResumeGameImage = nil
+    display.remove(OptionsImage)
+    display.remove(QuitImage)
 end
 
 -- -----------------------------------------------------------------------------------
