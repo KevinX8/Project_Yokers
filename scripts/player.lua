@@ -19,7 +19,6 @@ local leftButton = "a"
 local rightButton = "d"
 
 local playerImage
-PlayerActive = true
 
 local pressUp = false
 local pressDown = false
@@ -52,6 +51,7 @@ ExplosionX = 0
 ExplosionY = 0
 
 function player.start()
+    PlayerActive = true
     BasePlayerSpeed = 13
     PlayerSpeed = BasePlayerSpeed
     playerProjectileSpeed = 1100
@@ -59,7 +59,6 @@ function player.start()
     blinkSpeed = 2 --Speed at which player blinks when taken damage
     counter = invincibilityTime * blinkSpeed -- used in invincibility animation
     projectileLifetime = 3 -- Time in seconds before a projectile goes disappears after being shot
-    PlayerActive = true
 
     pressUp = false
     pressDown = false

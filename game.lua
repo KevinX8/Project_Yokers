@@ -34,6 +34,7 @@ local arrowDespawnTimer
 local mainMusic
 local menuMusic
 TimePauseD = 0
+PlayerActive = false
 
 local function keyEvent(event)
     Player.handleMovement(event)
@@ -324,7 +325,7 @@ function game:create()
     TimeLoaded = system.getTimer()
 
     EnemySpawner = timer.performWithDelay(math.random(MinTimeBetweenWaves, MaxTimeBetweenWaves), spawnEnemyWave, 0)
-    ProgessTimer = timer.performWithDelay(TimeDifficulty, ProgressLevel, 1)
+    ProgressTimer = timer.performWithDelay(TimeDifficulty, ProgressLevel, 1)
     TimeUI = timer.performWithDelay(100, UserInteface.updatetime, 0)
     BackgroundGroup.x = 0
     BackgroundGroup.y = 0
@@ -397,9 +398,7 @@ function PauseGame(event)
         TimePauseD = TimePauseD - system.getTimer()
         native.setProperty( "mouseCursorVisible", true )
         timer.pause(TimeUI)
-        if not ProgessTimer == nil then
         timer.pause(ProgressTimer)
-        end
         timer.pause(EnemySpawner)
         PlayerActive = false
         UserInteface.pauseButtonMenuButtons()
@@ -420,6 +419,7 @@ function ResumeGame(event)
     QuitImage.text = ""
     RetMenuImage.text = ""
     audio.pause(menuMusic)
+    composer.hideOverlay()
     RetMenuImage:removeEventListener("tap", goToMenu)
     ResumeGameImage:removeEventListener("tap", ResumeGame)
     OptionsImage:removeEventListener("tap", goToOptions)
@@ -429,10 +429,9 @@ function ResumeGame(event)
     transition.resume()
     native.setProperty( "mouseCursorVisible", false )
     PlayerActive = true
+
     timer.resume(TimeUI)
-    if not ProgessTimer == nil then
     timer.resume(ProgressTimer)
-    end
     timer.resume(EnemySpawner)
   --display.remove(NewGameImage)
 end
@@ -502,7 +501,7 @@ function game:destroy(event)
     timer.cancel(arrowTimer)
     end
     timer.cancel(EnemySpawner)
-    timer.cancel(ProgessTimer)
+    timer.cancel(ProgressTimer)
     timer.cancel(TimeUI)
     if not (Blink == nil) then
     timer.cancel(Blink)

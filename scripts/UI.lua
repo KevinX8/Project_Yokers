@@ -195,7 +195,7 @@ end
 
 function userinterface.deathscreen(timeSurvived, coopsAllDead)
     timer.cancel(TimeUI)
-    timer.cancel(ProgessTimer)
+    timer.cancel(ProgressTimer)
     timer.cancel(EnemySpawner)
     display.remove(ForegroundGroup)
     display.remove(timemImage)
