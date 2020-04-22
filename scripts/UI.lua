@@ -1,6 +1,7 @@
 local userinterface = {}
 --score = system.get(timer)--
 Ponyfont = require "com.ponywolf.ponyfont" -- https://github.com/ponywolf/ponyfont used to load bitmap fonts (white bg)
+local composer = require("composer")
 
 local damageSound = audio.loadSound("audio/Damage Sound.wav")
 local oneHeart = audio.loadSound("audio/OneHeart.mp3")
@@ -15,17 +16,29 @@ local fullHeart = false
 local blinkTime = 300
 local counter = 0
 local blinkCoop = 3
+local text1
+local text2
+local text3
+local text4
+local text5
 
 local heart = {}
 local coopicon = {}
 Timeloaded = 0
 
 local function gameClose(event)
-		native.requestExit()
+        composer.removeScene("game")
+		composer.gotoScene("menu")
 	end 
 
 function userinterface.InitialiseUI()
-    i = 1
+    if(not Blink == nil) then
+        timer.cancel(Blink)
+    end
+    blinkTime = 300
+    counter = 0
+    blinkCoop = 3
+    local i = 1
     repeat
         heart[i] = display.newImageRect(ForegroundGroup, "assets/fullheart.png", 96, 84)
         heart[i].y = display.contentCenterY - 440
@@ -234,7 +247,7 @@ function userinterface.deathscreen(timeSurvived, coopsAllDead)
         align = "right"
     }
     local quit2 = {
-        text = "Quit",
+        text = "Return to Menu",
         x = display.contentCenterX-60,
         y = display.contentCenterY + 240,
         font = "assets/coolfont.fnt",
@@ -246,15 +259,21 @@ function userinterface.deathscreen(timeSurvived, coopsAllDead)
         deathText.text = "All Of Your Coops Were Destroyed!"
     end
     
-    Ponyfont.newText(deathText)
-    Ponyfont.newText(optionsD)
-    Ponyfont.newText(optionsE)
-    Ponyfont.newText(optionsF)
-    local quit2Text = Ponyfont.newText(quit2)
-    quit2Text:addEventListener("tap", gameClose)
+    text1 = Ponyfont.newText(deathText)
+    text2 = Ponyfont.newText(optionsD)
+    text3 = Ponyfont.newText(optionsE)
+    text4 = Ponyfont.newText(optionsF)
+    text5 = Ponyfont.newText(quit2)
+    text5:addEventListener("tap", gameClose)
 end
 
-
+function  userinterface.removeDeathScreen()
+    display.remove(text1)
+    display.remove(text2)
+    display.remove(text3)
+    display.remove(text4)
+    display.remove(text5)
+end
 
 function userinterface.updatecoopscreen(cooptoflash)
     counter = 2
@@ -270,7 +289,7 @@ function userinterface.coopfadeOut(flashme)
     if(not(counter == 0) and flashme.beingdamaged == false) then
         flashme.beingdamaged = true
         transition.fadeOut(flashme, {time = (1000/(blinkCoop*2)), onComplete = function() transition.fadeIn(flashme, {time = 1000/(blinkCoop*2), onComplete = userinterface.coopfadeOut(flashme)}) end})
-        timer.performWithDelay(1000, function() flashme.beingdamaged = false flashme.alpha = 0.7 end,1)
+        flashme.timer = timer.performWithDelay(1000, function() flashme.beingdamaged = false flashme.alpha = 0.7 end,1)
     end
 end
 

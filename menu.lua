@@ -108,6 +108,7 @@ end
 
 function menu:show(event)
 	audio.play(MenuMusic,{channel = 15, loops = 10, duration = 600000})
+	audio.resume(MenuMusic)
 	if event.phase == "will" then
 	newGameText.text = "New Game"
 	difficultyText.text = "Difficulty: "..Difficulty

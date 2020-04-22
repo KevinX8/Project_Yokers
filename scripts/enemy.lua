@@ -13,7 +13,10 @@ local enemy = {
     pushFrame = 0,
     currentMovementSpeed = 0,
     readyToFire = true,
-    bossHealthPhase = 0
+    bossHealthPhase = 0,
+    damageTimer = 0,
+    bossSpeedTimer = 0,
+    bossInvincibilityTimer = 0
 }
 enemy.__index = enemy
 local movementSpeed = 250
@@ -44,6 +47,18 @@ local enemyDamageTime = 1000
 -- roaming/attackCoop will become attackPlayer if the player comes really close or if the player attacks
 -- attackPlayer will become roaming if the player gets far away
 -- retreating will become attackPlayer once the enemy gets far enough away
+
+function enemy.start()
+    enemyDamageTime = 1000
+    movementSpeed = 250
+    dropHeart = false
+    dropHeartx = 0
+    dropHearty = 0
+    iceChickenAcceleratedSpeed = 600
+    fireballLifetime = 5
+    timeBetweenFireballs = 1
+    fireballDamage = 1
+end
 
 function enemy.new(startX, startY)
     local self = setmetatable({}, enemy) -- OOP in Lua is weird...
@@ -151,6 +166,16 @@ end
     return self
 end
 
+function enemy.nukeEnemies()
+    local nuke = display.newImageRect(BackgroundGroup, "assets/blank.png", 30000,30000)
+    nuke.x = 0
+    nuke.y = 0
+    Physics.addBody(nuke, "static")
+    nuke.myName= "nuke"
+    nuke.collision = enemy.collisionEvent
+    nuke:addEventListener("collision")
+end
+
 function spawnBossAmmo()
     local ammoCoop
     ammoCoop = Coops[1]
@@ -171,6 +196,10 @@ function enemy.collisionEvent(self, event)
             timer.cancel(self.despawnTimer)
             self:removeSelf()
             return
+        end
+        if event.other.myName == "nuke" and self.myName == "enemy" then
+            self.instance.health = 0
+            print("nuked")
         end
         if event.other.myName == "playerProjectile" and self.myName == "enemy" then
             if(event.other.isFireEgg) then
@@ -222,7 +251,7 @@ function enemy.collisionEvent(self, event)
         if self.myName == "enemy" and event.other.myName == "coop" and self.instance.canDamage and event.other.isActive then
             self.instance.canDamage = false
             CoopDamage(event.other, self.instance.coopDamagePerHit)
-            timer.performWithDelay(enemyDamageTime, function() self.instance.canDamage = true end, 1)
+            self.damageTimer = timer.performWithDelay(enemyDamageTime, function() self.instance.canDamage = true end, 1)
         end
         if self.myName == "enemy" and self.instance.type == 4 and not self.isInvincible and self.instance.health % 10 == 0 then
             --after 10 hits the boss turns invincible and goes on a rampage at high speed
@@ -242,7 +271,7 @@ function enemy.collisionEvent(self, event)
             end
             self.instance.currentMovementSpeed = 400 + 50*self.phase
             self.phase = self.phase + 1
-            timer.performWithDelay(8000, function() self.instance.currentMovementSpeed = 100 self.instance.allowShoot = true end, 1)
+            self.bossSpeedTimer = timer.performWithDelay(8000, function() self.instance.currentMovementSpeed = 100 self.instance.allowShoot = true end, 1)
         end
         if self.myName == "enemy" and self.instance.health <= 0 then
             timer.cancel(self.instance.aiLoopTimer)
@@ -379,7 +408,7 @@ function enemy:aiUpdate() -- Called 30 times a second
                 self.allowShoot = false
                 self.flashme = true
                 self.flashloop = 0
-                bossInvincibilityTimer = timer.performWithDelay(5000, function() self.enemyImage.isInvincible = true self.flashme = false self.allowShoot = true end, 1)
+                self.bossInvincibilityTimer = timer.performWithDelay(5000, function() self.enemyImage.isInvincible = true self.flashme = false self.allowShoot = true end, 1)
             end
         end
         self.targetX = playerX

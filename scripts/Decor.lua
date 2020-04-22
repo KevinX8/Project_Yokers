@@ -4,11 +4,16 @@ local fireEggAudio = audio.loadSound("audio/Ignition.wav")
 local channelSelect = 0
 
 function Decor.generateDecor()
+    channelSelect = 0
     Decor.level1()
     Decor.level2()
     Decor.level3()
     Decor.level4()
     Runtime:addEventListener("enterFrame", Decor.enterFrame)
+end
+
+function Decor.removeEnterFrame()
+    Runtime:removeEventListener("enterFrame", Decor.enterFrame)
 end
 
 function Decor.level1()

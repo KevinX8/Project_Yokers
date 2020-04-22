@@ -5,6 +5,7 @@ local eggThrowSound = audio.loadSound("audio/EggThrowSound.wav")
 local audioChannelSelect = 1
 
 local UserInteface = require("scripts.UI")
+local enemy = require("scripts.enemy")
 BasePlayerSpeed = 13
 PlayerSpeed = BasePlayerSpeed
 local playerProjectileSpeed = 1100
@@ -51,6 +52,43 @@ ExplosionX = 0
 ExplosionY = 0
 
 function player.start()
+    BasePlayerSpeed = 13
+    PlayerSpeed = BasePlayerSpeed
+    playerProjectileSpeed = 1100
+    invincibilityTime = 3 -- Time in seconds the player should be invincible after being hit
+    blinkSpeed = 2 --Speed at which player blinks when taken damage
+    counter = invincibilityTime * blinkSpeed -- used in invincibility animation
+    projectileLifetime = 3 -- Time in seconds before a projectile goes disappears after being shot
+    PlayerActive = true
+
+    pressUp = false
+    pressDown = false
+    pressLeft = false
+    pressRight = false
+    mouseX = 0
+    mouseY = 0
+    mouseRotation = 0
+    clickReady = true
+
+    pushActive = false
+    pushAmount = 0
+    pushX = 0
+    pushY = 0
+    pushFrame = 0
+
+    slideActive = false
+    slideSpeed = 0
+    lakeWidth = 0
+    slideInitialX = 0
+    slideInitialY = 0
+
+    runtime = 0
+
+    isInvincible = false
+    updateAmmo = false
+    Explosion = false
+    ExplosionX = 0
+    ExplosionY = 0
     local self = setmetatable({}, player)
     Cursor = display.newImageRect(ForegroundGroup, "assets/cursor.png", 100, 100)
     Cursor.alpha = 0.65
@@ -64,6 +102,11 @@ function player.start()
     playerImage.collision = player.collisionEvent
     playerImage:addEventListener("collision")
     runtime = system.getTimer()
+    PlayerActive = true
+end
+
+function player.removeEnterFrame()
+    Runtime:removeEventListener("enterFrame", player.enterFrame)
 end
 
 function player.collisionEvent(self, event)
@@ -229,8 +272,9 @@ end
 
 function player.damage(damageAmount)
     if Health == damageAmount and not isInvincible and PlayerActive then
+        enemy.nukeEnemies()
         transition.pause()
-        Physics.pause() --stops crashing lol
+        timer.performWithDelay(100,function() Physics.pause() end,1) --stops crashing lol
         PlayerActive = false
         UserInteface.deathscreen(system.getTimer() - TimeLoaded, false)
         return

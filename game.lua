@@ -107,8 +107,9 @@ local function removeCoopFromGame(coop)
                 end
                 CoopsAlive = CoopsAlive - 1
                 if(CoopsAlive <= 0) and PlayerActive then
+                    enemy.nukeEnemies()
                     transition.pause()
-                    Physics.pause() --stops crashing lol
+                    timer.performWithDelay(100,function() Physics.pause() end,1) --stops crashing lol
                     PlayerActive = false
                     UserInteface.deathscreen(system.getTimer() - TimeLoaded - TimePauseD, true)
                 end
@@ -185,7 +186,15 @@ local function goToOptions()
            composer.showOverlay("main-menu.optionsMenu")
         end
 
+local function goToMenu()
+    composer.removeScene("game")
+    composer.goToScene("menu")
+end
+
 function game:create()
+    mutedEffects = false
+    musicIsMuted = false
+    composer.removeScene("menu")
     menuMusic = audio.play(MenuMusic,{channel = 15, loops = -1, duration = 600000})
     audio.pause(menuMusic)
     options.SetDifficulty()
@@ -395,7 +404,6 @@ function pauseGame(event)
 		ResumeGameImage:addEventListener("tap", resumeGame)
 		OptionsImage:addEventListener("tap", goToOptions)
 		QuitImage:addEventListener("tap", closeGame)
-		
    end
 end
 
@@ -479,20 +487,23 @@ end
 end]]
 
 function game:destroy(event)
-    display.remove()
-    BackgroundGroup:removeSelf()
+    if (not arrowDespawnTimer == nil) then
     timer.cancel(arrowDespawnTimer)
+    end
+    if (not arrowTimer == nil) then
     timer.cancel(arrowTimer)
+    end
     timer.cancel(EnemySpawner)
-    
     timer.cancel(ProgessTimer)
     timer.cancel(TimeUI)
-    timer.cancel()
-    timer.cancel()
-    timer.cancel()
-    timer.cancel()
-    timer.cancel()
-    timer.cancel()
+    if not (Blink == nil) then
+    timer.cancel(Blink)
+    end
+    Decor.removeEnterFrame()
+    Player.removeEnterFrame()
+    UserInteface.removeDeathScreen()
+    timer.performWithDelay(100, function() display.remove(BackgroundGroup) end, 1)
+    audio.stop(mainMusic)
 end
 
 -- -----------------------------------------------------------------------------------
