@@ -295,14 +295,14 @@ end
 
 function userinterface.pauseButtonMenuButtons()
         
-       --[[ local newGame1 = {
-        text = "New Game",
+       local Menu1 = {
+        text = "Main Menu",
         x = display.contentCenterX,
         y = display.contentCenterY - 150,
         font = "assets/coolfont.fnt",
         fontSize = 32,
         align = "centre"
-        } ]]--
+        }
         
         local resume1 = {
         text = "Resume",
@@ -331,11 +331,11 @@ function userinterface.pauseButtonMenuButtons()
         align = "centre"
         }
         
-        --NewGameImage = Ponyfont.newText(newGame1)
         if ResumeGameImage == nil then
         ResumeGameImage = Ponyfont.newText(resume1)
         OptionsImage = Ponyfont.newText(options1)
         QuitImage = Ponyfont.newText(quit1)
+        RetMenuImage =Ponyfont.newText(Menu1)
         else
             ResumeGameImage.text = "Resume"
             OptionsImage.text = "Options"

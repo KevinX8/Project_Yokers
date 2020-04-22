@@ -400,7 +400,7 @@ function pauseGame(event)
         audio.resume(menuMusic)
         audio.pause(mainMusic)
 
-		--NewGameImage:addEventListener("tap", goToGame)
+		RetMenuImage:addEventListener("tap", goToMenu)
 		ResumeGameImage:addEventListener("tap", resumeGame)
 		OptionsImage:addEventListener("tap", goToOptions)
 		QuitImage:addEventListener("tap", closeGame)
@@ -413,6 +413,7 @@ function resumeGame(event)
     OptionsImage.text = ""
     QuitImage.text = ""
     audio.pause(menuMusic)
+    RetMenuImage:removeEventListener("tap", goToMenu)
     ResumeGameImage:removeEventListener("tap", resumeGame)
     OptionsImage:removeEventListener("tap", goToOptions)
     QuitImage:removeEventListener("tap", closeGame)
