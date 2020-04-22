@@ -187,8 +187,13 @@ local function goToOptions()
         end
 
 local function goToMenu()
+    ForegroundGroup:removeSelf()
+    UserInteface.deathscreen(0, false)
+    UserInteface.removeDeathScreen()
+    enemy.nukeEnemies()
+    display.remove(RetMenuImage)
     composer.removeScene("game")
-    composer.goToScene("menu")
+    composer.gotoScene("menu")
 end
 
 function game:create()
@@ -413,6 +418,7 @@ function resumeGame(event)
     ResumeGameImage.text = ""
     OptionsImage.text = ""
     QuitImage.text = ""
+    RetMenuImage.text = ""
     audio.pause(menuMusic)
     RetMenuImage:removeEventListener("tap", goToMenu)
     ResumeGameImage:removeEventListener("tap", resumeGame)

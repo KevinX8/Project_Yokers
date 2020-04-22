@@ -198,13 +198,9 @@ function userinterface.deathscreen(timeSurvived, coopsAllDead)
     timer.cancel(ProgessTimer)
     timer.cancel(EnemySpawner)
     display.remove(ForegroundGroup)
-    local displayTime = timemImage.text .. " " .. timesImage.text .. "s"
     display.remove(timemImage)
-    --timemImage.text = ""
     display.remove(timesImage)
-    --timesImage.text = ""
     display.remove(currentLevel)
-    --currentLevel.text = ""
     display.remove(sImage)
     display.remove(eggCounter)
     native.setProperty( "mouseCursorVisible", true )
@@ -340,6 +336,7 @@ function userinterface.pauseButtonMenuButtons()
             ResumeGameImage.text = "Resume"
             OptionsImage.text = "Options"
             QuitImage.text = "Quit"
+            RetMenuImage.text = "Main Menu"
         end
     end
 
