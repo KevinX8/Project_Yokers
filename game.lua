@@ -205,7 +205,6 @@ function game:create()
     menuMusic = audio.play(MenuMusic,{channel = 15, loops = -1, duration = 600000})
     audio.pause(menuMusic)
     options.SetDifficulty()
-    native.setProperty("windowMode", "fullscreen")
     BackgroundGroup = display.newGroup() -- Holds all the objects that scroll (background, enemies, projectiles etc.) as well as the player
     ForegroundGroup = display.newGroup() -- Holds all UI
     LevelObjects = {} -- Holds level objects (coops, ice lakes, etc.) in the form {x, y, size}
