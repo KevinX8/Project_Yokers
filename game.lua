@@ -463,35 +463,8 @@ function MuteSound(event)
     end
 end
 
-function game:show(event)
-    local sceneGroup = self.view
-    local phase = event.phase
-
-    if (phase == "will") then
-    elseif (phase == "did") then
-
-    end
+function game:show(event)--function looks like it does nothing, but coronas composer doesnt work without it lol.
 end
-
---[[ function game:hide(event)
-    local sceneGroup = self.view
-    local phase = event.phase
-
-    if (phase == "will") then
-       
-	Physics.stop()
-        audio.stop()
-	transition.stop()
-        timer.cancel(TimeUI)
-        timer.cancel(ProgressTimer)
-        timer.cancel(EnemySpawner)
-        Runtime:removeEventListener("key", keyEvent)
-        Runtime:removeEventListener("mouse", mouseEvent)	
-		
-    elseif (phase == "did") then
-   
-    end
-end]]
 
 function game:destroy(event)
     if (not arrowDespawnTimer == nil) then
