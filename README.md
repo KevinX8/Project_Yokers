@@ -19,3 +19,8 @@ Use Mouse1 to shoot.
 Use "M" key to mute sound effects.
 Use "N" key to mute music.
 Use "ESC" key to pause game.
+
+OBJECTIVE
+
+
+The objective of the game is to survive as long as you can, and to protect your coops from the zombie chickens. Points are awarded at the end of each game for how long the player survived, as well as for the number of coops remaining undestroyed. Game Over is when the Player loses all of their health, or else when all of the coops in the levels they have access to are destroyed. Hint: In level 4, you can shoot eggs over lava to ignite them. An ignited egg will explode on impact with an enemy, dealing an area effect of damage to nearby enemies.
