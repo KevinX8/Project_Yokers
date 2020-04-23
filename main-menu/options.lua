@@ -34,7 +34,7 @@ function options.SetDifficulty()
         EggCapacity = 30
         EgginInv = 15
         MaxHearts = 6
-        HeartDropChance = 25
+        HeartDropChance = 20
         HeartLifeTime = 5
         MaxEggsPerEnemy = 2
         MinPlayerAccuracy = 0.5
